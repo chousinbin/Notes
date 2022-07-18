@@ -1,4 +1,4 @@
-# Vscode环境搭建＋修改.exe文件生成位置
+# Vscode C++
 
 
 
@@ -19,17 +19,17 @@ int main()
 
 点击左侧的调试按钮->创建`launch.json`文件 
 
-![img](../assets/VSCode修改.exe文件生成位置/1620.png)
+![1620](https://cdn.jsdelivr.net/gh/chousinbin/Image/%E5%88%9B%E5%BB%BAlaunch.json%E6%96%87%E4%BB%B6.png)
 
 选择`C++(GDB/LLDB)` 
 
-![img](../assets/VSCode修改.exe文件生成位置/1620-16565132537014.png)
+![](https://cdn.jsdelivr.net/gh/chousinbin/Image/选择C++GDB.png)
 
  选择`gcc.exe-生成和调试活动文件` 
 
-![img](../assets/VSCode修改.exe文件生成位置/1620-16565132557576.png)
+![](https://cdn.jsdelivr.net/gh/chousinbin/Image/选择gcc.exe-生成调试文件.png)
 
- 返回工作区文件目录，发现生成了.vscode文件夹，包含`launch.json`和`tasks.json`文件。简单了解下：`tasks`用于编译，`launch`用于执行编译后的文件，详情[点击这里](https://code.visualstudio.com/docs/cpp/config-wsl#_create-a-build-task)。
+ 返回工作区文件目录，发现生成了.vscode文件夹，`tasks`用于编译，`launch`用于执行编译后的文件。
 
 
 
@@ -144,7 +144,7 @@ int main()
 
 点击`Edit in settings.json`打开配置项，由于Code Runner中配置文件较多，我们只修改相关部分即可 
 
-![img](../assets/VSCode修改.exe文件生成位置/1620-16565132642989.png)
+![](https://cdn.jsdelivr.net/gh/chousinbin/Image/202207181607668.png)
 
  （1）将命令
 
@@ -152,15 +152,11 @@ int main()
 "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt", 
 ```
 
-复制
-
-替换为
+复制替换为
 
 ```javascript
 "c": "cd $dir && gcc $fileName -o $workspaceRoot/build/$fileNameWithoutExt && $workspaceRoot/build/$fileNameWithoutExt",
 ```
-
-复制
 
 （2）将命令
 
@@ -168,28 +164,20 @@ int main()
 "cpp": "cd $dir && g++ $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt", 
 ```
 
-复制
+复制替换为
 
-替换为
-
-```javascript
+```json
 "cpp": "cd $dir && g++ $fileName -o $workspaceRoot/build/$fileNameWithoutExt && $workspaceRoot/build/$fileNameWithoutExt", 
 ```
 
-复制
-
 最后在工作区新建文件夹**build**，作为**Test**文件子项，确定好文件从属关系。 
 
-![img](../assets/VSCode修改.exe文件生成位置/1620-165651326582211.png)
+![](https://cdn.jsdelivr.net/gh/chousinbin/Image/202207181604118.png)
 
 ## 测试
 
-![img](../assets/VSCode修改.exe文件生成位置/4239893032a1fdc39b579b545b61a613.gif)
+![](https://cdn.jsdelivr.net/gh/chousinbin/Image/202207181605389.gif)
 
-![img](../assets/VSCode修改.exe文件生成位置/1620-165651326910814.png)
-
-
-
-大功告成~
+![](https://cdn.jsdelivr.net/gh/chousinbin/Image/202207181605600.png)
 
 原帖：https://cloud.tencent.com/developer/article/2015634
