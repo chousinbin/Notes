@@ -183,7 +183,9 @@ Kdump是一个内核崩溃转储机制。在系统崩溃时，会捕获系统信
 
 网络地址转换模式，是把内部私有网络地址（IP地址）翻译成合法网络IP地址的技术，虚拟系统可以和外部系统通讯，不造成IP冲突。
 
-#### 主机模式
+注意当我们用**Xshell**远程连接**Vmware**NAT网络模式的虚拟机，使用一段时间后，主机的IP会被Vmware的虚拟网卡更新，当我们用**Xshell**连接不上我们的虚拟机时，及时返回**Vmware**登陆系统查看最新**IP**。
+
+#### 主机模式	
 
 独立的系统，单机。
 
@@ -486,6 +488,8 @@ Xshell是一个强大的安全终端模拟软件，支持SSH1，SSH2，以及Win
 | 从终端显示文件信息      | cat 文件名 |
 | 进入vim编辑显示文件信息 | vim 文件名 |
 | 根据前缀自动补全        | `tab`      |
+| 翻页                    | 空格       |
+| 退出                    | CTRL+D     |
 
 
 
@@ -499,6 +503,32 @@ Xshell是一个强大的安全终端模拟软件，支持SSH1，SSH2，以及Win
 | 关机                   | shutdown -h now 或 halt   |
 | $n$分钟后关机          | shutdown -h $n$           |
 | 重启                   | shutdown -r now 或 reboot |
+
+### 找回root密码
+
+不同的**Linux**版本找回**root**方式不同~以下以**CentOS 7.6**演示。
+
+1. 开机进入内核选择界面，通过按上下方向键解除自动启动系统，光标定位到我们使用的内核上按**e**。
+
+2. 如果不确定系统是否开启了**Selinux**或者刚装完没有修改过的系统，则最好用下面的方法解决：既在以字符串"Linux16”开头的行，将光标移动到该行的结尾，然后输入`init=/bin/bash enforcing=0`(前者作用让系统登录后加载bash解释器，后者是且**关闭Selinux**)
+
+   ![image-20220722210656964](https://cdn.jsdelivr.net/gh/chousinbin/Image/%E6%89%BE%E5%9B%9Eroot%E5%AF%86%E7%A0%81.png)
+
+3. 按下快捷键`Ctrl`+`X`启动，以单用户模式启动Linux。
+
+   ![image-20220722210958028](https://cdn.jsdelivr.net/gh/chousinbin/Image/%E6%89%BE%E5%9B%9Eroot%E5%AF%86%E7%A0%812.png)
+
+4. 在光标闪烁位置输入`mount -o rw,remount /`，回车。图中的`mount -o rw,remount /`命令是重新挂载根目录为可写状态（`rw`表示可写，`remount`是重新挂载），在单用户模式下默认根文件系统是处于只读状态。
+
+   ![image-20220722212955384](https://cdn.jsdelivr.net/gh/chousinbin/Image/%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%813.png)
+
+   在光标闪烁处输入`passwd`，回车，根据提示输入两次新密码。
+
+5. 如果是系统的**SELinux**处于开启状态，并且前文修改内核选项时，没有增加**“enforcing=0”**，则此处需要多执行一条**“touch /.autorelabel”**命令以便在下次系统引导前重新标记系统中的所有相关文件，因为在**SELinux**开启时，修改**root**密码时修改**password**文件会导致**SELinux**安全上下文报错，如果前文修改内核选项时，已增加“**enforcing=0”**，那么在修改密码文件时,**Selinux**是关闭状态，因此，这里就不需要执行**“touch /.autorelabel”**命令了。
+
+6. 配置完后，执行`exec /sbin/init`命令重启系统，过程较长，等待重启。此时，无法使用其它重启命令。
+
+   ![image-20220722213423559](C:/Users/ChouS/AppData/Roaming/Typora/typora-user-images/image-20220722213423559.png)
 
 ### 用户管理
 
@@ -583,9 +613,9 @@ root     pts/0        2022-07-21 10:11 (192.168.159.1)
 
 
 
-## 7.运行级别
+### 运行级别
 
-### 运行级别介绍
+#### 运行级别介绍
 
 加粗为常用运行级别，也可以指定默认运行级别
 
@@ -596,4 +626,569 @@ root     pts/0        2022-07-21 10:11 (192.168.159.1)
 4. 系统未使用保留给用户
 5. **图形界面**
 6. 系统从重启
+
+#### 3和5运行级别英文名称
+
+在**/etc/inittab**文件中，摘抄如下。
+
+```
+# multi-user.target: analogous to runlevel 3
+# graphical.target: analogous to runlevel 5
+```
+
+#### 切换运行级别
+
+```
+init 0123456
+```
+
+切换后某些级别需要根据提示输入账户和密码，进行登录。
+
+#### 查看当前级别
+
+```
+systemctl get-default
+```
+
+```
+[root@learnning ~]# systemctl get-default
+graphical.target
+```
+
+显示当前为图形界面
+
+#### 修改默认运行级别
+
+修改之后在主机开机级别即为默认级别。
+
+```
+systemclt set-default 运行级别
+```
+
+### 帮助指令
+
+#### man
+
+获取帮助信息
+
+``` 
+man 命令/配置文件
+例如 查看命令ls的帮助信息 man ls
+```
+
+#### help
+
+获取**shell**内置命令的帮助信息
+
+```
+help 命令
+```
+
+
+
+### 文件目录指令
+
+#### pwd
+
+显示当前工作目录的绝对路径(从根目录开始定位，显示完整)。
+
+```
+[root@learnning ~]# cd /root
+[root@learnning ~]# pwd
+/root
+```
+
+#### ls
+
+显示指定目录或文件或当前目录下的文件信息。
+
+```
+ls 选项 目录或文件
+```
+
+常用选项
+
+`-a` 显示所有的文件和信息，包含隐藏文件。
+
+`-l` 以列表的形式显示信息。
+
+`-h` 以人看起来更舒服的模式显示。
+
+更多选项可以通过使用上文介绍的`man`命令，查看`ls`的帮助信息中获得。
+
+**选项可以组合使用**，例如`-al`表示以列表的形式显示包含隐藏文件的所有文件和信息。
+
+#### cd
+
+切换到指定目录，能定位绝对路径或者相对路径。
+
+```
+cd 位置
+```
+
+相对路径和绝对路径的解释，如果当前目录在`/home`，此时我们要访问`/root`。如果用绝对路径我们要执行，`cd /root`。相对路径执行`cd ../root`。
+
+| 操作                     | 命令       |
+| ------------------------ | ---------- |
+| 回到用户的家目录         | cd ~或cd : |
+| 回到当前目录的上一级目录 | cd ..      |
+
+#### mkdir
+
+ 创建一个目录
+
+```
+mkdir 绝对位置
+```
+
+```shell
+[root@learnning ~]# mkdir /home/sinbin/animal
+[root@learnning ~]# cd /home/sinbin
+[root@learnning sinbin]# ls
+animal  公共  模板  视频  图片  文档  下载  音乐  桌面
+```
+
+创建多级目录
+
+```
+mkdir -p 绝对位置
+```
+
+```shell
+[root@learnning sinbin]# mkdir -p /home/sinbin/animal/dog
+[root@learnning sinbin]# ls
+animal  公共  模板  视频  图片  文档  下载  音乐  桌面
+```
+
+#### rmdir
+
+删除空目录**dog**
+
+```
+rmdir /home/sinbin/animal/dog
+```
+
+强制删除多级目录 谨慎操作
+
+```
+rm -rf /home/sinbin/animal
+```
+
+#### touch
+
+创建空文件
+
+```
+touch 文件名
+```
+
+#### cp
+
+拷贝文件到指定目录
+
+```
+cp 文件带目录或当前目录的文件名 目标目录
+```
+
+拷贝目录到指定目录
+
+```
+cp -r 目录 目标目录
+```
+
+```shell
+[root@learnning home]# ls
+bb  hello.txt  sinbin
+
+[root@learnning home]# cd sinbin
+[root@learnning sinbin]# ls
+公共  模板  视频  图片  文档  下载  音乐  桌面
+
+[root@learnning home]# cp -r /home/bb /home/sinbin/
+[root@learnning home]# cd sinbin
+[root@learnning sinbin]# ls
+bb  公共  模板  视频  图片  文档  下载  音乐  桌面
+[root@learnning sinbin]# cd bb
+[root@learnning bb]# ls
+hello.txt
+```
+
+强制拷贝覆盖不提醒
+
+```
+\cp -r 目录 目标目录
+```
+
+#### rm
+
+删除文件带提示
+
+```
+rm 文件名
+```
+
+删除文件不带提示
+
+```
+rm -f 文件名
+```
+
+递归删除整个文件夹
+
+```
+rm -r 绝对路径
+```
+
+```shell
+[root@learnning home]# ls
+bb  sinbin
+[root@learnning home]# rm -r /home/bb
+rm：是否进入目录"/home/bb"? y
+rm：是否删除普通空文件 "/home/bb/hello.txt"？y
+rm：是否删除目录 "/home/bb"？y
+[root@learnning home]# ls
+sinbin
+```
+
+递归删除整个文件夹不提示
+
+```
+rm -rf 绝对路径
+```
+
+#### mv
+
+文件/目录的重命名
+
+```
+mv oldName newName
+```
+
+```shell
+123.md  a  b  sinbin
+[root@learnning home]# mv 123.md 456.md
+[root@learnning home]# ls
+456.md  a  b  sinbin
+
+[root@learnning home]# ls
+b  sinbin
+[root@learnning home]# mv b bb
+[root@learnning home]# ls
+bb  sinbin
+```
+
+移动文件/目录
+
+```
+mv 文件/目录的路径 新地址的路径
+```
+
+```shell
+[root@learnning home]# mv /home/456.md /home/a
+[root@learnning home]# cd a
+[root@learnning a]# ls
+456.md
+[root@learnning a]# mv /home/a /home/b
+[root@learnning a]# cd ..
+[root@learnning b]# ls
+a
+[root@learnning b]# cd /home
+[root@learnning home]# ls
+b  sinbin
+```
+
+移动文件/目录 并且重命名
+
+```
+mv 文件或目录的路径 新地址的路径/新名称
+```
+
+```shell
+[root@learnning home]# ls
+aa  bb  sinbin
+[root@learnning home]# mv aa bb/aaa
+[root@learnning home]# ls
+bb  sinbin
+[root@learnning home]# cd bb
+[root@learnning bb]# ls
+aaa
+```
+
+#### cat
+
+仅仅查看文件内容不能修改
+
+```
+cat [选项] 文件名
+```
+
+`-n`：显示行号
+
+#### more
+
+是一个基于**VI**编辑器的文本过滤器，以全屏幕的方式按页显示文本文件的内容。**more**指令中内置快捷键。
+
+```
+more 文件
+```
+
+| 操作                           | 快捷键 |
+| ------------------------------ | ------ |
+| 向下翻一页                     | 空格   |
+| 向下翻一行                     | 回车   |
+| 立即离开more，不再显示文件内容 | q      |
+| 向下滚动一屏                   | Ctrl+F |
+| 返回上一屏                     | Ctrl+B |
+| 输出当前行的行号               | =      |
+| 输出文件名和当前行的行号       | :f     |
+
+#### less
+
+用来分屏查看文件的内容，与**more**指令相似，但是比**more**指令更加强大，支持各种显示终端。
+
+less指令在显示文件内容时，并不是一次将整个文件加载之后才显示，而是根据显示需要加载内容，对于显示大型文件具有较高的效率。
+
+```
+less 文件
+```
+
+| 操作     | 快捷键                                   |
+| -------- | ---------------------------------------- |
+| 空格     | 向下翻动一页                             |
+| pagedown | 向下翻动一页                             |
+| pageup   | 向上翻动一页                             |
+| /字串    | 向下搜寻字串的功能；n向下查找，N向上查找 |
+| ?字串    | 向上搜寻字串的功能；n向上查找，N向下查找 |
+| q        | 离开                                     |
+
+#### echo
+
+输出内容到控制台
+
+```
+echo 选项 输出内容
+```
+
+```shell
+[root@learnning sinbin]# echo $HOSTNAME
+learnning
+[root@learnning sinbin]# echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin
+[root@learnning sinbin]# echo hello world
+hello world
+```
+
+#### head
+
+输出文件的开头部分的内容。
+
+默认显示前10行
+
+```
+head 文件
+```
+
+指定行数
+
+```
+head -n 5 文件
+```
+
+#### tail
+
+输出文件的尾部的内容。
+
+默认显示前10行
+
+```
+tail 文件
+```
+
+指定行数
+
+```
+tail -n 5 文件
+```
+
+实时跟踪该文档的所有更新
+
+```
+tail -f 文件
+```
+
+#### >覆盖和>>追加
+
+| 操作                                            | 语法                     |
+| ----------------------------------------------- | ------------------------ |
+| 把当前目录内容按列覆盖写入a.txt文件中           | ls -l > a.txt            |
+| 把当前目录内容含隐藏文件按列追加到a.txt文件结尾 | ls -al >> a.txt          |
+| cat 文件1 > 文件2                               | 将文件1的内容覆盖到文件2 |
+| echo "内容" >> 文件                             | 内容追加到文件           |
+
+如果要覆盖或追加的文件不存在，会自动创建。
+
+#### ln
+
+ 软链接也称符号链接，类似于Windows里的快捷方式。主要存放了链接其他文件的路径。
+
+```
+ln -s 源文件/目录路径 软链接名路径
+```
+
+```shell
+[root@learnning /]# ln -s /root /home/myroot
+[root@learnning /]# cd /home
+[root@learnning home]# ls
+myroot  sinbin
+[root@learnning home]# ls -l
+总用量 4
+lrwxrwxrwx.  1 root   root    5 7月  23 20:14 myroot -> /root #指向root
+drwx------. 16 sinbin abc  4096 7月  23 15:59 sinbin
+```
+
+**myroot文件**就相当于**/root**
+
+```shell
+[root@learnning home]# cd myroot
+[root@learnning myroot]# ls
+anaconda-ks.cfg  password.txt  模板  图片  下载  桌面
+original-ks.cfg  公共          视频  文档  音乐
+```
+
+##### 删除软链接
+
+就使把**myroot文件**删除。
+
+```shell
+rm /home/myroot
+```
+
+#### history
+
+查看已经执行过的命令，也可以执行历史指令。
+
+```
+history
+```
+
+显示最近使用的10个指令
+
+```
+history 10
+```
+
+执行历史编号为5的指令
+
+```
+!5
+```
+
+### 时间日期类
+
+#### date
+
+| 操作             | 语法                      |
+| ---------------- | ------------------------- |
+| 显示当前日期时间 | date                      |
+| 显示当前日期     | date +%F                  |
+| 显示当前年份     | date +%Y                  |
+| 显示当前月份     | date +%m                  |
+| 显示当前日份     | date +%d                  |
+| 显示年月日时分秒 | date "+%Y-%m-%d %H:%M:%S" |
+
+#### 设置日期时间
+
+```
+date -s "2019-05-05 20:00:00"
+```
+
+#### 同步网络时间
+
+```
+ntpdate 0.cn.pool.ntp.org
+```
+
+#### 日历
+
+```
+cal
+```
+
+指定日/月/年日历
+
+```shell
+[root@learnning home]# cal 5 2019
+      五月 2019     
+日 一 二 三 四 五 六
+          1  2  3  4
+ 5  6  7  8  9 10 11
+12 13 14 15 16 17 18
+19 20 21 22 23 24 25
+26 27 28 29 30 31
+
+[root@learnning home]# cal 12 5 2019
+      五月 2019     
+日 一 二 三 四 五 六
+          1  2  3  4
+ 5  6  7  8  9 10 11
+12 13 14 15 16 17 18
+19 20 21 22 23 24 25
+26 27 28 29 30 31
+
+[root@learnning home]# cal 2019
+                               2019                               
+
+        一月                   二月                   三月        
+日 一 二 三 四 五 六   日 一 二 三 四 五 六   日 一 二 三 四 五 六
+       1  2  3  4  5                   1  2                   1  2
+ 6  7  8  9 10 11 12    3  4  5  6  7  8  9    3  4  5  6  7  8  9
+13 14 15 16 17 18 19   10 11 12 13 14 15 16   10 11 12 13 14 15 16
+20 21 22 23 24 25 26   17 18 19 20 21 22 23   17 18 19 20 21 22 23
+27 28 29 30 31         24 25 26 27 28         24 25 26 27 28 29 30
+                                              31
+        四月                   五月                   六月        
+日 一 二 三 四 五 六   日 一 二 三 四 五 六   日 一 二 三 四 五 六
+    1  2  3  4  5  6             1  2  3  4                      1
+ 7  8  9 10 11 12 13    5  6  7  8  9 10 11    2  3  4  5  6  7  8
+14 15 16 17 18 19 20   12 13 14 15 16 17 18    9 10 11 12 13 14 15
+21 22 23 24 25 26 27   19 20 21 22 23 24 25   16 17 18 19 20 21 22
+28 29 30               26 27 28 29 30 31      23 24 25 26 27 28 29
+                                              30
+        七月                   八月                   九月        
+日 一 二 三 四 五 六   日 一 二 三 四 五 六   日 一 二 三 四 五 六
+    1  2  3  4  5  6                1  2  3    1  2  3  4  5  6  7
+ 7  8  9 10 11 12 13    4  5  6  7  8  9 10    8  9 10 11 12 13 14
+14 15 16 17 18 19 20   11 12 13 14 15 16 17   15 16 17 18 19 20 21
+21 22 23 24 25 26 27   18 19 20 21 22 23 24   22 23 24 25 26 27 28
+28 29 30 31            25 26 27 28 29 30 31   29 30
+
+        十月                  十一月                 十二月       
+日 一 二 三 四 五 六   日 一 二 三 四 五 六   日 一 二 三 四 五 六
+       1  2  3  4  5                   1  2    1  2  3  4  5  6  7
+ 6  7  8  9 10 11 12    3  4  5  6  7  8  9    8  9 10 11 12 13 14
+13 14 15 16 17 18 19   10 11 12 13 14 15 16   15 16 17 18 19 20 21
+20 21 22 23 24 25 26   17 18 19 20 21 22 23   22 23 24 25 26 27 28
+27 28 29 30 31         24 25 26 27 28 29 30   29 30 31
+```
+
+### 搜索查找类
+
+#### find
+
+从指定目录向下递归遍历其各个子目录，将满足条件的文件或者目录显示在终端。
+
+```
+find 搜索范围 选项
+```
+
+| 选项         | 功能         |
+| ------------ | ------------ |
+| -name 文件名 | 根据名称查找 |
+| -user 用户名 | 查找指定用户所有文 |
+| -size 文件大小 （+nM 大于n兆、 -nM小于、nM 等于） | 按照指定文件大小查找文件 |
+
+查找/home目录下所有txt文件
+```
+find /home -name *.txt
+```
 
