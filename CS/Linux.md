@@ -491,8 +491,6 @@ Xshell是一个强大的安全终端模拟软件，支持SSH1，SSH2，以及Win
 | 翻页                    | 空格       |
 | 退出                    | CTRL+D     |
 
-
-
 ### 关机重启命令
 
 虽然目前**shutdown/reboot/halt**命令均已经在关机和重启前自动执行**sync**命令，但工作还是要小心谨慎。
@@ -924,6 +922,16 @@ cat [选项] 文件名
 
 `-n`：显示行号
 
+管道查看
+
+```
+cat 文件 | more
+```
+
+#### 管道符号
+
+管道符号|，表示将前一个命令的处理结果输出传递给后面的命令处理。
+
 #### more
 
 是一个基于**VI**编辑器的文本过滤器，以全屏幕的方式按页显示文本文件的内容。**more**指令中内置快捷键。
@@ -1192,3 +1200,114 @@ find 搜索范围 选项
 find /home -name *.txt
 ```
 
+#### locate
+
+快速定位文件路径。**Locate**利用实现建立的系统中所有文件名称及路径的locate数据库实现快速定位搜索的文件。locate指令无需遍历整个文件系统，查询速度较快。
+
+```
+locate 文件
+```
+
+根据它的特性，为了保证我们查询的准确性，在第一次使用前需要更新数据库或者平时定期更新数据库。
+
+```
+updatedb
+```
+
+#### which
+
+查看Linux指令映射的文件位置
+
+```
+which 指令
+```
+
+#### grep
+
+过滤查找文件内容
+
+```
+grep 选项 查找内容 源文件
+```
+
+`-n`显示匹配行及行号
+
+`-i`不区分大小写
+
+过滤查看内容
+
+```
+cat 文件 | grep 选项 要查看的内容
+```
+
+```shell
+[root@learnning home]# cat -n hello.txt
+     1	123
+     2	abc
+     3	123
+     4	abc
+     5	yes
+     6	Yes
+     7	yes
+
+[root@learnning home]# cat hello.txt | grep -ni yes
+5:yes
+6:Yes
+7:yes
+```
+
+### 压缩和解压
+
+#### gzip/gunzip
+
+主要用于单体文件的解压和压缩
+
+````
+gzip 被压缩的文件
+gunzip 被解压的文件.gz
+```
+
+```shell
+[root@learnning home]# gzip hello.txt
+[root@learnning home]# ls
+hello.txt.gz  sinbin
+[root@learnning home]# gunzip hello.txt.gz
+[root@learnning home]# ls
+hello.txt  sinbin
+```
+
+#### zip/unzip
+
+主要用于整个文件夹的项目的解压和压缩
+
+```
+zip -r 压缩后的文件名 被压缩的目录（不能是绝对路径，只能从该路径的上一级使用相对路径） 
+unzip -d 解压后的位置 被解压的文件名
+unzip (默认解压到当前文件夹)
+```
+
+用zip压缩/home下的a/时，最好cd在/home目录下执行`zip -r a.zip a`。否则在压缩时会多压缩一级目录。
+
+zip 默认把压缩后的文件生成到当前cd的文件夹下。
+
+#### tar
+
+tar的压缩文件后缀名为**.tar.gz**。
+
+```
+tar -zcvf 生成的文件名.tar.gz 被打包的目录/文件（一定要从目录的上一级用相对路径，否则会多打包一级目录） 
+```
+
+```
+tar -zxvf 要解包解压的文件 [-C 解压到的目录]
+```
+
+| 选项 | 作用                       |
+| ---- | -------------------------- |
+| -c   | 产生.tar打包文件           |
+| -v   | 显示详细信息               |
+| -f   | 指定压缩后的文件名         |
+| -z   | 用gzip对存档进行压缩或解压 |
+| -x   | 解包.tar文件               |
+
+多种选项组合选项`f`一定要放到最后。
