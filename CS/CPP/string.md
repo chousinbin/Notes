@@ -1,8 +1,10 @@
-# stringstream
+# string
+
+## stringstream
 
 如果一行有 $n$ 个空格隔开的字符串,在 $C$ 语言中无法直接单独读入。我们可以用 $string$ 的`getline`函数进行整行的读入，再用`stringstream`进行提取处理。
 
-## 错误票据
+### 错误票据
 
 某涉密单位下发了某种票据，并要在年终全部收回。
 
@@ -77,5 +79,21 @@ int main()
     cout<<m<<' '<<n;
     
 }
+```
+
+
+
+## 数字转string
+
+```cpp
+string str=to_string(123);
+```
+
+
+
+## string转int
+
+```cpp
+int x=stoi(str);
 ```
 

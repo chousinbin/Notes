@@ -463,7 +463,7 @@ Xshell是一个强大的安全终端模拟软件，支持SSH1，SSH2，以及Win
 | 保存退出**vim**                                           |      :wq      |
 | 如果有修改，不保存退出到正常模式。没有修改，退出**vim**。 |      :q       |
 | 不保存强制退出**vim**                                     |      :q!      |
-| 查找单次（区分大小写）                                    | /要查找的单次 |
+| 查找单词（区分大小写）                                    | /要查找的单次 |
 | 遍历找的多个单词                                          |      按n      |
 | 显示行号                                                  |    :set nu    |
 | 隐藏行号                                                  |   :set nonu   |
@@ -480,16 +480,17 @@ Xshell是一个强大的安全终端模拟软件，支持SSH1，SSH2，以及Win
 
 ### 基础命令
 
-| 操作名称                | 命令       |
-| ----------------------- | ---------- |
-| 显示当前目录            | pwd        |
-| 显示当前目录内容        | ls         |
-| 清屏                    | clear      |
-| 从终端显示文件信息      | cat 文件名 |
-| 进入vim编辑显示文件信息 | vim 文件名 |
-| 根据前缀自动补全        | `tab`      |
-| 翻页                    | 空格       |
-| 退出                    | CTRL+D     |
+| 操作名称                | 命令             |
+| ----------------------- | ---------------- |
+| 显示当前目录            | pwd              |
+| 显示当前目录内容        | ls               |
+| 清屏                    | clear            |
+| 从终端显示文件信息      | cat 文件名       |
+| 进入vim编辑显示文件信息 | vim 文件名       |
+| 根据前缀自动补全        | `tab`            |
+| 翻页                    | 空格             |
+| 退出                    | CTRL+D           |
+| 执行文件内的指令        | ./带有指令的文件 |
 
 ### 关机重启命令
 
@@ -581,7 +582,7 @@ graphical.target
 修改之后在主机开机级别即为默认级别。
 
 ```
-systemclt set-default 运行级别
+systemctl set-default 运行级别
 ```
 
 ### 帮助指令
@@ -1344,4 +1345,665 @@ chgrp 新的组名 所修改的文件
 
 
 ### 权限
+
+#### rwx解读
+
+`r`可读：文件可以读取查看内容/目录可以`ls`列举目录下的文件。
+
+`w`可写：目录可以进行目录内文件的创建或删除、重命名目录名。文件可以修改，但文件不代表可以删除（删除文件前提是对该文件所处的目录有可写的权限）。
+
+`x`可执行（execute）：文件可以被执行/目录可以`cd`进入。
+
+#### rwx数字表示
+
+r=4，w=2，x=1
+
+#### ls -l数据解读
+
+```
+-rw-r--r--.  1 sinbin abc      229 8月   1 19:21 change.md
+```
+
+##### 权限编号
+
+第0位，确定文件类型。`-`是普通文件； `l`是链接，相当于快捷方式；`d`是目录，相当于文件夹；`c`是字符设备，比如键鼠；`b`是块设备，比如硬盘。
+
+第1-3位，确定所有者对该文件的权限，权限为读、写不能执行。
+
+第4-6位，确定所属组对该文件的权限，权限为读、不能写、执行。
+
+第7-9位，确定其他用户拥对该文件的权限，权限为读，不能写、执行。
+
+##### 数字
+
+文件：硬连接数
+
+目录：子目录数
+
+##### 所属者
+
+sinbin
+
+##### 所在组
+
+abc
+
+##### 文件大写（字节）
+
+229
+
+##### 最后修改日期时间
+
+##### 文件名
+
+#### chmod修改文件/目录权限
+
+##### rwx修改
+
+u:所有者、g:所有组、o:其他人、a:所有人
+
+给所有者设置rwx，所在组设置rx，其他人设置x
+
+```
+chmod u=rwx,g=rx,o=x 文件/目录
+```
+
+给其他人添加w权限
+
+```
+chmod o+w 文件/目录
+```
+
+给其他人禁用w权限
+
+```
+chmod o-w 文件/目录
+```
+
+##### 数字修改
+
+相当于用数字修改权限为**rwx r-x --x**
+
+```
+chmod 751 文件/目录
+```
+
+#### chown修改文件/目录所有者
+
+```
+chown nerowner 文件/目录 新的所有者
+```
+
+递归修改目录下所有文件/目录的所有者
+
+```
+chown -R 新的所有者 路径
+```
+
+#### chown修改文件/目录所在组
+
+```
+chgrp newgroup 文件/目录 新的所在组
+```
+
+递归修改目录下所有文件/目录的所在组
+
+```
+chgrp -R 新的所在组 路径
+```
+
+
+
+## 8.定时任务调度
+
+### crond任务调度
+
+某个时间自动执行特定的程序或命令。
+
+#### crontab
+
+```
+crond 选项
+```
+
+| 选项 | 作用                             |
+| ---- | -------------------------------- |
+| -e   | 编辑crontab定时任务 每行一个任务 |
+| -l   | 查询crontab任务                  |
+| -r   | 删除当前用户所有crontab任务      |
+
+#### 重启任务调度
+
+```
+service crond restart
+```
+
+#### 任务结构
+
+```
+时间参数设置 指令
+时间参数设置 脚本路径（该用户对脚本必须有执行权限的前提下）
+```
+
+#### 时间参数
+
+五个位置依次为：分钟 小时 日 月 星期（0和7都代表日）
+
+| 符号 | 含义                                                        |
+| ---- | ----------------------------------------------------------- |
+| *    | 任何时间。每一分钟/小时/天/月/星期                          |
+| ,    | 不连续的时间。"0 8,12,14 * * *"代表每天8:00,12:00,14:00执行 |
+| -    | 时间范围。"0 5 * * 1-6"代表每星期一到星期六的5:00执行       |
+| */n  | 代表每隔多久执行一次。"*/10 * * * *"代表每隔10min执行一次   |
+
+#### mysql案例
+
+每天凌晨2:00点将mysql数据库testdb，备份到文件中。
+
+1. ```
+   crontab -e
+   ```
+
+2. ```
+   0 2 * * * mysqldump -u root -p密码 数据库文件testdb > /home/db.bak
+   ```
+
+### at任务调度
+
+#### 工作原理
+
+一次性定时计划任务，at的守护进程atd会以后台的模式运行，每60秒检查任务队列，有任务时，检查作业运行时间，时间匹配执行任务。at的命令的前提是atd进程一定要在后台运行。
+
+#### 检测当前运行的进程(atd)
+
+```
+ps -ef
+```
+
+```
+[root@learnning ~]# ps -ef | grep atd
+root       1086      1  0 12:55 ?        00:00:00 /usr/sbin/atd -f
+root       9357   5649  0 19:49 pts/1    00:00:00 grep --color=auto atd
+```
+
+#### 任务添加
+
+```
+at 选项 时间
+at> 指令
+（两次CTRL+D 结束任务添加）
+```
+
+| 其他指令      | 作用             |
+| ------------- | ---------------- |
+| atq           | 查看队列中at任务 |
+| atrm 任务编号 | 删除队列中at任务 |
+
+#### 时间参数
+
+1. hh:mm。时间当天没过当天执行，当天已过第二天执行。
+2. 模糊时间。midnight、noon、teatime（一般是下午四点）。
+3. 12小时制。加上AM/PM。例如12PM。
+4. **指定日期**。格式，mm dd或yy-mm-dd。指定日期必须放在时间的后面，例如12:00 2022-08-06。
+5. 相对计时法。now ＋ count time-units。count是时间数，time-units是时间单位。
+6. 直接使用，today,tommor。
+
+#### 实例
+
+1. 19:40把ls /home下的内容追加到/home/sinbin/a.txt文件中
+
+```
+[root@learnning ~]# at 19:40
+at> /bin/ls /home >> /home/sinbin/a.txt<EOT>
+job 1 at Sat Aug  6 19:40:00 2022
+
+[root@learnning sinbin]# ls
+a.txt  公共  模板  视频  图片  文档  下载  音乐  桌面
+[root@learnning sinbin]# cat a.txt
+change.md
+date.txt
+fox
+myroot
+sinbin
+```
+
+
+
+## 9.磁盘和挂载
+
+### 磁盘工作实用指令
+
+| 指令                              | 作用                               |
+| --------------------------------- | ---------------------------------- |
+| ls -l 目录 \| grep "^-" \| wc -l  | 统计目录下文件的个数               |
+| ls -lR 目录 \| grep "^-" wc -l    | 统计目录下文件的个数，包含子目录内 |
+| ls -l 目录 \| grep "^d" \| wc -l  | 统计目录下目录的个数               |
+| ls -lR 目录 \| grep "^d" \| wc -l | 统计目录下目录的个数，包含子目录内 |
+| yum install tree                  | tree指令安装                       |
+| tree 目录                         | 以树状显示目录结构                 |
+
+
+
+### 硬盘
+
+#### 硬盘分类
+
+Linux硬盘分为**IDE**硬盘和**SCSI**硬盘，目前基本是**SCSI**。
+
+对于SCSI硬盘，驱动器标识符为`sdx~`，sd表示分区所在设备的类型即**SCSI**硬盘，x表示盘号（a,b,c,d...）。~表示分区号主分区和扩展分区(1,2,3,4)，5为逻辑分区。例如sda1表示第一个SCSI硬盘的第一个分区。
+
+对于IDE硬盘，驱动器标识符为`sdx~`，表示法与SCSI一样。
+
+#### lsblk所有块设备信息
+
+```
+lsblk
+```
+
+```
+[root@learnning home]# lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    0   20G  0 disk 
+├─sda1   8:1    0  300M  0 part /boot
+├─sda2   8:2    0    2G  0 part [SWAP]
+└─sda3   8:3    0 17.7G  0 part /
+sr0     11:0    1 53.5M  0 rom  /run/media/sinbin/VMware Tools
+```
+
+#### df文件系统磁盘使用情况
+
+```
+df -h
+```
+
+```
+[root@learnning ~]# df -h
+文件系统        容量  已用  可用 已用% 挂载点
+devtmpfs        895M     0  895M    0% /dev
+tmpfs           910M     0  910M    0% /dev/shm
+tmpfs           910M   11M  900M    2% /run
+tmpfs           910M     0  910M    0% /sys/fs/cgroup
+/dev/sda3        18G  5.1G   13G   29% /
+/dev/sdb1       991M  2.6M  922M    1% /newdisk
+/dev/sda1       297M  164M  134M   55% /boot
+tmpfs           182M     0  182M    0% /run/user/0
+tmpfs           182M   24K  182M    1% /run/user/1000
+/dev/sr0         54M   54M     0  100% /run/media/sinbin/VMware Tools
+```
+
+#### du显示目录/文件占用空间
+
+```
+du 选项 --max-depth=层数 目录/文件
+```
+
+| 选项 | 作用                     |
+| ---- | ------------------------ |
+| -h   | 人们习惯的单位提高可读性 |
+| -a   | 包含文件                 |
+
+```
+[root@learnning fox]# du -ah --max-depth=1 /home
+265M	/home/sinbin
+32K		/home/fox
+0		/home/myroot
+4.0K	/home/change.md
+4.0K	/home/date.txt
+265M	/home
+```
+
+最后一行为当前目录占用的总大小。
+
+#### 添加硬盘
+
+在虚拟机菜单中，设置-添加硬盘-下一步-选择硬盘大小-下一步-重启系统-完成。
+
+```shell
+[sinbin@learnning ~]$ lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    0   20G  0 disk 
+├─sda1   8:1    0  300M  0 part /boot
+├─sda2   8:2    0    2G  0 part [SWAP]
+└─sda3   8:3    0 17.7G  0 part /
+sdb      8:16   0    1G  0 disk #新添加的1GB硬盘 但是没有分区 也没有挂载点也就时Linux系统无法使用
+sr0     11:0    1 53.5M  0 rom  /run/media/sinbin/VMware Tools
+```
+
+#### 硬盘分区
+
+```
+fdisk 要被分区的硬盘对应的文件
+```
+
+| fdisk命令 | 作用                    |
+| --------- | ----------------------- |
+| m         | 显示命令帮助信息        |
+| p         | 显示磁盘分区 同fdisk -l |
+| n         | 新增分区                |
+| d         | 删除分区                |
+| w         | **写入并退出！**        |
+
+```shell
+#sdb就是我们上一步添加的1GB硬盘的NAME
+
+[root@learnning ~]# fdisk /dev/sdb 
+欢迎使用 fdisk (util-linux 2.23.2)。
+
+更改将停留在内存中，直到您决定将更改写入磁盘。
+使用写入命令前请三思。
+
+Device does not contain a recognized partition table
+使用磁盘标识符 0x0d6d175f 创建新的 DOS 磁盘标签。
+
+命令(输入 m 获取帮助)：n
+Partition type:
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended
+Select (default p): p
+分区号 (1-4，默认 1)：1
+起始 扇区 (2048-2097151，默认为 2048)：2048
+Last 扇区, +扇区 or +size{K,M,G} (2048-2097151，默认为 2097151)：
+将使用默认值 2097151
+分区 1 已设置为 Linux 类型，大小设为 1023 MiB
+
+命令(输入 m 获取帮助)：w
+The partition table has been altered!
+
+Calling ioctl() to re-read partition table.
+正在同步磁盘。
+
+#此时查看磁盘状态 已经有了分区
+
+[root@learnning ~]# lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    0   20G  0 disk 
+├─sda1   8:1    0  300M  0 part /boot
+├─sda2   8:2    0    2G  0 part [SWAP]
+└─sda3   8:3    0 17.7G  0 part /
+sdb      8:16   0    1G  0 disk 
+└─sdb1   8:17   0 1023M  0 part 
+sr0     11:0    1 53.5M  0 rom  /run/media/sinbin/VMware Tools
+
+#但是挂载之前还需要对分区进行格式化
+```
+
+#### 硬盘格式化
+
+```
+mkfs -t 分区类型（常用ext4） 被格式化分区/dev下对应的文件
+```
+
+`-t`选项为文件系统。
+
+```
+[root@learnning ~]# mkfs -t ext4 /dev/sdb1
+mke2fs 1.42.9 (28-Dec-2013)
+文件系统标签=
+OS type: Linux
+块大小=4096 (log=2)
+分块大小=4096 (log=2)
+Stride=0 blocks, Stripe width=0 blocks
+65536 inodes, 261888 blocks
+13094 blocks (5.00%) reserved for the super user
+第一个数据块=0
+Maximum filesystem blocks=268435456
+8 block groups
+32768 blocks per group, 32768 fragments per group
+8192 inodes per group
+Superblock backups stored on blocks: 
+	32768, 98304, 163840, 229376
+
+Allocating group tables: 完成                            
+正在写入inode表: 完成                            
+Creating journal (4096 blocks): 完成
+Writing superblocks and filesystem accounting information: 完成
+```
+
+### 挂载
+
+> 挂载：mount
+
+在Linux系统中“一切皆文件”，所有文件都放置在以根目录为树根的树形目录结构中。在Linux系统中任何硬件设备也都是文件。当Linux系统需要调用使用这些硬件时，只有相应硬件设备的目录作为Linux系统目录中的一个文件时，设备才能被Linux所调用，相应硬件的目录成为Linux系统目录中的一个文件就叫挂载。
+
+挂载个人定义：把硬件作为文件使其在Linux系统内能被系统或用户所调用或使用。
+
+#### 命令行手动挂载分区
+
+挂载目录可以在根目录，也可以在其他目录，最好挂载目录是空目录，避免错误。
+
+```shell
+mount 设备名称 挂载目录
+```
+
+```shell
+[root@learnning /]# mount /dev/sdb1 /newdisk
+
+[root@learnning newdisk]# lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sdb      8:16   0    1G  0 disk 
+└─sdb1   8:17   0 1023M  0 part /newdisk  #此时有了挂载点 挂载成功
+```
+
+**注：命令行手动挂载再重启系统之后会失效。**
+
+#### 命令行手动取消挂载
+
+```
+umount 卸载的设备文件/卸载的挂载目录
+```
+
+```
+[root@learnning newdisk]# umount /dev/sdb1
+umount: /newdisk：目标忙。
+        (有些情况下通过 lsof(8) 或 fuser(1) 可以
+         找到有关使用该设备的进程的有用信息)
+
+[root@learnning /]# umount /dev/sdb1
+
+[root@learnning /]# lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    0   20G  0 disk 
+├─sda1   8:1    0  300M  0 part /boot
+├─sda2   8:2    0    2G  0 part [SWAP]
+└─sda3   8:3    0 17.7G  0 part /
+sdb      8:16   0    1G  0 disk 
+└─sdb1   8:17   0 1023M  0 part 
+```
+
+我们可以看到第一次尝试卸载挂载，我们cd在newdisk目录下造成”文件忙“的问题导致失败，我们要卸载一个挂载时，尽量cd在根目录下来操作。
+
+#### 自动永久挂载
+
+通过修改`/etc/fstab`实现永久挂载，前提是利用命令行挂载之后再进行此步骤实现永久挂载。
+
+```
+[root@learnning /]# vim /etc/fstab
+
+UUID=7475f080-894b-496b-b3f4-7a9375fd2189 /                       xfs     defaults 0 0
+UUID=b03d91ad-64a4-4688-bfa5-3a2382553350 /boot                   xfs     defaults 0 0
+UUID=090ff961-c853-4e46-bb66-7f0a240081f4 swap                    swap    defaults 0 0 
+
+/dev/sdb1                                 /newdesk                ext4    defaults 0 0
+上方如果UUID记不住可以用文件代替
+```
+
+
+
+## 10.网络
+
+#### Linux查询IP
+
+```
+ifconfig
+```
+
+#### Windows查询IP
+
+```
+ipconfig
+```
+
+#### Ping
+
+测试主机之间网络的连通性
+
+```
+ping 目的主机IP
+
+ping baidu.com
+```
+
+### 网络配置
+
+#### 自动获取IP地址
+
+在学习生活中，为了避免IP冲突，我们大多由系统启动后自动获取IP地址。缺点是每次启动后IP地址不一样。
+
+设置-网络-网络设置-IPv4-自动
+
+#### 指定IP（CentOS7.9）
+
+程序员远程开发Linux的IP地址经常变动，会对程序员开发非常不方便，我们需要给Linux远程主机固定一个IP。
+
+步骤
+
+1. 用`ifconfig`检查要修改的网络配置的名称。
+
+   ```
+   [root@bogon network-scripts]# ifconfig
+   ens33: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+           inet 192.168.159.133  netmask 255.255.255.0  broadcast 192.168.159.255
+           inet6 fe80::fbc2:e385:dc00:dd82  prefixlen 64  scopeid 0x20<link>
+           ether 00:0c:29:46:7a:63  txqueuelen 1000  (Ethernet)
+           RX packets 19029  bytes 26306617 (25.0 MiB)
+           RX errors 0  dropped 0  overruns 0  frame 0
+           TX packets 4946  bytes 317433 (309.9 KiB)
+           TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+   
+   lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+           inet 127.0.0.1  netmask 255.0.0.0
+           inet6 ::1  prefixlen 128  scopeid 0x10<host>
+           loop  txqueuelen 1000  (Local Loopback)
+           RX packets 0  bytes 0 (0.0 B)
+           RX errors 0  dropped 0  overruns 0  frame 0
+           TX packets 0  bytes 0 (0.0 B)
+           TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+   
+   virbr0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+           inet 192.168.122.1  netmask 255.255.255.0  broadcast 192.168.122.255
+           ether 52:54:00:17:dd:b8  txqueuelen 1000  (Ethernet)
+           RX packets 0  bytes 0 (0.0 B)
+           RX errors 0  dropped 0  overruns 0  frame 0
+           TX packets 0  bytes 0 (0.0 B)
+           TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+   ```
+
+   我们可以看到名称为**ens33**。
+
+2. 编辑`/etc/sysconfig/network-scripts`下的网卡配置文件`/ifcfg-ens33`。(不同版本的Linux网卡文件名不同)
+
+   ```
+   [root@learnning vim /etc/sysconfig/network-scripts/ifcfg-lo
+   
+   TYPE="Ethernet"
+   PROXY_METHOD="none"
+   BROWSER_ONLY="no"
+   BOOTPROTO="static"
+   DEFROUTE="yes"
+   IPV4_FAILURE_FATAL="no"
+   IPV6INIT="yes"
+   IPV6_AUTOCONF="yes"
+   IPV6_DEFROUTE="yes"
+   IPV6_FAILURE_FATAL="no"
+   IPV6_ADDR_GEN_MODE="stable-privacy"
+   NAME="ens33"
+   UUID="5b672be3-fd8a-4c0e-91d9-7c58458b4b98"
+   DEVICE="ens33"
+   ONBOOT="yes"
+   
+   #IP
+   IPADDR=192.168.159.133
+   #网关
+   GATEWAY=192.168.159.2
+   #域名解析器
+   DNS1=192.168.159.2             
+   ```
+
+   如果找不到**ifcfg-ens33**这个文件，重装系统。
+
+3. 修改VM虚拟机网络设置参数
+
+   VM-虚拟网络编辑器-VMnet8-修改IP、网关、CDN参数与步骤2修改内容一致。
+
+4. 重启网络服务
+
+   ```
+   service network restart
+   ```
+
+### NAT
+
+#### NAT网络原理图
+
+![](https://cdn.jsdelivr.net/gh/chousinbin/Image/Linux网络.png)
+
+#### 修改主机名
+
+修改`/etc/hostname`文件内容为要设定的主机名
+
+```
+vim /etc/hostname
+```
+
+### Hosts
+
+Hosts是一个本地的文本文件，用来记录IP和Hostname（主机名）的映射关系。
+
+### DNS
+
+#### 什么是DNS
+
+DNS，Domain Name System的缩写，域名系统。是互联网上作为域名和IP地址互相映射的一个分布式数据库。
+
+#### DNS解析流程
+
+```mermaid
+graph TD
+用户在浏览器输入www.google.com --> 浏览器检查浏览器缓存中是否有该域名解析IP地址
+浏览器检查浏览器缓存中是否有该域名解析IP地址 --有--- 完成解析并返回
+浏览器检查浏览器缓存中是否有该域名解析IP地址 --无--- 检查电脑本地DNS解析器缓存
+检查电脑本地DNS解析器缓存 --有--- 完成解析并返回
+检查电脑本地DNS解析器缓存 --无--- 检查本地hosts文件
+检查本地hosts文件 --有--- 完成解析并返回
+检查本地hosts文件 --无--- 访问DNS服务器
+访问DNS服务器　--有--- 完成解析并返回
+访问DNS服务器　--无--- 域名不存在访问失败 
+```
+
+更详细的解析流程内容[访问知乎](https://zhuanlan.zhihu.com/p/88260838)
+
+### hosts映射
+
+在本地通过修改hosts文件，把目标IP和别名映射起来，从而使别名代替冗长的IP，别名可以任意，最好与目标IP所在主机的主机名一致。
+
+#### 本地访问Linux虚拟机
+
+在本地电脑上通过Linux主机名找到（ping）Linux系统。
+
+本地电脑Windows修改`C:\Windows\System32\drivers\etc\hosts`文件
+
+添加一行新内容为
+
+```
+Linu系统IP Linux主机名
+```
+
+#### Linux虚拟机访问本地
+
+NAT网络模式下
+
+```
+vim /etc/hosts
+VM虚拟网卡IP 本地主机名
+```
 
