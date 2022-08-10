@@ -531,60 +531,6 @@ Xshell是一个强大的安全终端模拟软件，支持SSH1，SSH2，以及Win
 
 
 
-
-
-### 运行级别
-
-#### 运行级别介绍
-
-加粗为常用运行级别，也可以指定默认运行级别
-
-0. 关机
-1. 单用户（找回丢失密码）
-2. 多用户状态无网络服务
-3. **多用户状态有网络服务**
-4. 系统未使用保留给用户
-5. **图形界面**
-6. 系统从重启
-
-#### 3和5运行级别英文名称
-
-在**/etc/inittab**文件中，摘抄如下。
-
-```
-# multi-user.target: analogous to runlevel 3
-# graphical.target: analogous to runlevel 5
-```
-
-#### 切换运行级别
-
-```
-init 0123456
-```
-
-切换后某些级别需要根据提示输入账户和密码，进行登录。
-
-#### 查看当前级别
-
-```
-systemctl get-default
-```
-
-```
-[root@learnning ~]# systemctl get-default
-graphical.target
-```
-
-显示当前为图形界面
-
-#### 修改默认运行级别
-
-修改之后在主机开机级别即为默认级别。
-
-```
-systemctl set-default 运行级别
-```
-
 ### 帮助指令
 
 #### man
@@ -2005,5 +1951,290 @@ NAT网络模式下
 ```
 vim /etc/hosts
 VM虚拟网卡IP 本地主机名
+```
+
+
+
+## 11.进程管理
+
+在Linux中，每个执行的程序都称为一个进程。每一个进程都分配一个ID，名为PID（进程号）。
+
+进程有前台和后台两种存在类型，一般系统的服务都是后台进程，常驻在系统中，直到关机才结束。
+
+一个程序从硬盘被加载到内存当中后，程序就从静态的代码跑起来变成进程。
+
+### 查看进程
+
+#### 查看正在运行的进程
+
+显示系统进程信息，可以不带选项参数。
+
+```
+ps 选项
+```
+
+| 选项 | 作用                             |
+| ---- | -------------------------------- |
+| a    | 显示当前终端的所有进程信息       |
+| u    | 显示进程的归属用户和内存使用情况 |
+| x    | 显示没有控制终端的进程           |
+
+| 表头    | 含义                                                         |
+| ------- | ------------------------------------------------------------ |
+| PID     | 进程识别号                                                   |
+| %MEN    | 物理内存占用百分比                                           |
+| VSZ     | 虚拟内存占用大小，单位KB                                     |
+| RSS     | 物理内存占用大小，单位KB                                     |
+| TTY     | 该进程是在哪个终端运行的。其中，tty1 ~ tty7 代表本地控制台终端（可以通过 Alt+F1 ~ F7 快捷键切换不同的终端），tty1~tty6 是本地的字符界面终端，tty7 是图形终端。pts/0 ~ 255 代表虚拟终端，一般是远程连接的终端，第一个远程连接占用 pts/0，第二个远程连接占用 pts/1，依次増长。 |
+| STAT    | 进程状态。常见的状态有以下几种： <br /> -D：不可被唤醒的睡眠状态，通常用于 I/O 情况。<br /> -R：该进程正在运行。<br /> -S：该进程处于睡眠状态，可被唤醒。<br /> -T：停止状态，可能是在后台暂停或进程处于除错状态。<br /> -W：内存交互状态（从 2.6 内核开始无效）。<br /> -X：死掉的进程（应该不会出现）。<br /> -Z：僵尸进程。进程已经中止，但是部分程序还在内存当中。<br /> -<：高优先级（以下状态在 BSD 格式中出现）。<br /> -N：低优先级。<br /> -L：被锁入内存。<br /> -s：包含子进程。<br /> -l：多线程（小写 L）。<br /> -+：位于后台。终端机号 |
+| TIME    | 此进程所占用CPU时间                                          |
+| COMMAND | 启动进程所用的命令和参数,过长会被截断                        |
+
+#### 过滤查看正在运行的进程
+
+```
+ps aux | grep 要查找的进程
+```
+
+#### 显示系统执行的进程
+
+全格式显示当前所有的进程，用于查看父子进程关系。
+
+```
+ps -ef | grep xxx
+```
+
+| 表头  | 含义                                                         |
+| ----- | ------------------------------------------------------------ |
+| UID   | 用户ID                                                       |
+| PID   | 进程ID                                                       |
+| PPID  | 父进程ID                                                     |
+| C     | CPU计算执行优先级因子。数值越大，进程是CPU密集型运算，执行优先级会降低；数值越小，进程是I/O密集型运算，执行优先级会提高。 |
+| STIME | 进程启动的时间                                               |
+| TIME  | 占用CPU的时间                                                |
+| CMD   | 启动进程所用的命令和参数                                     |
+
+子进程被父进程启用。
+
+#### 查看进程树
+
+```
+pstree 选项
+```
+
+| 选项 | 作用         |
+| ---- | ------------ |
+| -p   | 显示PID      |
+| -u   | 显示所属用户 |
+
+### 终止进程
+
+#### kill
+
+通过进程号杀死进程
+
+```
+kill 选项 进程号
+```
+
+| 选项 | 作用                       |
+| ---- | -------------------------- |
+| -9   | 立即强制停止正在运行的进程 |
+
+终止一个用户
+
+```
+[root@zxb ~]# ps -aux | grep sshd
+...
+root       9005  0.0  0.2 156780  5436 ?        Ss   00:04   0:00 sshd: sinbin [priv]
+...
+[root@zxb ~]# kill 9005
+```
+
+#### killall
+
+通过进程名杀死进程，同时会杀死该进程的所有子进程。支持通配符。
+
+```
+killall 进程名
+```
+
+
+
+## 12.服务管理
+
+服务本质就是进程，但是是运行在后台的，通常会监听某个端口，等待其他程序的请求，比如mysqld,sshd,防火墙，因此我们又称为**守护进程**。
+
+### 服务的查看与管理
+
+#### setup
+
+查看系统全部服务，带星号的服务是Linux自启动的服务。
+
+![](https://cdn.jsdelivr.net/gh/chousinbin/Image/setup2.png)
+
+#### service管理服务
+
+```
+service 服务名 start/stop/restart/reload/status
+```
+
+在CentOS7.0以后，很多服务不再使用**service**，而是**systemctl**。
+
+#### 查看支持**service**指令的服务
+
+```
+[root@zxb init.d]# ls -l /etc/init.d/
+total 40
+-rw-r--r--. 1 root root 18281 May 22  2020 functions
+-rwxr-xr-x. 1 root root  4569 May 22  2020 netconsole
+-rwxr-xr-x. 1 root root  7928 May 22  2020 network
+-rw-r--r--. 1 root root  1160 Oct  2  2020 README
+```
+
+
+
+#### systemctl管理服务
+
+```
+systemctl start/stop/restart/status 服务名
+```
+
+使用此指令关闭或打开服务都是立即生效且为临时的，不会影响下次是否默认自启动。
+
+#### 查看支持systemctl管理的服务
+
+```
+ls -l /usr/lib/systemd/system
+```
+
+
+
+### 服务的运行级别
+
+#### runlevel
+
+- 运行级别0：系统停机状态，系统默认运行级别不能设为0，否则不能正常启动
+- 运行级别1：单用户工作状态，root权限，用于系统维护，禁止远程登陆
+- 运行级别2：多用户状态（没有NFS），不支持网络
+- 运行级别3：完全多用户状态（有NFS），登陆后进入控制台命令行模式
+- 运行级别4：系统未使用，保留
+- 运行级别5：X11控制台，登陆后进入图形GUI模式
+- 运行级别6：系统正常关闭或重启，默认运行级别不能设为6，否则不i能正常启动
+
+常用的是**3和5**。
+
+#### 运行级别文件
+
+在**/etc/inittab**文件中，摘抄如下。
+
+```
+# multi-user.target: analogous to runlevel 3
+# graphical.target: analogous to runlevel 5
+```
+
+#### 切换运行级别
+
+```
+init 0123456
+```
+
+切换后某些级别需要根据提示输入账户和密码，进行登录。
+
+#### 查看默认运行级别
+
+```
+systemctl get-default
+```
+
+```
+[root@learnning ~]# systemctl get-default
+graphical.target
+```
+
+#### 修改默认运行级别
+
+```
+systemctl set-default 运行级别的英文名
+```
+
+#### 开机流程
+
+```mermaid
+graph LR
+开机 --> BIOS --> /boot --> systemd进程1 --> 进入对应运行级别 --> 启动运行级对应的服务
+```
+
+### 服务的自启动
+
+#### 查看支持chkconfig指令的服务
+
+```
+[root@zxb init.d]# chkconfig --list[ | grep 服务]
+netconsole     	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+network        	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+```
+
+#### chkconfig修改自启动
+
+通过chkconfig命令可以给服务不同的运行级别设置不同的自启动/关闭状态。
+
+```
+chkconfig --level 5 服务名 on/off
+```
+
+使用**chkconfig**重新设置服务自启动选项后，需要重启系统生效。
+
+
+
+#### 查看支持systemctl管理的服务
+
+```
+systemctl list-unit-files[ | grep 服务名]
+```
+
+#### systemctl修改自启动
+
+systemctl修改服务自启同时修改第3和5运行级别的服务的自启状态。
+
+```
+打开自启
+systemctl enable 服务
+关闭自启
+systemctl disable 服务
+询问服务自启情况
+systemctl is-enabled 服务
+```
+
+### 防火墙端口管理
+
+#### 端口与防火墙
+
+```mermaid
+graph LR
+本地终端 --IP端口--> Linux
+Linux --防火墙打开--> 防火墙
+Linux --防火墙关闭--> 访问成功
+防火墙 --该端口被防火墙开放 --> 访问成功
+防火墙 --该端口被防火墙禁止 --> 访问失败
+```
+
+#### 查看端口和协议
+
+```
+netstat -anp | more
+```
+
+#### firewall
+
+```
+开放端口
+firewall-cmd --permanent --add-port=端口号/协议
+禁用端口
+firewall-cmd --permanent --remove-port=端口号/协议
+重新载入才能生效
+firewall-cmd --reload
+查询端口是否开放
+firewall-cmd --query-port=端口/xie'yi
 ```
 
