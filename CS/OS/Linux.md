@@ -1777,6 +1777,8 @@ UUID=090ff961-c853-4e46-bb66-7f0a240081f4 swap                    swap    defaul
 
 ## 10.网络
 
+### IP与Ping
+
 #### Linux查询IP
 
 ```
@@ -1953,6 +1955,38 @@ vim /etc/hosts
 VM虚拟网卡IP 本地主机名
 ```
 
+### 监控网络状态
+
+```
+netstat 选项[ | more][ | grep 进程]
+```
+
+| 选项 | 作用               |
+| ---- | ------------------ |
+| -an  | 按一定顺序排列输出 |
+| -p   | 显示哪个进程在调用 |
+
+#### 表头解释
+
+```shell
+[root@zxb ~]# netstat -an | more
+Active Internet connections (servers and established)
+
+#协议名               本地地址					远程地址				 状态
+Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+tcp        0      0 0.0.0.0:111             0.0.0.0:*               LISTEN      #监听 
+tcp        0      0 192.168.122.1:53        0.0.0.0:*               LISTEN     
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN     
+tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN     
+tcp        0      0 127.0.0.1:25            0.0.0.0:*               LISTEN     
+tcp        0      0 127.0.0.1:6010          0.0.0.0:*               LISTEN     
+tcp        0     36 192.168.159.133:22      192.168.159.1:2575      ESTABLISHED #已连接
+```
+
+
+
+
+
 
 
 ## 11.进程管理
@@ -2016,7 +2050,7 @@ ps -ef | grep xxx
 
 子进程被父进程启用。
 
-#### 查看进程树
+### 查看进程树
 
 ```
 pstree 选项
@@ -2058,6 +2092,49 @@ root       9005  0.0  0.2 156780  5436 ?        Ss   00:04   0:00 sshd: sinbin [
 ```
 killall 进程名
 ```
+
+
+
+### top动态进程监控
+
+top与ps很相似，唯一的不同是，在top执行一段时间可以实时更新正在运行的进程。
+
+```
+top 选项
+```
+
+| 选项      | 作用                  |
+| --------- | --------------------- |
+| -d 10     | 10秒更新一次，默认3秒 |
+| -u 用户名 | 监听指定用户的进程    |
+|           |                       |
+
+![](https://cdn.jsdelivr.net/gh/chousinbin/Image/top.png)
+
+
+| 表头    | 含义                                    |
+| ------- | --------------------------------------- |
+| PID     | 进程号                                  |
+| USER    | 进程所属用户                            |
+| PR      | 优先级，数值越小优先级越高              |
+| NI      | 优先级，数值越小、优先级越高            |
+| VIRT    | 该进程使用的虚拟内存的大小，单位为 KB。 |
+| RES     | 该进程使用的物理内存的大小，单位为 KB。 |
+| SHR     | 共享内存大小，单位为 KB                 |
+| S       | 进程状态                                |
+| ％CPU   | 该进程占用 CPU 的百分比                 |
+| ％MEN   | 该进程占用内存的百分比                  |
+| TIME+   | 该进程共占用的 CPU 时间。               |
+| COMMAND | 进程的命令名                            |
+
+| 交互 | 功能                                                  |
+| ---- | ----------------------------------------------------- |
+| P    | 以CPU使用率排序，默认就是如此                         |
+| M    | 以内存使用率排序                                      |
+| N    | 以PID排序                                             |
+| u    | 按u之后输入用户名，查看该用户所属的进程               |
+| k    | 按k之后输入PID，然后输入9立即杀死进程，实现进程的终止 |
+| q    | 退出top                                               |
 
 
 
@@ -2235,6 +2312,130 @@ firewall-cmd --permanent --remove-port=端口号/协议
 重新载入才能生效
 firewall-cmd --reload
 查询端口是否开放
-firewall-cmd --query-port=端口/xie'yi
+firewall-cmd --query-port=端口/协议
 ```
+
+
+
+
+
+## 13.软件安装
+
+### RPM
+
+RPM是Linux系统两个类型软件包之一，其中RPM软件包是二进制包，源码已经被编译过，安装应用速度较快。
+
+```
+rpm 选项
+```
+
+#### RPM包名称解读
+
+```
+firefox-68.10.0-1.el7.centos.x86_64
+
+名称 firefox
+版本号 68.10.0
+二进制包的发布次数 1
+软件发行商 el7 适用于centos7.x上使用
+适用操作系统 centos
+x86_64 适用于64位操作系统
+i686、i386表示32位操作系统
+noarch表示通用
+```
+
+#### 查询RPM包
+
+| 选项                 | 作用                      |
+| -------------------- | ------------------------- |
+| -qa                  | 查看所有已安装RPM包       |
+| -qa \| grep 软件包名 | 管道符过滤查找            |
+| -q 软件包名          | 查看RPM包是否安装         |
+| -qi 软件包名         | 查看RPM包详细信息         |
+| -ql 软件包名         | 查询RPM包中的文件         |
+| -qf 文件             | 查询该文件归属于哪个RPM包 |
+
+#### 安装卸载更新RPM包
+
+| 选项                 | 作用                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| -e 包名              | 卸载RPM包也就卸载了应用                                      |
+| -e --nodeps 包名     | 强制删除，但是可能导致其他依赖此软件包的应用之后无法正常使用，慎用！ |
+| -ivh RPM包全路径名称 | 安装RPM包，i=install，v=verbose，h=hash进度条                |
+
+### Yum
+
+Yum是一个Shelli前端软件包管理器。基于RPM包管理，能够从指定的服务器自动下载RPM包并且安装。
+
+优点：可以自动处理依赖性关系，并且**一次安装所有依赖的软件包**。
+
+#### 查询Yum包
+
+```
+yum list | grep 软件名
+```
+
+#### 安装Yum包
+
+```
+yum install 软件包
+```
+
+### JavaEE环境安装
+
+#### 安装JDK
+
+- mkdir /opt/jdk
+
+- 把从windows下载的jdk.tar.gz用xftp上传到 /opt/jdk
+
+- 解压tar -zxvf jdk.tar.gz
+
+- 移动mv /opt/jdk/jdk-1.8.0/ /etc/local/java/
+
+- 配置环境变量 vim /etc/profile 进入编辑模式 在末尾添加如下内容
+
+- export JAVA_HOME=/usr/local/java/jdk-1.8.0
+
+- ```
+  export PATH=$JAVA_HOME/bin:$PATH
+  ```
+
+- ```
+  source /etc/profile #让新的环境变量生效
+  ```
+
+- 安装完成
+
+#### 安装TomCat8
+
+- 上传安装文件，并解压到`/opt/tomcat/`
+- 进入解压目录`/bin`启动tomcat。`./startup.sh`
+- 开放端口
+- 在Linux、Windows下访问`https://linuxip:8080`，Linux的8080端口默认被防火墙禁止，需手动打开。
+
+![12](https://cdn.jsdelivr.net/gh/chousinbin/Image/tomcat8080.png)
+
+成功！
+
+#### 安装IDEA
+
+- 上传安装文件，并解压到`/opt/idea`
+- 进入解压目录`/bin`启动idea`./idea.sh`
+- idea需要从图形化终端启动
+
+#### 安装MySQL5.7
+
+- 上传安装文件，并解压到`/opt/mysql`
+- centos7自带类MySQL数据库mariadb，会与MySQL冲突，要先卸载。
+- 按照顺序依次安装
+- rpm -ivh mysql-community-common
+- 
+- 
+
+
+
+
+
+## 14.shell
 
