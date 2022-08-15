@@ -2426,16 +2426,776 @@ yum install 软件包
 
 #### 安装MySQL5.7
 
-- 上传安装文件，并解压到`/opt/mysql`
-- centos7自带类MySQL数据库mariadb，会与MySQL冲突，要先卸载。
-- 按照顺序依次安装
-- rpm -ivh mysql-community-common
-- 
-- 
+1. 上传安装文件，并解压到`/opt/mysql`
+2. centos7自带类MySQL数据库mariadb，会与MySQL冲突，要先卸载。
+3. 移动mysql目录到`/usr/local/mysql`
+4. 把mysql目录所有者和所在组改成mysql用户
+5. 把mysql及目录内所有文件权限设置为755
+6. 在mysql下创建`date/`
+7. 进入`mysql/bin`执行
 
+```
+./mysqld --initialize --user=mysql --datadir=/usr/local/mysql/data --basedir=/usr/local/mysql
+```
 
+8. 得到临时密码：/hDQZ?+>A8.N
+9. 编辑配置文件
+
+```
+[root@localhost bin]#  vi /etc/my.cnf
+
+[mysqld]
+datadir=/usr/local/mysql/data
+port = 3306
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
+symbolic-links=0
+max_connections=400
+innodb_file_per_table=1
+#表名大小写不明感，敏感为
+lower_case_table_names=1
+```
+
+10. 配置软链接
+
+```
+[root@localhost /]#  ln -s /usr/local/mysql/support-files/mysql.server /etc/init.d/mysql 
+[root@localhost /]#  ln -s /usr/local/mysql/bin/mysql /usr/bin/mysql
+[root@localhost /]#  service mysql restart
+```
+
+11. 登陆MySQL，修改密码
+
+```
+[root@localhost /]#  mysql -u root -p
+Enter password:
+mysql>set password for root@localhost = password('yourpass');
+```
+
+12. 开放远程连接
+
+```
+mysql>use mysql;
+msyql>update user set user.Host='%' where user.User='root';
+mysql>flush privileges;
+```
+
+13. 退出MySQL命令行`\q`
+14. 设置开机自启动
+
+```
+1、将服务文件拷贝到init.d下，并重命名为mysql
+[root@localhost /]# cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysqld
+2、赋予可执行权限
+[root@localhost /]# chmod +x /etc/init.d/mysqld
+3、添加服务
+[root@localhost /]# chkconfig --add mysqld
+4、显示服务列表
+[root@localhost /]# chkconfig --list
+```
 
 
 
 ## 14.shell
+
+shell是一个命令行解释器，它为用户提供了一个向Linux内核发送请求以便运行程序的界面系统级程序，用户可以用shell来启动、挂起、停止甚至是编写一个程序。
+
+### 格式
+
+- 脚本名后缀`.sh`
+
+- 脚本以`#!/bin/bash`开头
+- 脚本需要有可执行权限
+
+```shell
+[root@zxb shell]# vim hello.sh
+#!/bin/bash
+
+echo "hello!";
+
+[root@zxb shell]# ll
+total 4
+-rw-r--r--. 1 root root 30 Aug 13 17:15 hello.sh
+[root@zxb shell]# chmod u=rwx hello.sh
+[root@zxb shell]# ll
+total 4
+-rwxr--r--. 1 root root 30 Aug 13 17:15 hello.sh
+
+[root@zxb shell]# ./hello.sh 
+hello!
+```
+
+### 执行
+
+- 脚本目录内，相对路径的执行
+
+```
+[root@zxb shell]# ./hello.sh
+hello!
+```
+
+- 不在脚本目录内，绝对路径的执行
+
+```
+[root@zxb /]# /home/study/shell/hello.sh
+hello!
+```
+
+- sh执行，不需要脚本文件的执行权限,，绝对路径相对路径均可以
+
+```
+sh 脚本.sh
+
+[root@zxb shell]# ll
+total 4
+-rw-r--r--. 1 root root 28 Aug 13 17:16 hello.sh
+[root@zxb shell]# sh hello.sh 
+hello!
+[root@zxb shell]# cd ..
+[root@zxb study]# sh shell/hello.sh 
+hello!
+```
+
+#### 以后台方式执行脚本
+
+```
+/home/study/shell/hello.sh &
+```
+
+### 变量和赋值
+
+```shell
+#!/bin/bash
+
+#定义复制变量A
+A=100
+
+#输出变量 以下会输出"A=100" 解释器会把$后的视为变量 其他按照字符输出
+echo A=$A
+
+#撤销变量A 撤销之后A变量消失
+unset A
+
+#声明静态的变量B=1，不能撤销
+readonly B=2
+echo B=$B
+
+#命令的返回值赋值给变量
+C=`date` #运行里面的命令并返回给C
+C=$(date) #同上等价
+
+
+```
+
+定义变量的规则
+
+1. 变量名称可以由字母、数字和下划线组成，但是不能以数字开头。
+2. 变量名称字母一般习惯为大写
+3. 赋值的等号两侧不可以有空格
+
+#### 环境变量
+
+环境变量也就是全局变量，Linux的全部环境变量在`/etc/profile`文件中统一定义，供其他脚本或程序使用。
+
+```shell
+#环境变量的定义和赋值
+export 变量名=变量值
+
+#其他脚本输出环境变量
+echo $变量名
+
+#配置信息的刷新
+source /etc/profile
+```
+
+样例
+
+```shell
+#添加一个环境变量
+[root@zxb study]# vim /etc/profile
+export hj1=/home/sinbin
+
+#在其他脚本调用输出环境变量
+[root@zxb study]# vim var.sh
+echo $hj1
+
+#执行其他脚本
+[root@zxb study]# sh var.sh 
+/home/sinbin
+```
+
+#### 位置参数变量
+
+当我们执行shell脚本时，如果希望.sh里面获取到命令行的参数信息，就可以使用位置参数变量。
+
+| 语法 | 作用                                                         |
+| ---- | ------------------------------------------------------------ |
+| $n   | n为数字，0代表命令本身，`$1-$9`代表第1-9个参数，两位（含）以上的n，用`{}`括起来。 |
+| $*   | 代表命令行中所有的参数，把所有的参数看成一个整体             |
+| $@   | 代表命令行中所有的参数，把每个参数区分对待                   |
+| $#   | 代表命令行中所有的参数的个数                                 |
+
+```shell
+[root@zxb shell]#vim weizhi_canshu.sh
+
+#!/bin/bash
+echo 0=$0 1=$1 2=$2
+echo $*
+echo $@
+echo 总数=$#
+
+[root@zxb shell]# sh weizhi_canshu.sh 111 222
+0=weizhi_bianliang.sh 1=111 2=222
+111 222
+111 222
+总数=2
+```
+
+#### 预定义变量
+
+就是shell设计者事先已经定义好的变量，可以直接在shell脚本中使用。
+
+| 语法 | 作用                                                         |
+| ---- | ------------------------------------------------------------ |
+| $$   | 当前进程的进程号PID                                          |
+| $!   | 后台运行的最后一个进程的进程号PID                            |
+| $?   | 最后一次执行命令的返回状态。如果为0，证明上一个命令正确执行；反之证明上个命令错误执行。 |
+
+```shell
+
+[root@zxb shell]# sh pre_var.sh 
+self_pid=17413
+bach_last_pid=17414
+all_last_state=0
+[root@zxb shell]# hello!
+```
+
+###  注释
+
+```shell
+:<<!
+内容
+!
+```
+
+### 运算符
+
+```
+"$((运算式))"
+"$[运算式]"
+`expr m + n`
+```
+
+- **expr**运算要有必须要有空格，且运算符分别为`\*`,`/`,`+`,`-`,`%`。
+- **expr**运算式整体要被``括起来。
+
+```shell
+#!/bin/bash
+#计算(9+8)*2的值
+RES1=$(((9+8)*2))
+echo "RES1=$RES1"
+RES2=$[(9+8)*2]
+echo "RES2=$RES2"
+TEMP=`expr 9 + 8`
+RES3=`expr $TEMP \* 2`
+echo "RES3=$RES3"
+
+#求出两个命令行参数之和
+echo $[$1+$2]
+
+[root@zxb shell]# sh oper.sh 9 8
+RES1=34
+RES2=34
+RES3=34
+17
+```
+
+### 条件判断
+
+| 条件选项          | 作用                       |
+| ----------------- | -------------------------- |
+| 整数1 -gt 整数2   | 比较整数1是否大于整数2     |
+| 整数1 -ge 整数2   | 比较整数1是否大于等于整数2 |
+| 整数1 -eq 整数2   | 比较整数1是否等于整数2     |
+| 整数1 -ne 整数2   | 比较整数1是否不等于整数2   |
+| 整数1 -lt 整数2   | 比较整数1是否小于整数2     |
+| 整数1 -le 整数2   | 比较整数1是否小于等于整数2 |
+| 字符串1 = 字符串2 | 比较字符串是否相等         |
+| 空                | false                      |
+| 非空              | true                       |
+| -f 文件路径       | 文件存在并且是一个常规文件 |
+| -e 文件路径       | 文件存在                   |
+| -d 文件路径       | 存在并且是一个目录         |
+
+#### 单分支
+
+```shell
+#!/bin/bash
+
+if [ 条件 ] #条件左右各有一个空格不可缺少
+then #满足
+else #不满足
+fi #结束标志
+```
+
+#### 多分支
+
+```shell
+#!/bin/bash
+
+if [ $1 -gt 60 ]
+then
+        echo "yes"
+elif [ $1 -lt 60 ]
+then
+        echo "no"
+else
+        echo "6060"
+fi
+```
+
+### 流程控制
+
+#### case
+
+```shell
+#!/bin/bash
+
+#命令行参数时1时，输出周一，2时输出周二，其他输出other
+case $1 in
+
+"1") #命令行为1的情况
+echo "周一"
+;; #一个case的结束
+
+"2") #命令行为2的情况
+echo "周二"
+;;
+
+*) #命令行为其他的情况
+echo "other"
+;;
+
+esac #整个case的结束
+```
+
+#### for
+
+一般语法
+
+```shell
+#!/bin/bash
+#打印命令行输入的参数 区分$*与$@
+for i in "$*"
+do
+        echo "$ *num is $i"
+done
+
+for i in "$@"
+do
+        echo "$ @num is $i"
+done
+[root@zxb shell]# sh for.sh 1 2 3
+$ *num is 1 2 3
+$ @num is 1
+$ @num is 2
+$ @num is 3
+```
+
+常用语法
+
+```shell
+#!/bin/bash
+#计算1-$1之和
+for (( i=1; i<=$1; i++))
+do
+	$SUM=$[$SUM+$i]
+done
+echo SUM=$SUM
+```
+
+#### while
+
+```shell
+#!/bin/bash
+
+while [ 条件判断式 ]
+do
+	程序
+done
+```
+
+```shell
+#!/bin/bash
+#while倒求0-99之和
+i=100
+while [ $[i--] -gt 0 ]
+do
+        SUM=$[$SUM+$i]
+done
+echo $SUM
+#while求1-100之和
+j=1 SUM2=0
+while [ $j -le 100 ]
+do
+        SUM2=$[$SUM2+$j]
+        j=$[$j+1]
+done
+echo $SUM2
+```
+
+### read
+
+#### 普通read
+
+```shell
+read -p "输出语句" 输入后被赋值的变量
+```
+
+```shell
+#!/bin/bash
+read -p "请输入NUM1=" NUM1
+echo "NUM1=$NUM1"
+```
+
+#### 限时read
+
+```
+read -t 秒数 -p "输出语句" 变量
+```
+
+### 系统函数
+
+#### basename
+
+返回完整路径最后`/`后面的部分，常用于获取文件名
+
+```shell
+basename 文件绝对路径 要删除的后缀
+
+[root@zxb shell]# basename /home/study/shell/hello.sh
+hello.sh
+[root@zxb shell]# basename /home/study/shell/hello.sh .sh
+hello
+```
+
+#### dirname
+
+返回完整路径最后`/`的前面的部分，常用于返回路径部分
+
+```
+dirname 文件绝对路径
+
+[root@zxb shell]# dirname /home/study/shell/hello.sh 
+/home/study/shell
+```
+
+### 自定义函数
+
+```shell
+#!/bin/bash
+#获取两个参数之和
+function get_sum()
+{
+        SUM=$[$n1+$n2]
+        echo "SUM=$SUM"
+}
+#输入
+read -p "输入n1=" n1
+read -p "输入n2=" n2
+#调用
+get_sum $n1 $n2
+
+[root@zxb shell]# sh fun_sum.sh 
+输入n1=2
+输入n2=8
+SUM=10
+```
+
+### 定时备份数据库
+
+
+
+
+
+## 15.系统日志管理
+
+日志激励很多重要的系统事件，包括用户的登陆信息，系统的启动信息、系统的安全信息、邮件相关信息、各种服务相关的信息。
+
+日志对于安全来说也很重要，记录了系统每天发生的各种事情，通过日志来检查错误发生的原因，或者受到攻击时，攻击者留下的痕迹。
+
+### 系统日志
+
+#### 系统日志的保存位置
+
+`/var/log/`
+
+```
+[root@zxb local]# ls /var/log/
+anaconda           gdm                 sa                    vmware-network.3.log
+audit              glusterfs           samba                 vmware-network.4.log
+boot.log           grubby_prune_debug  secure                vmware-network.5.log
+boot.log-20220810  lastlog             secure-20220814       vmware-network.6.log
+boot.log-20220811  libvirt             speech-dispatcher     vmware-network.log
+boot.log-20220813  maillog             spooler               vmware-vgauthsvc.log.0
+btmp               maillog-20220814    spooler-20220814      vmware-vmsvc-root.log
+chrony             messages            sssd                  vmware-vmtoolsd-root.log
+cron               messages-20220814   swtpm                 wpa_supplicant.log
+cron-20220814      ntpstats            tallylog              wtmp
+cups               pluto               tuned                 Xorg.0.log
+dmesg              ppp                 vmware                Xorg.0.log.old
+dmesg.old          qemu-ga             vmware-network.1.log  yum.log
+firewalld          rhsm                vmware-network.2.log
+```
+
+#### 常用的系统日志
+
+| 日志文件          | 说 明                                                        |
+| ----------------- | ------------------------------------------------------------ |
+| /var/log/cron     | 记录与系统定时任务相关的曰志                                 |
+| /var/log/cups/    | 记录打印信息的曰志                                           |
+| /var/log/dmesg    | 记录了系统在开机时内核自检的信总。也可以使用dmesg命令直接查看内核自检信息 |
+| /var/log/btmp     | 记录错误登陆的日志。这个文件是二进制文件，不能直接用Vi查看，而要使用lastb命令查看。命令如下： [root@localhost log]#lastb root tty1 Tue Jun 4 22:38 - 22:38 (00:00) #有人在6月4 日 22:38便用root用户在本地终端 1 登陆错误 |
+| /var/log/lasllog  | 记录系统中所有用户最后一次的登录时间的曰志。这个文件也是二进制文件.不能直接用Vi 查看。而要使用lastlog命令查看 |
+| /var/Iog/mailog   | 记录邮件信息的曰志                                           |
+| /var/log/messages | 它是核心系统日志文件，其中包含了系统启动时的引导信息，以及系统运行时的其他状态消息。I/O 错误、网络错误和其他系统错误都会记录到此文件中。其他信息，比如某个人的身份切换为 root，已经用户自定义安装软件的日志，也会在这里列出。 |
+| /var/log/secure   | 记录验证和授权方面的倍息，只要涉及账户和密码的程序都会记录，比如系统的登录、ssh的登录、su切换用户，sudo授权，甚至添加用户和修改用户密码都会记录在这个日志文件中 |
+| /var/log/wtmp     | 永久记录所有用户的登陆、注销信息，同时记录系统的后动、重启、关机事件。同样，这个文件也是二进制文件.不能直接用Vi查看，而要使用last命令查看 |
+| /var/tun/ulmp     | 记录当前已经登录的用户的信息。这个文件会随着用户的登录和注销而不断变化，只记录当前登录用户的信息。同样，这个文件不能直接用Vi查看，而要使用w、who、users等命令查看 |
+
+### 日志管理服务
+
+CentOS7.x的日志服务是rsyslogd，6.x是syslogd。rsyslogd更强大，其使用、日志文件的格式和syslogd兼容。
+
+#### 查询rsyslogd服务是否启动
+
+```
+ps aux | grep rsyslogd | grep -v grep
+
+ | grep rsyslogd 显示含有rsyslogd相关的
+ | grep -v grep 反向过滤不显示含有grep自身的
+```
+
+#### 查询rsyslogd自启动
+
+```
+[root@zxb log]# systemctl list-unit-files | grep rsyslog
+rsyslog.service                               enabled 
+```
+
+#### rsyslogd配置文件
+
+配置文件地址：`/etc/rsyslog.conf`
+
+格式
+
+```
+日志服务 连接符号 日志等级 日志记录位置
+
+cat /etc/rsyslog.conf
+# Log all the mail messages in one place.
+mail.*   -/var/log/maillog
+```
+
+##### 连接符号
+
+在这里，连接符号可以被识别为以下三种。
+
+1. “.”代表只要比后面的等级高的（包含该等级）日志都记录。比如，“cron.info”代表cron服务产生的日志，只要日志等级大于等于info级别，就记录。
+2. “.=”代表只记录所需等级的日志，其他等级的日志都不记录。比如，“*.=emerg”代表人和日志服务产生的日志，只要等级是emerg等级，就记录。这种用法极少见，了解就好。
+3. “.！”代表不等于，也就是除该等级的日志外，其他等级的日志都记录。
+
+##### 服务名称
+
+我们首先需要确定 rsyslogd 服务可以识别哪些服务的日志，也可以理解为以下这些服务委托 rsyslogd 服务来代为管理日志。
+
+| 服务名称                     | 说 明                                                        |
+| ---------------------------- | ------------------------------------------------------------ |
+| auth(LOG AUTH)               | 安全和认证相关消息 (不推荐使用authpriv替代）                 |
+| authpriv(LOG_AUTHPRIV)       | 安全和认证相关消息（私有的）                                 |
+| cron (LOG_CRON)              | 系统定时任务cront和at产生的日志                              |
+| daemon (LOG_DAEMON)          | 与各个守护进程相关的曰志                                     |
+| ftp (LOG_FTP)                | ftp守护进程产生的曰志                                        |
+| kern(LOG_KERN)               | 内核产生的曰志（不是用户进程产生的）                         |
+| Iocal0-local7 (LOG_LOCAL0-7) | 为本地使用预留的服务                                         |
+| lpr (LOG_LPR)                | 打印产生的日志                                               |
+| mail (LOG_MAIL)              | 邮件收发信息                                                 |
+| news (LOG_NEWS)              | 与新闻服务器相关的日志                                       |
+| syslog (LOG_SYSLOG)          | 存syslogd服务产生的曰志信息（虽然服务名称己经改为reyslogd，但是很多配罝依然沿用了 syslogd服务的，所以这里并没有修改服务名称） |
+| user (LOG_USER)              | 用户等级类别的日志信息                                       |
+| uucp (LOG_UUCP>              | uucp子系统的日志信息，uucp是早期Linux系统进行数据传递的协议，后来 也常用在新闻组服务中 |
+
+这些日志服务名称是rsyslogd服务自己定义的，并不是实际的Linux的服务。当有服务需要由rsyslogd服务来帮助管理日志时，只需要调用这些服务名称就可以实现日志的委托管理。
+
+这些日志服务名称大家可以使用命令“man 3 syslog”来查看。虽然我们的日志管理服务已经更新到rsyslogd，但是很多配置依然沿用了syslogd服务，在帮助文档中仍然查看syslog服务的帮助信息。
+
+##### 服务等级
+
+每个日志的重要性都是有差别的，比如，有些日志只是系统的一个日常提醒，看不看根本不会对系统的运行产生影响；但是有些日志就是系统和服务的警告甚至报错信息，这些日志如果不处理，就会威胁系统的稳定或安全。如果把这些日志全部写入一个文件，那么很有可能因为管理员的大意而忽略重要信息。
+
+比如，我们在工作中需要处理大量的邮件，笔者每天可能会接收到200多封邮件。而这些邮件中的绝大多数是不需要处理的普通信息邮件，甚至是垃圾邮件。所以笔者每天都要先把这些大量的非重要邮件删除之后，才能找到真正需要处理的邮件。但是每封邮件的标题都差不多，有时会误删除需要处理的邮件。这时笔者就非常怀念Linux的日志等级，如果邮件也能标识重要等级，就不会误删除或漏处理重要邮件了。
+
+邮件的等级信息也可以使用“man 3 syslog”命令来查看
+
+| 等级名称             | 说 明                                                        |
+| -------------------- | ------------------------------------------------------------ |
+| debug (LOG_DEBUG)    | 一般的调试信息说明                                           |
+| info (LOG_INFO)      | 基本的通知信息                                               |
+| nolice (LOG_NOTICE)  | 普通信息，但是有一定的重要性                                 |
+| warning(LOG_WARNING) | 警吿信息，但是还不会影响到服务或系统的运行                   |
+| err(LOG_ERR)         | 错误信息, 一般达到err等级的信息已经可以影响到服务成系统的运行了 |
+| crit (LOG_CRIT)      | 临界状况信思，比err等级还要严®                               |
+| alert (LOG_ALERT)    | 状态信息，比crit等级还要严重，必须立即采取行动               |
+| emerg (LOG_EMERG)    | 疼痛等级信息，系统已经无法使用了                             |
+| *                    | 代表所有日志等级。比如，“authpriv.*”代表amhpriv认证信息服务产生的日志，所有的日志等级都记录 |
+
+##### 日志记录位置
+
+日志记录位置就是当前日志输出到哪个日志文件中保存，当然也可以把日志输出到打印机打印，或者输出到远程日志服务器上（当然，远程日志服务器要允许接收才行）。日志的记录位置也是固定的：
+
+- 日志文件的绝对路径。这是最常见的日志保存方法，如“/var/log/secure”就是用来保存系统验证和授权信息日志的。
+- 系统设备文件。如“/dev/lp0”代表第一台打印机，如果日志保存位置是打印机设备，当有日志时就会在打印机上打印。
+- 转发给远程主机。因为可以选择使用 TCP 和 UDP 协议传输日志信息，所以有两种发送格式：如果使用“@192.168.0.210：514”，就会把日志内容使用 UDP 协议发送到192.168.0.210 的 UDP 514 端口上；如果使用“@@192.168.0.210：514”，就会把日志内容使用 TCP 协议发送到 192.168.0.210 的 TCP 514 端口上，其中 514 是日志服务默认端口。当然，只要 192.168.0.210 同意接收此日志，就可以把日志内容保存在日志服务器上。
+- 用户名。如果是“root”，就会把日志发送给 root 用户，当然 root 要在线，否则就收不到日志信息了。发送日志给用户时，可以使用“*”代表发送给所有在线用户，如“mail.**”就会把 mail 服务产生的所有级别的日志发送给所有在线用户。如果需要把日志发送给多个在线用户，则用户名之间用“，”分隔。
+- 忽略或丢弃日志。如果接收日志的对象是“~”，则代表这个日志不会被记录，而被直接丢弃。如“local3.* ~”代表忽略 local3 服务类型所有的日志都不记录。
+- 忽略或丢弃日志。如果接收日志的对象是“~”，则代表这个日志不会被记录，而被直接丢弃。如“local3.* ~”代表忽略 local3 服务类型所有的日志都不记录。
+
+### 日志文件
+
+#### 日志文件格式
+
+1. 事件产生的时间
+2. 产生事件的服务器的主机名
+3. 产生事件的服务器的程序/服务名
+4. 事件的具体信息
+
+```
+[root@zxb etc]# cat /var/log/secure
+Aug 15 21:48:46 zxb unix_chkpwd[40293]: password check failed for user (sinbin)
+Aug 15 21:48:48 zxb sshd[40289]: Failed password for sinbin from 192.168.159.1 port 12388 ssh2
+Aug 15 21:48:53 zxb sshd[40289]: Accepted password for sinbin from 192.168.159.1 port 12388 ssh2
+Aug 15 21:48:53 zxb sshd[40289]: pam_unix(sshd:session): session opened for user sinbin by (uid=0)
+```
+
+### 自定义配置文件
+
+```
+[root@zxb etc]# vim /etc/rsyslog.conf 
+#增加自定义的日志配置
+*.*                                             /var/log/diy1.log
+[root@zxb etc]# > /var/log/diy1.log
+[root@zxb etc]# cat /var/log/diy1.log
+[root@zxb etc]# reboot
+
+[root@zxb ~]# cat /var/log/diy1.log | grep sshd
+Aug 15 21:57:24 zxb sshd[1037]: Server listening on 0.0.0.0 port 22.
+Aug 15 21:57:24 zxb sshd[1037]: Server listening on :: port 22.
+Aug 15 21:57:29 zxb sshd[1876]: Accepted password for root from 192.168.159.1 port 12463 ssh2
+Aug 15 21:57:29 zxb sshd[1876]: pam_unix(sshd:session): session opened for user root by (uid=0)
+```
+
+### 日志轮替
+
+日志轮替，把旧的日志文件移动并改名，同时建立新的空的日志文件，旧的日志文件超出保存范围，自动删除。
+
+CentOS7使用logrotate进行日志轮替管理
+
+#### 配置文件
+
+`/etc/logrotate.conf`，全局配置，也可单独配置优先级更高。
+
+| 参 致                   | 参数说明                                                     |
+| ----------------------- | ------------------------------------------------------------ |
+| daily                   | 日志的轮替周期是毎天                                         |
+| weekly                  | 日志的轮替周期是每周                                         |
+| monthly                 | 日志的轮控周期是每月                                         |
+| rotate数宇              | 保留的日志文件的个数。0指没有备份                            |
+| compress                | 当进行日志轮替时，对旧的日志进行压缩                         |
+| create mode owner group | 建立新日志，同时指定新日志的权限与所有者和所属组.如create 0600 root utmp |
+| mail address            | 当进行日志轮替时.输出内存通过邮件发送到指定的邮件地址        |
+| missingok               | 如果日志不存在，则忽略该日志的警告信息                       |
+| nolifempty              | 如果曰志为空文件，則不进行日志轮替                           |
+| minsize 大小            | 日志轮替的最小值。也就是日志一定要达到这个最小值才会进行轮持，否则就算时间达到也不进行轮替 |
+| size大小                | 日志只有大于指定大小才进行日志轮替，而不是按照时间轮替，如size 100k |
+| dateext                 | 使用日期作为日志轮替文件的后缀，如secure-20130605            |
+| sharedscripts           | 在此关键宇之后的脚本只执行一次                               |
+| prerotate/cndscript     | 在曰志轮替之前执行脚本命令。endscript标识prerotate脚本结束   |
+| postrolaie/endscripl    | 在日志轮替之后执行脚本命令。endscripi标识postrotate脚本结束  |
+
+```shell
+[root@zxb etc]# cat logrotate.conf 
+# see "man logrotate" for details
+# rotate log files weekly  每周对日志进行轮替一次
+weekly
+
+# keep 4 weeks worth of backlogs  共保存4份日志文件，新的加入旧的删除
+rotate 4
+
+# create new (empty) log files after rotating old ones  创建新的日志文件在轮替之后
+create
+
+# use date as a suffix of the rotated file  日期作为日志轮替文件的后缀
+dateext
+
+# uncomment this if you want your log files compressed  日志文件是否压缩，取消注释进行压缩
+#compress
+
+# RPM packages drop log rotation information into this directory  
+include /etc/logrotate.d #包含此文件下额外的单独的论题日志配置信息
+
+# no packages own wtmp and btmp -- we'll rotate them here
+/var/log/wtmp {
+    monthly  每月进行一次轮替
+    create 0664 root utmp  #创建新的日志文件 权限是0664 所有者是root 所在组utep
+	minsize 1M  #日志最小轮替大小为1MB
+    rotate 1  #仅保留1份轮替日志文件
+}
+
+/var/log/btmp {
+    missingok
+    monthly
+    create 0600 root utmp
+    rotate 1
+}
+```
+
+#### dateext
+
+通过`/etc/logrotate.conf`配置文件中`dateext`参数。
+
+如果配置文件中有`dateext`参数，日志会用日期作为轮替日志文件的后缀，例如secure-20220815。这样轮替日志不会重名，也不需要手动改名，只需设置保留个数。
+
+如果配置文件中没有`dateext`参数，轮替日志会以"日志名.n"，最新的为1，最老的数字越大，以此类推。
+
+#### 自定义配置文件
+
+1. 在`/etc/logrotate.d`下新建一个日志的轮替配置文件，写入轮替策略。
+
+```
+#轮替源日志路径
+/var/log/diy1.log
+{
+        missingok
+        daily
+        rorate 7
+        notifempty
+}
+```
+
+#### 轮替日志机制
+
+日志轮替是依赖系统定时任务实现在指定时间备份日志。在`/etc/cron.daily/`目录有logrotate文件，日志轮替通过这个文件以来定时任务执行。
+
+### 内存日志
+
+journalctl查看内存日志，重启后清空。
+
+```shell
+journalctl  #查看全部
+journalctl -n 3  ##查看最新3条
+journalctl --since 19:00 --until 19:10:00  #查看起始到结束内，可加日期
+journalctl -p err  #内存报错日志
+journalctl -o verbose  #日志详细内容
+journalctl _PID=1212 _COMM=sshd #查看包含这些参数的日志
+journalctl | grep sshd
+```
 
