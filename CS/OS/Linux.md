@@ -1062,6 +1062,7 @@ find 搜索范围 选项
 | -name 文件名 | 根据名称查找 |
 | -user 用户名 | 查找指定用户所有文 |
 | -size 文件大小 （+nM 大于n兆、 -nM小于、nM 等于） | 按照指定文件大小查找文件 |
+| -atime 之前时间 （+n 早于n天、 -n小于、n 等于） | 根据时间查找 |
 
 查找/home目录下所有txt文件
 ```
@@ -1409,7 +1410,7 @@ chgrp -R 新的所在组 路径
 #### crontab
 
 ```
-crond 选项
+crontab 选项
 ```
 
 | 选项 | 作用                             |
@@ -2913,9 +2914,49 @@ SUM=10
 
 ### 定时备份数据库
 
+> 每天02:30备份数据库zxbsql到/date/backup/db
+>
+> 备份开始和备份结束能够给出相应的提示信息
+>
+> 备份后的文件以备份时间为文件名，并打包为.tar.gz文件
+>
+> 在备份的同时检查并删除10天前备份的数据库文件
 
+1. 创建符合备份要求的脚本文件。`vim /usr/sbin/mysql_db_backup.sh`
 
+   ```SHELL
+   #!/bin/bash
+   #备份目录
+   BACKUP=/data/backup/db
+   #当前时间
+   DATETIME=$(date +%Y-%m-%d_%H%M%S)
+   #数据库的地址
+   HOST=localhost
+   #数据库用户名
+   DB_USER=root
+   #数据库密码
+   DB_PW=zt4-knMsP-YgJgS
+   #备份的数据库
+   DATABASE=zxbsql
+   
+   #创建备份目录，如果不存在就创建
+   [ ! -d "$BACKUP/$DATETIME" ] && mkdir -p "$BACKUP/$DATETIME"
+   #备份数据库
+   mysqldump -u${DB_USER} -p${DB_PW} --host=${HOST} -q -R --databases ${DATABASE} | gzip > ${BACKUP}/${DATETIME}/$DATETIME.sql.gz
+   
+   #打包为.tar.gz格式
+   cd $BACKUP
+   tar -zcvf $DATETIME.tar.gz $DATETIME
+   #删除源文件夹
+   rm -rf $BACKUP/$DATETIME
+   #删除多余文件
+   find $BACKUP/ -atime +10 -name "*.tar.gz" -exec rm {} \;
+   echo "备份数据库$DATABASE 成功"
+   ```
 
+2. 使用crond来定时调用写好的备份脚本。
+
+   
 
 ## 15.系统日志管理
 
@@ -3199,3 +3240,26 @@ journalctl _PID=1212 _COMM=sshd #查看包含这些参数的日志
 journalctl | grep sshd
 ```
 
+
+
+
+
+
+
+## 16.Lniux优化
+
+1. ### 对Linux系统架构优化
+
+2. ### 对Linux系统本身优化
+
+   1. 不用root，使用sudo提示权限
+   2. 定时自动更新服务时间`nptdate npt1.aliyun.com`，让croud定时更新
+   3. 配置yum源，指向国内镜像
+   4. 配置合理的防火墙策略，打开必要端口，关闭不必要端口
+   5. 打开最大文件数（调整文件的描述的数量） `vim /etc/profile ulimit -Shn 65535`
+   6. 配置合理的监控策略
+   7. 配置合理的重要文件的备份策略
+   8. 对安装的软件配置进行优化
+   9. 对内核参数进行优化`/etc/sysctl.conf`
+   10. 锁定一些重要的系统文件
+   11. 禁用不必要的服务`setup/ntsysv`
