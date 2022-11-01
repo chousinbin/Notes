@@ -436,7 +436,7 @@ git merge 分支名
 
    ```shell
    ChouS@DESKTOP-78VSLED MINGW64 ~/.ssh
-   $ ssh -keygen -t rsa -C "邮箱地址"
+   $ ssh-keygen -t rsa -C "邮箱地址"
    ```
 
 4. 查看**SSH Key**
