@@ -1,4 +1,4 @@
-package com.polymorphic;
+package com.static_;
 
 /**
  * @ClassName: static1
