@@ -632,6 +632,10 @@ switch(条件表达式) {
 for(循环变量初始化;循环条件;循环变量迭代) {
     循环语句;
 }
+//增强for循环
+for(声明循环变量 : 循环数组名) {
+    循环语句;
+}
 ```
 
 1. 每次循环执行完循环语句之后才进行循环变量迭代
@@ -3677,9 +3681,12 @@ class Season {
 3. 如有多个常量对象, 使用逗号间隔, 重复步骤2;
 4. 私有化构造器
 
-#### 本质
+#### 细节
 
-当我们使用enum关键字开发一个枚举类时, 默认会继承Enum类, 而且是一个`final`类, 通过`javap`反编译可以证明以上;
+1. 当我们使用enum关键字开发一个枚举类时, 会隐式继承Enum类, 而且是一个`final`类, 通过`javap`反编译可以证明以上; 所以, **enum类不能继承其他的类**;
+2. 在用enum枚举类时传统的`public static final 对象名 = new 类名(参数列表)` 会被简化成`对象名(参数列表)`
+
+#### 反编译
 
 ```bash
 E:\Github\Notes\CodeTest\javaProject\javaTest\out\production\javaTest\com\enum_\enum_enum>javap Season.class
@@ -3697,8 +3704,6 @@ final class com.enum_.enum_enum.Season extends java.lang.Enum<com.enum_.enum_enu
   static {};
 }
 ```
-
-在用enum枚举类时传统的`public static final 对象名 = new 类名(参数列表)` 会被简化成`对象名(参数列表)`
 
 #### 演示代码
 
@@ -3751,4 +3756,294 @@ enum Season {
 }
 
 ```
+
+
+
+### Enum成员方法
+
+#### name()
+
+返回当前枚举类的常量的名称(对象名)
+
+#### toString()
+
+已经被Enum类重写, 返回当前对象名, 子类可以重写该方法, 用于返回对象属性信息
+
+#### ordinal()
+
+返回当前枚举的对象的编号, 编号从0开始;
+
+#### values()
+
+返回包含当前枚举类的所有对象名的数组
+
+#### valueOf()
+
+将字符串与枚举类中的对象名进行匹配, 匹配成功返回对象, 否则报错
+
+#### compareTo()
+
+比较两个枚举常量的位置号, 返回前者位置号与后者位置号相减的结果
+
+#### 演示代码
+
+```java
+package com.enum_;
+
+/**
+ * @ClassName: EnumMethod
+ * @Description:演示Enum类的成员方法
+ * @date: 2023-03-18 15:57
+ */
+public class EnumMethod {
+    public static void main(String[] args) {
+        Season autumn = Season.AUTUMN;
+        //name()返回当前枚举常量的名称
+        System.out.println(autumn.name());
+        //toString(), 已经被Enum类重写, 返回当前对象名, 子类可以重写该方法, 用于返回对象属性信息
+        System.out.println(Season.SPRING);
+        //ordinal()返回当前枚举常量的编号(从0开始)
+        System.out.println(autumn.ordinal());
+        //values()返回包含当前枚举类的所有对象名的数组
+        Season[] values = Season.values();
+        for(Season value : values) {
+            System.out.println(value);
+        }
+        //valueOf()将字符串与枚举类中的对象名进行匹配, 匹配成功返回对象, 否则报错
+        Season spring = Season.valueOf("SPRING");
+        System.out.println(spring);
+        System.out.println(spring == Season.SPRING);
+        //compareTo()比较两个枚举常量的位置号, 返回前者位置号与后者位置号相减的结果
+        System.out.println(Season.SPRING.compareTo(Season.SUMMER));
+    }
+}
+
+enum Season {
+    SPRING("春天", "温暖"), SUMMER("夏天", "炎热"),
+    AUTUMN("秋天", "凉爽"), WINTER("冬天", "寒冷");
+
+    private String name;
+    private String desc;
+
+    private Season() {}  //无参构造器
+    private Season(String name, String desc) {
+        this.name = name;
+        this.desc = desc;
+    }
+
+    @Override
+    public String toString() {
+        return "Season{" +
+                "name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                '}';
+    }
+}
+```
+
+### enum实现接口
+
+enum实现的枚举类可以实现接口
+
+#### 演示代码
+
+```java
+public class enumInterface {
+    public static void main(String[] args) {
+        Music.CLASSIC.playing();
+    }
+}
+
+interface IP {
+    public void playing();
+}
+
+enum Music implements IP{
+    CLASSIC;
+
+    @Override
+    public void playing() {
+        System.out.println("播放音乐");
+    }
+}
+```
+
+
+
+## 注解
+
+### 概括
+
+#### 定义
+
+注解(Annotation)也被称为元数据(Metadata), 用于修饰包, 类, 方法, 属性, 构造器, 局部变量等数据信息;和注释一样, 注解不影响程序逻辑, 但注解可以被编译运行, 相当于嵌入在代码中的补充信息; 
+
+#### 作用
+
+在JavaSe中, 注解的使用目的比较简单, 例如标记过时的功能, 忽略警告等. 在JavaEE中注解占据了重要角色, 例如用来配置应用程序的任何切面, 代替JavaEE旧版中所遗留的繁冗代码和XML配置等;
+
+
+
+### @Override
+
+@Override表示指定重写父类方法, 如果注解了@Override的方法在父类中没有, 则会报错. 如果不写@Override注解, 而父类有子类同名方法, 则依然构成方法重写.
+
+@Override只能修饰方法, 查看@Override注解源码为@Target(ElementType.METHOD), 说明只能修饰方法
+
+@Target是修饰注解的注解, 称为源注解
+
+#### 源码
+
+```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.SOURCE)
+public @interface Override {
+}
+```
+
+
+
+### @Deprecated
+
+@Deprecated注解修饰某个元素, 表明该元素已过时, 即不推荐使用, 但不是不能用;
+
+可以修饰:方法, 类, 字段, 包, 参数等
+
+@Deprecated可以做JDK版本升级过度使用
+
+#### 源码
+
+```java
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(value={CONSTRUCTOR, FIELD, LOCAL_VARIABLE, METHOD, PACKAGE, PARAMETER, TYPE})
+public @interface Deprecated {
+}
+```
+
+### @SuppressWarnings
+
+我们写的有些代码, IEDA会在界面上有警告信息, 可以用@SuppressWarnings注解那些代码, 来抑制IDEA的警告;
+
+#### 语法
+
+```java
+@SuppressWarings({"警告类型", "警告类型"})
+```
+
+#### 作用范围
+
+作用范围和编写的位置相关, 比如@SuprressWarnings放在一个方法的前一行, 那么作用范围为整个方法;
+
+#### 警告类型表
+
+|警告类型|作用|
+| ---- | ---- |
+|all| 抑制所有警告|
+|boxing|抑制与封装/拆装作业相关的警告|
+|cast| 抑制与强制转型作业相关的警告|
+|dep-ann| 抑制与淘汰注释相关的警告|
+|deprecation| 抑制与淘汰的相关警告|
+|fallthrough| 抑制与 switch 陈述式中遗漏 break 相关的警告|
+|finally| 抑制与未传回 finally 区块相关的警告|
+|hiding| 抑制与隐藏变数的区域变数相关的警告|
+|incomplete-switch| 抑制与 switch 陈述式(enum case)中遗漏项目相关的警告|
+|javadoc| 抑制与 javadoc 相关的警告|
+|nls| 抑制与非 nls 字串文字相关的警告|
+|null| 抑制与空值分析相关的警告|
+|rawtypes| 抑制与使用 raw 类型相关的警告|
+|resource| 抑制与使用 Closeable 类型的资源相关的警告|
+|restriction| 抑制与使用不建议或禁止参照相关的警告|
+|serial| 抑制与可序列化的类别遗漏 serialVersionUID 栏位相关的警告|
+|static-access| 抑制与静态存取不正确相关的警告|
+|static-method| 抑制与可能宣告为 static 的方法相关的警告|
+|super| 抑制与置换方法相关但不含 super 呼叫的警告|
+|synthetic-access| 抑制与内部类别的存取未最佳化相关的警告|
+|sync-override| 抑制因为置换同步方法而遗漏同步化的警告|
+|unchecked| 抑制与未检查的作业相关的警告|
+|unqualified-field-access| 抑制与栏位存取不合格相关的警告|
+|unused| 抑制与未用的程式码及停用的程式码相关的警告|
+
+#### 源码
+
+```java
+@Target({TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE})
+@Retention(RetentionPolicy.SOURCE)
+public @interface SuppressWarnings {
+    String[] value();
+}
+```
+
+
+
+### 元注解
+
+JDK的元注解用于修饰其他的注解
+
+#### Retention
+
+只能用于修饰一个 Annotation 定义, 用于指定该 Annotation 可以保留多长时间, @Rentention 包含一个 RetentionPolicy
+类型的成员变量, 使用 @Rentention 时必须为该 value 成员变量指定值:
+
+1) RetentionPolicy.SOURCE: 编译器使用后， 直接丢弃这种策略的注释
+2) RetentionPolicy.CLASS: 编译器将把注解记录在 class 文件中. 当运行 Java 程序时, JVM 不会保留注解. 这是默认
+   值
+3) RetentionPolicy.RUNTIME:编译器将把注解记录在 class 文件中. 当运行 Java 程序时, JVM 会保留注解. 程序可以
+   通过反射获取该注解 
+
+```java
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface Retention {
+    /**
+     * Returns the retention policy.
+     * @return the retention policy
+     */
+    RetentionPolicy value();
+}
+```
+
+
+
+#### Target
+
+用于修饰一个 Annotation 定义, 指定被修饰的注解可以修饰哪些程序元素. @Target也包含一个名为value的成员变量
+
+```java
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface Target {
+    /**
+     * Returns an array of the kinds of elements an annotation type
+     * can be applied to.
+     * @return an array of the kinds of elements an annotation type
+     * can be applied to
+     */
+    ElementType[] value();
+}
+```
+
+
+
+#### Documented
+
+用于指定被该元注解修饰的注解类将被JavaDoc工具提取成文档, 即在生成文档时, 可以看到该注解;
+
+```java
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface Documented {
+}
+```
+
+
+
+#### Inherited
+
+被@Inherited修饰的注解将具有继承性, 即如果某个类使用了被@Inherited修饰的注解, 则子类将自动被那个注解修饰;
+
+
 
