@@ -4047,3 +4047,141 @@ public @interface Documented {
 
 
 
+# 异常
+
+> 当程序逐行执行到有错误的代码行的时候, 程序会抛出相应类型的异常, 当抛出异常后, 程序结束, 不再执行后面的代码; 所以只要出现一个非致命错误, 就导致整个系统结束运行, 异常处理机制应运而生; 如果程序员觉得某些代码行的代码有可能出现异常, 可以使用异常处理机制来解决, 从而保证程序的健壮性容错性;
+
+
+
+## 基本概念
+
+### 异常定义
+
+Java语言中,  将程序执行中发生的不正常情况称为异常. 语法错误和逻辑错误不称为异常. 
+
+### 异常事件分类
+
+1. Error(错误)：Java虚拟机无法解决的严重问题。如：JVM系统内部错误、资源耗尽等严重情况。比如：StackOverflowError[栈溢出]和OOM(out of memory),Error是严重错误，程序会崩溃。
+2. Exceptio:其它因编程错误或偶然的外在因素导致的一般性问题，可以使用针对性的代码进行处理. 例如空指针访问，试图读取不存在的文件，网络连接中断等等，Exception分为两大类：运行时异常和编译时异常.
+
+### 异常体系图
+
+![](https://cdn.jsdelivr.net/gh/chousinbin/Image/202303241111492.png)
+
+#### 编译时异常
+
+编译时异常是编译器要求必须处理的异常
+
+#### 运行时异常
+
+运行时异常是编译器检查不出来的异常, 一般是指编译时发生的逻辑错误, 是程序员应该避免其出现的异常; 
+对于运行时异常, 可以不做处理, 因为这类异常很普遍, 若全处理可能对程序的可读性和运行效率产生影响;
+
+
+
+## 五大运行时异常
+
+### NullPointerException
+
+当应用程序试图在需要对象的地方使用null时抛出空指针异常
+
+```java
+public class NullPointer {
+    public static void main(String[] args) {
+        String name = null;
+        System.out.println(name.length());
+    }
+}
+
+Exception in thread "main" java.lang.NullPointerException
+	at com.exception_.NullPointer.main(NullPointer.java:4)
+```
+
+
+
+### ArithmeticException
+
+当出现异常的运算条件时, 抛出算数异常
+
+```java
+public class ArithmeticException {
+    public static void main(String[] args) {
+        int n1 = 10;
+        int n2 = 0;
+
+        int res = n1 / n2;  //抛出异常
+        System.out.println("程序正在运行");  //从此不再执行
+    }
+}
+
+Exception in thread "main" java.lang.ArithmeticException: / by zero
+	at com.exception_.ArithmeticException.main(ArithmeticException.java:6)
+```
+
+
+
+### ArrayIndexOutOfBounds
+
+用非法索引访问数组时抛出的数组下标越界异常
+
+```java
+public class ArrayIndexOutOfBounds {
+    public static void main(String[] args) {
+        int[] arr = {0, 1, 2, 3};
+        for (int i = 0; i <= arr.length; i++) {
+            System.out.println(arr[i]);
+        }
+    }
+}
+
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: 4
+	at com.exception_.ArrayIndexOutOfBounds.main(ArrayIndexOutOfBounds.java:5)
+```
+
+
+
+### ClassCastException
+
+当试图将对象强制转换为不是实例的子类时, 抛出类型转换异常
+
+```java
+public class ClassCast {
+    public static void main(String[] args) {
+        A a = new B();
+        B b = (B) a;
+        C c = (C) a;
+    }
+}
+
+class A {}
+class B extends A {}
+class C extends A {}
+
+Exception in thread "main" java.lang.ClassCastException: com.exception_.B cannot be cast to com.exception_.C
+	at com.exception_.ClassCast.main(ClassCast.java:5)
+```
+
+
+
+### NumberFormatException
+
+当应用程序试图将字符串转换成一种数值类型, 但该字符串不能转换为适当格式时, 抛出该数字格式不正确异常, 使用异常可以确保输入是满足条件数字
+
+```java
+public class NumberFormatException {
+    public static void main(String[] args) {
+        String name = "1234";
+        int num = Integer.parseInt(name);
+        
+        name = "zhou";
+        num = Integer.parseInt(name);
+    }
+}
+
+Exception in thread "main" java.lang.NumberFormatException: For input string: "zhou"
+	at java.lang.NumberFormatException.forInputString(Unknown Source)
+	at java.lang.Integer.parseInt(Unknown Source)
+	at java.lang.Integer.parseInt(Unknown Source)
+	at com.exception_.NumberFormatException.main(NumberFormatException.java:7)
+```
+
