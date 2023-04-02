@@ -58,7 +58,7 @@ int main()
     
     sort(logs,logs+n);  //按照时间顺序排序二元组
     
-    for(int i=0,j=0;i<n;i++)
+    for(int i=0,j=0;i<n;i++)  //i为右端点, j为左端点
     {
         int id=logs[i].second;
         cnt[id]++;

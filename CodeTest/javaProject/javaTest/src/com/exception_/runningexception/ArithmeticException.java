@@ -1,4 +1,4 @@
-package com.exception_;
+package com.exception_.runningexception;
 
 /**
  * @ClassName: Test01
@@ -11,7 +11,11 @@ public class ArithmeticException {
         int n1 = 10;
         int n2 = 0;
 
-        int res = n1 / n2;  //抛出异常
+        try {
+            int res = n1 / n2;  //抛出异常
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("程序正在运行");  //从此不再执行
     }
 }

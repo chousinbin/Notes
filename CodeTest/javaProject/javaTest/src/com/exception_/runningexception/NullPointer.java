@@ -1,4 +1,4 @@
-package com.exception_;
+package com.exception_.runningexception;
 
 /**
  * @ClassName: NullPointer

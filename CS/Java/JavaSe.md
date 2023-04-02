@@ -4062,24 +4062,21 @@ Java语言中,  将程序执行中发生的不正常情况称为异常. 语法�
 ### 异常事件分类
 
 1. Error(错误)：Java虚拟机无法解决的严重问题。如：JVM系统内部错误、资源耗尽等严重情况。比如：StackOverflowError[栈溢出]和OOM(out of memory),Error是严重错误，程序会崩溃。
-2. Exceptio:其它因编程错误或偶然的外在因素导致的一般性问题，可以使用针对性的代码进行处理. 例如空指针访问，试图读取不存在的文件，网络连接中断等等，Exception分为两大类：运行时异常和编译时异常.
+2. Exception:其它因编程错误或偶然的外在因素导致的一般性问题，可以使用针对性的代码进行处理. 例如空指针访问，试图读取不存在的文件，网络连接中断等等，Exception分为两大类：运行时异常和编译时异常.
 
 ### 异常体系图
 
 ![](https://cdn.jsdelivr.net/gh/chousinbin/Image/202303241111492.png)
 
-#### 编译时异常
 
-编译时异常是编译器要求必须处理的异常
 
-#### 运行时异常
+## 运行时异常
+
+### 定义
 
 运行时异常是编译器检查不出来的异常, 一般是指编译时发生的逻辑错误, 是程序员应该避免其出现的异常; 
-对于运行时异常, 可以不做处理, 因为这类异常很普遍, 若全处理可能对程序的可读性和运行效率产生影响;
 
-
-
-## 五大运行时异常
+对于运行时异常, 可以不做处理, 默认的处理方法就是隐式的throws处理异常, 最终会抛给JVM.  因为这类异常很普遍, 若全处理可能对程序的可读性和运行效率产生影响;
 
 ### NullPointerException
 
@@ -4184,4 +4181,136 @@ Exception in thread "main" java.lang.NumberFormatException: For input string: "z
 	at java.lang.Integer.parseInt(Unknown Source)
 	at com.exception_.NumberFormatException.main(NumberFormatException.java:7)
 ```
+
+
+
+## 编译时异常
+
+### 定义
+
+编译异常是指在编译期间, 就必须处理的异常, 比如用try-catch 或者 throws,否则代码不能通过编译.
+
+### 常见编译异常
+
+| 异常                      | 含义                               |
+| ------------------------- | ---------------------------------- |
+| SQLException              | 操作数据库时, 查询表可能发生异常   |
+| IOException               | 操作文件时, 发生的异常             |
+| FileNotFoundException     | 当操作一个不存在的文件时, 发生异常 |
+| ClassNotFoundException    | 加载类, 而该类不存在时, 发生异常   |
+| EOFException              | 操作文件, 到文件末尾, 发生异常     |
+| IllegalArguementException | 参数异常                           |
+
+
+
+## 异常处理
+
+异常处理就是当异常发生时, 对异常的处理方式.
+
+### try
+
+#### try-catch-finall
+
+```java
+try {
+	可能有异常的代码块;
+    //如果try块内某行代码发生异常, 则try中那行之后的代码不会被执行
+    //当异常发生时, 系统将异常封装成Exception类型的异常对象e, 传递给catch
+} catch (Exception e) {
+    //捕获到异常
+    //输出异常信息
+    //如果没有异常发生, 不会执行catch代码块
+} finally {  //finally不是必须的
+    //不管try里的代码块是否有异常发生, finally块始终被执行
+    //所以通常将释放资源的代码放在finally中
+}
+```
+
+可以有多个catch语句, 用于捕获不同类型的异常, 要求父类异常在后, 子类异常在前, 比如Exception在后, NullPointerException在前; 如果发生异常, 只会匹配一个catch
+
+#### try-finally
+
+这种用法相当于没有捕获异常, try中发生异常后, 执行finally, finally执行完毕中断程序.
+
+应用场景:执行一段代码时, 不管是否发生异常, 都必须执行某个业务逻辑, 此业务逻辑的代码就放在finally中.
+
+```java
+public class TryFinally {
+    public static void main(String[] args) {
+        try {
+            int a = 10;
+            int b = 0;
+            System.out.println(a / b);
+        } finally {
+            System.out.println("总是执行");
+        }
+    }
+}
+```
+
+
+
+### throws
+
+如果一个方法中的语句执行时可能生成某种异常, 但是不能确定如何处理这些异常, 则此方法应显示地声明抛出异常, 表明该方法将不对这些异常进行处理, 而由该方法的调用者负责处理.
+
+在方法声明中用throws语句可以声明抛出异常的列表, throws后面异常类型可以是方法中产生的异常类型, 也可以是它的父类类型.
+
+将发生的异常抛给上一级调用者, 顶级调用者为JVM, 对于一个异常处理, 不是try-catch-finally就是throws. 如果在代码中没有显示的处理方法, 那么就会默认使用隐式的异常处理, 即为throws, 最终throws到JVM, 而JVM作为最高级调用者, 他就会简单的输出异常信息, 中断程序.
+
+<img src="https://cdn.jsdelivr.net/gh/chousinbin/Image/202304021340954.png" alt="image-20230402134033727" style="zoom: 33%;" />
+
+#### 细节
+
+1. 子类重写父类的方法时, 对抛出异常的规定:子类重写的方法, 所抛出的异常类型要么和父类抛出的类型一致, 要么为父类抛出异常的类型的子类型.
+2. 在throws过程中, 如果有方法try-catch处理异常, 就可以不必throws 
+
+
+
+## 自定义异常
+
+### 概念
+
+当程序中出现了某些"错误", 但该错误信息并没有在Throwable子类中描述处理, 这个时候可以自己设计异常类, 用于描述该错误信息.
+
+### 步骤
+
+1. 自定义类:自定义异常类名, 继承Exception或RuntimeException类
+2. 如果继承Exception类属于编译异常
+3. 如果继承RuntimeException类属于运行异常
+
+### 举例代码
+
+```java
+//要求范围在18-120之间,否则抛出自定义异常,并给出提示信息
+public class CustomException {
+    public static void main(String[] args) {
+        int age = 800;
+
+        if(age < 18 || age > 120) {
+            throw new AgeException("输入应在18-120之间");
+        }
+
+        System.out.println("输入范围正确");
+    }
+}
+class AgeException extends RuntimeException {
+    public AgeException(String message) {
+        super(message);
+    }
+}
+
+
+Exception in thread "main" com.exception_.AgeException: 输入应在18-120之间
+	at com.exception_.CustomException.main(CustomException.java:6)
+```
+
+
+
+## throw与throws区别
+
+| 类型   | 意义                   | 位置       | 后面跟的东西 |
+| ------ | ---------------------- | ---------- | ------------ |
+| throws | 异常处理的一种方式     | 方法声明处 | 异常类型     |
+| throw  | 手动生成异常类型关键字 | 方法体中   | 异常对象     |
 
