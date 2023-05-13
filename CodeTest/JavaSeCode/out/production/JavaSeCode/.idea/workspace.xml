@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:note" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6b0690b0-24fd-401f-9662-e5773cbf3da4" name="默认的" comment="默认的">
+      <change beforePath="$PROJECT_DIR$/../javaProject/Hello/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Hello/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Hello/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Hello/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Hello/Hello.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Hello/out/production/Hello/Hello.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Hello/out/production/Hello/Mytools.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Hello/src/Hello.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Hello/src/Package.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Package/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Package/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Package/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Package/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Package/Package.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Package/out/production/Package/com/bin/Person.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Package/out/production/Package/com/bin/note/note.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Package/out/production/Package/com/jing/Person.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Package/out/production/Package/com/usr/test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Package/src/com/bin/Person.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Package/src/com/bin/note/note.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Package/src/com/jing/Person.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/Package/src/com/usr/test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/javaTest.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/A.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/B.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/Computer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/ExtendsTheory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/Father.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/Graduate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/GrandPa.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/NotePad.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/PC.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/Pupil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/Son.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/extends1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/improve/Graduate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/improve/Pupil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/improve/Student.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/improve/test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/test1/Base.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/test1/Sub.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/test1/test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/Extends/test2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/abstract_/CommonEmployee.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/abstract_/Employee.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/abstract_/Manager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/abstract_/Sub1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/abstract_/Sub2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/abstract_/Template.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/abstract_/TemplateTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/abstract_/test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/annotation/A.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/annotation/B.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/annotation/C.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/annotation/Test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/codeblock_/A.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/codeblock_/AA.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/codeblock_/BB.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/codeblock_/Block1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/codeblock_/Block2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/encapsulation/Account.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/encapsulation/AccountTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/encapsulation/Person.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/encapsulation/encapsulation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/enum_/Color.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/enum_/EnumMethod.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/enum_/Exercise.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/enum_/Gender.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/enum_/HomeWork01$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/enum_/HomeWork01.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/enum_/IP.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/enum_/Music.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/enum_/SHOW.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/enum_/Season.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/enum_/diy_enum/Season.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/enum_/diy_enum/Test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/enum_/enumInterface.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/enum_/enum_enum/Season.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/enum_/enum_enum/Test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/AgeException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/CustomException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/HomeWork01.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/ReturnExceptionDemo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/ThrowException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/runningexception/A.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/runningexception/ArithmeticException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/runningexception/ArrayIndexOutOfBounds.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/runningexception/B.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/runningexception/C.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/runningexception/ClassCast.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/runningexception/NullPointer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/runningexception/NumberFormatException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/throws_/throws01.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/try_/Exercise.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/try_/Exercise02.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/try_/Person.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/try_/Test01.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/try_/Test02.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/exception_/try_/TryFinally.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/final_/Circle.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/final_/Test1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/Car$Air.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/Car.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/Homework01.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/base/Base.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/base/Outer$1Inner01.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/base/Outer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/exercise/Exercise01$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/exercise/Exercise01$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/exercise/Exercise01.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/exercise/ICalculate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/exercise/Phone.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/AnonyInnerClass.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/Apply$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/Apply.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/Apply2$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/Apply2$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/Apply2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/Bell.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/CA.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/IA.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/Outer$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/Outer$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/Outer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/OuterClass$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/OuterClass$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/OuterClass.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/Person.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/Phone.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/Pic.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/Picture.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/innerclass02/Test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/member_inner_class/Outer$Inner.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/member_inner_class/Outer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/member_inner_class/Test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/static_inner_class/Other.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/static_inner_class/Outer$Inner.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/inner_class/static_inner_class/Outer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/A.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/B.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/Boat.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/C.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/Exercise.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/Exercise2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/Factory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/Horse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/Person.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/Vehicles.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface1/Camera.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface1/Computer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface1/Interface01.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface1/Phone.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface1/Usb.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface2/A.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface2/B.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface2/InterfaceExercise1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_poly/C1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_poly/Camera.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_poly/Camera_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_poly/Computer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_poly/I1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_poly/I2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_poly/InterfacePolyArray.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_poly/InterfacePolyPass.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_poly/Phone.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_poly/Phone_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_poly/Usb.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_poly/UsbInterface.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_poly/poly.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_vs_entends/Bird.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_vs_entends/Fish.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_vs_entends/Monkey.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_vs_entends/Test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/interface_/interface_vs_entends/jinSiHou.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/main_/Main02.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/main_/MainTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/modifier/A.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/modifier/B.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/modifier/test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/modifier2/test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/object_/Car.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/object_/EqualTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/object_/Finalize1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/object_/Person.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/object_/equals1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/object_/monster.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/object_/toString1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/override/Animal.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/override/Dog.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/override/Person.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/override/Student.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/override/override1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/override/test2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/denamicbinding/A.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/denamicbinding/B.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/denamicbinding/dynamic1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/ex/Base.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/ex/Sub.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/ex/exercise.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly1/Animal.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly1/Bone.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly1/Cat.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly1/Dog.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly1/Fish.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly1/Food.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly1/Master.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly1/Pig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly1/Rice.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly1/test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly2/A.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly2/Animal.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly2/B.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly2/Cat.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly2/Dog.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly2/PolyMethod.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly2/PolyObject.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly3/Animal.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly3/Cat.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly3/test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly4/A.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly4/B.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly4/Base.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly4/Detail.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly4/Detail02.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/poly4/Sub.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/polyarr/Person.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/polyarr/PolyArr.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/polyarr/Student.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/polyarr/Teacher.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/polyparameter/Employee.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/polyparameter/Handle.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/polyparameter/PolyParameter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/polyparameter/Staff.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/polymorphic/polyparameter/Test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/singledesign/GirlFriend.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/singledesign/GirlFriend2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/singledesign/Single.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/singledesign/Single2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/static_/People.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/static_/Person.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/static_/static1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/static_/staticTest1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/super_/A.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/super_/AA.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/super_/B.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/super_/BB.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/super_/super1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/super_/test1/A.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/super_/test1/B.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/super_/test1/Base.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/super_/test1/test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/super_/test3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/zeromoneycommunication/MoneyTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/zeromoneycommunication/SmallChangeSysAPP.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/out/production/javaTest/com/zeromoneycommunication/SmallChangeSysOOP.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/Extends/Computer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/Extends/ExtendsTheory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/Extends/Graduate.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/Extends/Pupil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/Extends/extends1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/Extends/improve/Graduate.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/Extends/improve/Pupil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/Extends/improve/Student.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/Extends/improve/test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/Extends/test1/Base.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/Extends/test1/Sub.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/Extends/test1/test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/Extends/test2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/abstract_/Sub1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/abstract_/Sub2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/abstract_/Template.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/abstract_/TemplateTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/abstract_/test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/annotation/Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/codeblock_/Block1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/codeblock_/Block2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/encapsulation/Account.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/encapsulation/AccountTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/encapsulation/encapsulation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/enum_/EnumMethod.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/enum_/Exercise.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/enum_/HomeWork01.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/enum_/diy_enum/Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/enum_/enumInterface.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/enum_/enum_enum/Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/exception_/CustomException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/exception_/HomeWork01.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/exception_/ThrowException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/exception_/runningexception/ArithmeticException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/exception_/runningexception/ArrayIndexOutOfBounds.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/exception_/runningexception/ClassCast.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/exception_/runningexception/NullPointer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/exception_/runningexception/NumberFormatException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/exception_/throws_/throws01.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/exception_/try_/Exercise.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/exception_/try_/Exercise02.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/exception_/try_/Test01.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/exception_/try_/Test02.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/exception_/try_/TryFinally.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/final_/Test1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/inner_class/Homework01.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/inner_class/base/Base.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/inner_class/exercise/Exercise01.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/inner_class/innerclass02/AnonyInnerClass.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/inner_class/innerclass02/Apply.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/inner_class/innerclass02/Apply2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/inner_class/innerclass02/Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/inner_class/member_inner_class/Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/inner_class/static_inner_class/Other.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/interface_/Exercise.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/interface_/Exercise2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/interface_/interface1/Camera.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/interface_/interface1/Computer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/interface_/interface1/Interface01.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/interface_/interface1/Phone.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/interface_/interface1/Usb.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/interface_/interface2/InterfaceExercise1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/interface_/interface_poly/InterfacePolyArray.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/interface_/interface_poly/InterfacePolyPass.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/interface_/interface_poly/poly.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/interface_/interface_vs_entends/Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/main_/Main02.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/main_/MainTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/modifier/A.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/modifier/B.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/modifier/test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/modifier2/test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/object_/EqualTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/object_/Finalize1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/object_/equals1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/object_/toString1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/override/Animal.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/override/Dog.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/override/Person.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/override/Student.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/override/override1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/override/test2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/denamicbinding/dynamic1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/ex/exercise.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly1/Animal.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly1/Bone.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly1/Cat.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly1/Dog.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly1/Fish.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly1/Food.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly1/Master.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly1/Pig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly1/Rice.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly1/test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly2/PolyMethod.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly2/PolyObject.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly3/Animal.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly3/Cat.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly3/test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly4/Detail.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/poly4/Detail02.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/polyarr/Person.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/polyarr/PolyArr.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/polyarr/Student.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/polyarr/Teacher.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/polymorphic/polyparameter/PolyParameter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/singledesign/Single.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/singledesign/Single2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/static_/static1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/static_/staticTest1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/super_/A.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/super_/B.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/super_/super1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/super_/test1/A.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/super_/test1/B.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/super_/test1/Base.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/super_/test1/test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/super_/test3.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/zeromoneycommunication/MoneyTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/zeromoneycommunication/SmallChangeSysAPP.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaProject/javaTest/src/com/zeromoneycommunication/SmallChangeSysOOP.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Kotlin Class" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="2LufOrOXJXraELzcHt6Ei6vGPH2" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "E:/Github/Notes/CodeTest/JavaSeCode",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Global Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="Application.User">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestBankAccount (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.DJTU_Java.TestBankAccount" />
+      <module name="JavaSeCode" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.DJTU_Java.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestBankAccount (2)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.DJTU_Java.TestBankAccount" />
+      <module name="JavaSeCode" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.DJTU_Java.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestBankAccount" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.DJTU_Java.TestBankAccount" />
+      <module name="JavaSeCode" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.DJTU_Java.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestBox" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.DJTU_Java.TestBox" />
+      <module name="JavaSeCode" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.DJTU_Java.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="User" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.DJTU_Java.User" />
+      <module name="JavaSeCode" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.DJTU_Java.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.User" />
+      <item itemvalue="Application.TestBankAccount" />
+      <item itemvalue="Application.TestBankAccount (1)" />
+      <item itemvalue="Application.TestBankAccount (2)" />
+      <item itemvalue="Application.TestBox" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.User" />
+        <item itemvalue="Application.TestBankAccount (2)" />
+        <item itemvalue="Application.TestBankAccount (1)" />
+        <item itemvalue="Application.TestBox" />
+        <item itemvalue="Application.TestBankAccount" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\Sinbin\AppData\Roaming\Subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6b0690b0-24fd-401f-9662-e5773cbf3da4" name="默认的" comment="" />
+      <created>1676725860393</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1676725860393</updated>
+      <workItem from="1676725861463" duration="4368000" />
+      <workItem from="1676773671385" duration="3547000" />
+      <workItem from="1676786846951" duration="3933000" />
+      <workItem from="1676801507584" duration="80000" />
+      <workItem from="1676801874561" duration="9368000" />
+      <workItem from="1676856544099" duration="21798000" />
+      <workItem from="1676969434961" duration="4551000" />
+      <workItem from="1677035119945" duration="23883000" />
+      <workItem from="1678090150131" duration="7185000" />
+      <workItem from="1678186403698" duration="4573000" />
+      <workItem from="1678242716818" duration="16173000" />
+      <workItem from="1678444185913" duration="4441000" />
+      <workItem from="1678587687167" duration="3092000" />
+      <workItem from="1678618367555" duration="2662000" />
+      <workItem from="1678781472912" duration="4822000" />
+      <workItem from="1678863545532" duration="15078000" />
+      <workItem from="1679124409890" duration="8525000" />
+      <workItem from="1679151068854" duration="848000" />
+      <workItem from="1679215138429" duration="130000" />
+      <workItem from="1679215278835" duration="6521000" />
+      <workItem from="1679230649286" duration="1216000" />
+      <workItem from="1679298426621" duration="5040000" />
+      <workItem from="1679312293851" duration="6229000" />
+      <workItem from="1679624436437" duration="5316000" />
+      <workItem from="1679991193726" duration="1000" />
+      <workItem from="1680414621057" duration="11919000" />
+      <workItem from="1680523876433" duration="51000" />
+      <workItem from="1680524001428" duration="213000" />
+      <workItem from="1680524224545" duration="345000" />
+      <workItem from="1680524594205" duration="590000" />
+      <workItem from="1680872539723" duration="312000" />
+      <workItem from="1681045783650" duration="1010000" />
+      <workItem from="1681102021828" duration="2160000" />
+      <workItem from="1682048655232" duration="50000" />
+      <workItem from="1682048839816" duration="1408000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/../../.." />
+      <path value="$PROJECT_DIR$/../.." />
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
