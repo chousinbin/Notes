@@ -34,7 +34,10 @@ int in()
         cout<<"输入第"<<i + 1<<"个进程工作时间:";
         cin>>PCB[i].burst_time;
         PCB[i].end_time = 999;
+
     }
+    system("pause");
+    system("cls");
     return n;
 }
 
@@ -71,11 +74,12 @@ bool check_finish(int n)
 
 void fcfs(int n)
 {
+    cout<<"FCFS调度算法开始"<<endl;
     queue<Node> Ready;  //就绪队列
     sort(PCB, PCB + n, cmp_arrival);
 
     int time = 0;
-    bool first_arrival = false;
+    // bool first_arrival = false;
     bool is_run = false;
 
     while(time < 20)
@@ -88,11 +92,11 @@ void fcfs(int n)
         {
             if(time >= PCB[i].arrival_time && PCB[i].state == 0)
             {
-                if(first_arrival = false)
-                {
-                    PCB[i].start_time = PCB[i].arrival_time;
-                    first_arrival = true;
-                }
+                // if(first_arrival = false)
+                // {
+                //     PCB[i].start_time = PCB[i].arrival_time;
+                //     first_arrival = true;
+                // }
 
                 Ready.push(PCB[i]);
                 PCB[i].state = 1;
@@ -109,11 +113,10 @@ void fcfs(int n)
             PCB[temp_id].end_time = time + PCB[temp_id].burst_time;
             PCB[temp_id].state = 2;
 
+            Ready.pop();
             PCB[temp_id].waiting_time = PCB[temp_id].start_time - PCB[temp_id].arrival_time;
             PCB[temp_id].turnaround_time = PCB[temp_id].end_time - PCB[temp_id].arrival_time;
         }
-
-        
         
         //输出当前时间片的各进程状态
         cout<<"当前时间片:"<<time<<'-'<<time + 1<<endl;
@@ -136,21 +139,40 @@ void fcfs(int n)
             {
                 cout<<"已结束"<<endl;
             }
-
         }
+
+        //输出当前时间片的就绪队列情况
+        if(Ready.empty()) cout<<"就绪队列为空"<<endl;
+        else
+        {
+            cout<<"处于就绪队列的进程有:"<<endl;
+            for(int i = 0; i < Ready.size(); i++)
+            {
+                cout<<"PID:"<<Ready.front().pid<<endl;
+                Ready.push(Ready.front());
+                Ready.pop();
+            }
+        }
+        cout<<endl;
+
+        system("pause");
+        system("cls");
 
         //如果当前时间片是当前正在运行进程的结束时间, 标记该进程为完成, 弹出就绪队列
         //时间片按块来算, 进程开始时间和结束时间按时间点来算
-        //详细图片访问:https://cdn.jsdelivr.net/gh/chousinbin/Image/202306192222744.png
+        //时间片图片访问:https://cdn.jsdelivr.net/gh/chousinbin/Image/202306192222744.png
         if(PCB[temp_id].end_time - 1 == time)
         {
             PCB[temp_id].state = 3;
-            Ready.pop();
             is_run = false;
         }
 
         time++;
 
+        //这里检查退出条件采取的最笨的方法
+        //遍历所有进程, 检查所有进程的状态, 是否都以完成运行
+        //如果直接判断就绪队列是否为空的话有局限性
+        //比如前几个时间片没有进程到达 会直接退出程序
         if(check_finish(n))
         {
             out(n);
@@ -158,7 +180,7 @@ void fcfs(int n)
         }
 
     }
-    cout<<"FCFS结束"<<endl;
+    cout<<"FCFS调度算法结束"<<endl;
 }
 
 
