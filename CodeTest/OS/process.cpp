@@ -1,8 +1,9 @@
 #include<bits/stdc++.h>
+#include<cstdlib>
 using namespace std;
 
 const int N = 10;
-int n;  //进程个数
+int n;
 
 struct Node
 {
@@ -38,6 +39,7 @@ void input()
         PCB[i].end_time = 999;
 
     }
+    
     system("pause");
     system("cls");
 }
@@ -51,121 +53,111 @@ void output()
         sum += PCB[i].turnaround_time;
     }
     cout<<n<<"个进程的平均周转时间为:"<<sum / n<<endl;
+    system("pause");
+    system("cls");
 }
 
 int find(int id)
 {
+    int p;
     for(int i = 0; i < n; i++)
     {
         if(PCB[i].pid == id)
         {
-            return i;
+           p = i;
+           break;
         }
     }
+    return p;
 }
 
 void show_state(int time, queue<Node> Ready)
 {
     //输出当前时间片的各进程状态
-        cout<<"当前时间片:"<<time<<'-'<<time + 1<<endl;
-        for(int i = 0; i < n; i++)
+    cout<<"当前时间片:["<<time<<'-'<<time + 1<<']'<<endl;
+    for(int i = 0; i < n; i++)
+    {
+        cout<<"pid为"<<PCB[i].pid<<"的进程状态为:";
+        if(PCB[i].state == 0)
         {
-            cout<<"pid为"<<PCB[i].pid<<"的进程状态为:";
-            if(PCB[i].state == 0)
-            {
-                cout<<"未到达"<<endl;
-            }
-            else if(PCB[i].state == 1)
-            {
-                cout<<"处于就绪队列"<<endl;
-            }
-            else if(PCB[i].state == 2)
-            {
-                cout<<"运行中"<<endl;
-            }
-            else if(PCB[i].state == 3)
-            {
-                cout<<"已结束"<<endl;
-            }
-            else if(PCB[i].state == 4)
-            {
-                cout<<"已暂停"<<endl;
-            }
+            cout<<"未到达"<<endl;
         }
-
-        //输出当前时间片的就绪队列情况
-        if(Ready.empty()) cout<<"就绪队列为空"<<endl;
-        else
+        else if(PCB[i].state == 1)
         {
-            cout<<"处于就绪队列的进程有:"<<endl;
-            for(int i = 0; i < Ready.size(); i++)
-            {
-                cout<<"PID:"<<Ready.front().pid<<endl;
-                Ready.push(Ready.front());
-                Ready.pop();
-            }
+            cout<<"就绪中"<<endl;
         }
-        cout<<endl;
+        else if(PCB[i].state == 2)
+        {
+            cout<<"运行中"<<endl;
+        }
+        else if(PCB[i].state == 3)
+        {
+            cout<<"已结束"<<endl;
+        }
+        else if(PCB[i].state == 4)
+        {
+            cout<<"暂停中"<<endl;
+        }
+    }
 
-        system("pause");
-        system("cls");
+    //输出当前时间片的就绪队列情况
+    if(Ready.empty()) cout<<"就绪队列为空"<<endl;
+    else
+    {
+        cout<<"处于就绪队列的进程有:"<<endl;
+        for(int i = 0; i < Ready.size(); i++)
+        {
+            cout<<"PID:"<<Ready.front().pid<<endl;
+            Ready.push(Ready.front());
+            Ready.pop();
+        }
+    }
+    cout<<endl;
+
+    system("pause");
+    system("cls");
 }
 
-
-
 void FCFS()
-{
-    cout<<"FCFS调度算法开始"<<endl;
-    queue<Node> Ready;  //就绪队列
+{ 
+    sort(PCB, PCB + n, cmp);  //按进程到达时间升序排序
+    
     int cnt = 0;  //记录进程完成个数
-    sort(PCB, PCB + n, cmp);
-
     int time = 0;
-    // bool first_arrival = false;
     bool is_run = false;
+    queue<Node> Ready;  //就绪队列
+    Node temp;
+    int temp_id;
 
     while(cnt < n)
     {
-        Node temp;
-        int temp_id;
-
-        //每到一个时间片查找到达的进程并添加到就绪队列并标记进程状态
-        for(int i = 0; i < n; i++)
+        for(int i = 0; i < n; i++)  //每到一个时间片, 查找到达的进程并添加到就绪队列并标记进程状态
         {
             if(time >= PCB[i].arrival_time && PCB[i].state == 0)
             {
-                // if(first_arrival = false)
-                // {
-                //     PCB[i].start_time = PCB[i].arrival_time;
-                //     first_arrival = true;
-                // }
-
                 Ready.push(PCB[i]);
                 PCB[i].state = 1;
             }
         }
-
-        //如果这个时间片没有进程正在运行 && 就绪队列非空
-        if(is_run == false && Ready.empty() == false)
+        
+        if(is_run == false && Ready.empty() == false)  //如果这个时间片没有进程正在运行 && 就绪队列非空
         {
             is_run = true;
             temp = Ready.front();
+            Ready.pop();
             temp_id = find(temp.pid);
+
             PCB[temp_id].start_time = time;
             PCB[temp_id].end_time = time + PCB[temp_id].burst_time;
             PCB[temp_id].state = 2;
-
-            Ready.pop();
             PCB[temp_id].waiting_time = PCB[temp_id].start_time - PCB[temp_id].arrival_time;
             PCB[temp_id].turnaround_time = PCB[temp_id].end_time - PCB[temp_id].arrival_time;
         }
         
         show_state(time, Ready);
 
-        //如果当前时间片是当前正在运行进程的结束时间, 标记该进程为完成, 弹出就绪队列
-        //时间片按块来算, 进程开始时间和结束时间按时间点来算
-        //时间片图片访问:https://cdn.jsdelivr.net/gh/chousinbin/Image/202306192222744.png
-        if(PCB[temp_id].end_time - 1 == time)
+        //时间片按块来算, 进程开始时间和结束时间按时间点来算:https://cdn.jsdelivr.net/gh/chousinbin/Image/202306192222744.png
+        if(PCB[temp_id].end_time - 1 == time)  //如果当前时间片是当前正在运行进程的结束时间, 标记该进程为完成, 弹出就绪队列
         {
             PCB[temp_id].state = 3;
             is_run = false;
@@ -175,10 +167,9 @@ void FCFS()
         time++;
     }
     output();
-    cout<<"FCFS调度算法结束"<<endl;
 }
 
-void init_SRTF()
+void init_remaining_time()  //初始化: 剩余时间 = 工作时间
 {
     for(int i = 0; i < n; i++)
     {
@@ -186,8 +177,11 @@ void init_SRTF()
     }
 }
 
-Node check_shorst(queue<Node> &Ready, Node &temp)
+void check_shorst(queue<Node> &Ready, Node &temp, int &temp_id)  //检查就绪队列是否有进程的剩余时间 < 目前temp的剩余时间
 {
+    /*
+    temp可能是正在运行/没有运行过将要运行的进程
+    */
     int p = -1;
     for(int i = 0; i < Ready.size(); i++)
     {
@@ -199,39 +193,39 @@ Node check_shorst(queue<Node> &Ready, Node &temp)
         Ready.pop();
     }
 
-    for(int i = 0; i < p; i++)
+    if(p >= 0)  //说明就绪队列里面有比temp进程剩余时间短的进程
     {
-        Ready.push(Ready.front());
-        Ready.pop();
-    }
+        for(int i = 0; i < p; i++)  //把最短的移到就绪队列的队头
+        {
+            Ready.push(Ready.front());
+            Ready.pop();
+        }
 
-    if(p >= 0)  //说明就绪队列里面有比当前进程剩余时间短的进程
-    {
-        Ready.push(temp);
-        if(PCB[find(temp.pid)].state == 2) PCB[find(temp.pid)].state = 4;
-        temp = Ready.front();
+        Ready.push(temp);  //当前temp进程加到就绪队列
+        if(PCB[find(temp.pid)].state == 2) PCB[find(temp.pid)].state = 4;  //特判: temp是正在运行的进程 状态设为4暂停中
+        temp = Ready.front();  //更新temp进程
         Ready.pop();
     }
+    temp_id = find(temp.pid);  //temp是否更新, 都要获取 / 更新temp进程在PCB中的下标
 }
 
 void SRTF()
 {
-    queue<Node> Ready;
-    int time = 0;
-    sort(PCB, PCB + n, cmp);
-    init_SRTF();  //初始化剩余时间
-    bool is_run = false;
-    bool is_new_arrival = false;  //有进程到达
-    int cnt = 0;
+    sort(PCB, PCB + n, cmp);  //先按到达时间升序, 如果到达时间相同, 按剩余时间升序
+    init_remaining_time();  //初始化剩余时间
 
+    int time = 0;
+    int cnt = 0;
+    bool is_run = false;
+    bool is_new_arrival = false;  //默认没有新进程到达
+    queue<Node> Ready;  //就绪队列
     Node temp;
     int temp_id;
 
     while(cnt < n)
     {
-        is_new_arrival = false;
-        //到一个新时间片检查新到达进程并加入就绪队列
-        for(int i = 0; i < n; i++)
+        is_new_arrival = false;  //每到一个新的时间片, 把新进程到达标志归为FALSE
+        for(int i = 0; i < n; i++)  //每到一个新时间片, 检查新到达进程并加入就绪队列
         {
             if(PCB[i].arrival_time <= time && PCB[i].state == 0)
             {
@@ -241,15 +235,15 @@ void SRTF()
             }
         }
 
-        //正在运行进程 && 有新到达的进程
-        if(is_run)
+        
+        if(is_run)//如果当前有进程正在运行
         {
-            //检查最短剩余
-            if(is_new_arrival)
+            
+            if(is_new_arrival)  //有进程新到达
             {
-                check_shorst(Ready, temp);
-                temp_id = find(temp.pid);
+                check_shorst(Ready, temp, temp_id);  //检查正在运行的进程是否为最短剩余
             }
+
             if(temp.state == 1)
             {
                 PCB[temp_id].start_time = time;
@@ -267,32 +261,108 @@ void SRTF()
             }
         }
 
-        //如果当前没有进程运行 && 就绪队列非空
-        if(is_run == false && Ready.empty() == false)
+        if(is_run == false && Ready.empty() == false)  //如果当前没有进程运行 && 就绪队列非空
         {   
-            temp = Ready.front();
+            temp = Ready.front();  //从就绪队列任取一个进程
             Ready.pop();
-            
-            check_shorst(Ready, temp);
-            temp_id = find(temp.pid);
-            if(PCB[temp_id].state == 1)
+
+            check_shorst(Ready, temp, temp_id);  //检查将要运行的进程是否为最短剩余
+
+            if(PCB[temp_id].state == 1)  //如果要运行的进程是首次运行
                 PCB[temp_id].start_time = time;
+
             PCB[temp_id].remaining_time--;
             PCB[temp_id].state = 2;
             is_run = true;
         }
 
-        show_state(time, Ready);
-
-        if(PCB[temp_id].remaining_time == 0)
+        show_state(time, Ready);  //显示当前时间片, 各进程状态
+        
+        if(is_run && PCB[temp_id].remaining_time == 0)  //当前进程待执行时间为0, 说明进程结束
         {
-            is_run = false;
             PCB[temp_id].end_time = time + 1;
             PCB[temp_id].state = 3;
             PCB[temp_id].turnaround_time = PCB[temp_id].end_time - PCB[temp_id].arrival_time;
             PCB[temp_id].waiting_time = PCB[temp_id].turnaround_time - PCB[temp_id].burst_time;
             
+            is_run = false;
             cnt++;
+        }
+
+        time++;
+    }
+    output();  //输出各进程周转时间和所有进程的平均周转时间
+}
+
+void RR()  //同一时间到达
+{
+    init_remaining_time();
+    sort(PCB, PCB + n, cmp);
+    int timer;
+    cout<<"请输入轮转时间片长度:";
+    cin>>timer;
+
+    int time = 0;
+    int cnt = 0;
+    bool is_run = false;
+    queue<Node> Ready;  //就绪队列
+    Node temp;
+    int temp_id;
+
+    int p = 0;  //默认从就绪队列里第一个进程开始
+    int c = 0;  //当前小计时器
+    while(cnt < n)
+    {
+        for(int i = 0; i < n; i++)  //每到一个新时间片, 检查新到达进程并加入就绪队列
+        {
+            if(PCB[i].arrival_time <= time && PCB[i].state == 0)
+            {
+                Ready.push(PCB[i]);
+                PCB[i].state = 1;
+            }
+        }
+
+        if(is_run == false && Ready.empty() == false)  //就绪队列非空 && 没有程序在运行
+        {
+            temp = Ready.front();
+            temp_id = find(temp.pid);
+            Ready.pop();  //先弹出到后期视情况再决定是否重回就绪队列
+            if(PCB[temp_id].state = 1)  //该进程首次启动
+            {
+                PCB[temp_id].start_time = time;
+                PCB[temp_id].state = 2;
+            }
+            else  //从挂起恢复的进程
+            {
+                PCB[temp_id].state = 2;
+            }
+            is_run = true;
+        }
+
+        if(is_run)
+        {
+            c++;
+            PCB[temp_id].remaining_time--;
+        }
+
+        show_state(time, Ready);
+
+        if(PCB[temp_id].remaining_time == 0)  //这个时间片后该进程结束
+        {
+            PCB[temp_id].end_time = time + 1;
+            PCB[temp_id].state = 3;
+            c = 0;
+            is_run = false;
+            cnt++;
+            PCB[temp_id].turnaround_time = PCB[temp_id].end_time - PCB[temp_id].arrival_time;
+            PCB[temp_id].waiting_time = PCB[temp_id].turnaround_time - PCB[temp_id].burst_time;
+        }
+        else if(c == timer)  //当前时间片走完但还有剩余工作时长, 挂起此进程
+        {
+            PCB[temp_id].state = 4;
+            Ready.push(PCB[temp_id]);
+            c = 0;
+            is_run = false;
         }
 
         time++;
@@ -300,9 +370,66 @@ void SRTF()
     output();
 }
 
+void menu()
+{
+    cout<<"=======主菜单======="<<endl;
+    cout<<"1. FCFS算法"<<endl;
+    cout<<"2. SRTF算法(最短剩余优先)"<<endl;
+    cout<<"3. RR算法(同时到达)"<<endl;
+    cout<<"0. 退出程序"<<endl;
+    cout<<"====================="<<endl;
+}
+void to_zero()
+{
+    for(int i = 0; i < n; i++)
+    {
+        PCB[i].arrival_time =  0;
+        PCB[i].burst_time = 0;
+        PCB[i].end_time = 0;
+        PCB[i].pid = 0;
+        PCB[i].priority = 0;
+        PCB[i].remaining_time = 0;
+        PCB[i].start_time = 0;
+        PCB[i].state = 0;
+        PCB[i].turnaround_time = 0;
+        PCB[i].waiting_time = 0;
+    }
+}
 int main()
 {
-    input();
-    SRTF();
+    int choice;
+    while(true)
+    {
+        menu();
+        cout<<"请输入你的选项:";
+        cin>>choice;
+        system("pause");
+        system("cls");
+        
+        switch(choice)
+        {
+            case 0 :
+                return 0;
+                break;
+            case 1 :
+                input();
+                FCFS();
+                to_zero();
+                break;
+            case 2 :
+                input();
+                SRTF();
+                to_zero();
+                break;
+            case 3 :
+                input();
+                RR();
+                to_zero();
+                break;
+            default :
+                cout<<"此选项无效"<<endl;
+        }
+        
+    }
     return 0;
 }
