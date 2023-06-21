@@ -444,6 +444,7 @@ int main()
                 break;
             default :
                 cout<<"此选项无效"<<endl;
+                out_pause();
         }
     }
     return 0;
