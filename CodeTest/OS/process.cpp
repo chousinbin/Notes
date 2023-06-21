@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<cstdlib>
 using namespace std;
 
 const int N = 10;
@@ -25,6 +24,21 @@ bool cmp(Node x, Node y)
     return x.remaining_time < y.remaining_time;  //如果到达时间相同按最短剩余排序
 }
 
+void in_pause()
+{
+    getchar();
+    cout<<"请输入任意键继续";
+    getchar();
+    system("cls");
+}
+
+void out_pause()
+{
+    cout<<"请输入任意键继续";
+    getchar();
+    system("cls");
+}
+
 void input()
 {
     cout<<"请输入进程数:";
@@ -39,22 +53,24 @@ void input()
         PCB[i].end_time = 999;
 
     }
-    
-    system("pause");
-    system("cls");
+    in_pause();
 }
 
 void output()
 {
     double sum = 0;
+    printf("PID \t 到达时间 \t 开始时间 \t 工作时间 \t 结束时间 \t 周转时间\n");
     for(int i = 0; i < n; i++)
     {
-        cout<<"PID:"<<PCB[i].pid<<"的周转时间为"<<PCB[i].turnaround_time<<endl;
+        printf("%d %8d %16d %16d %16d %16d\n", PCB[i].pid, 
+        PCB[i].arrival_time, PCB[i].start_time, 
+        PCB[i].burst_time, PCB[i].end_time, PCB[i].turnaround_time);
+        
         sum += PCB[i].turnaround_time;
     }
     cout<<n<<"个进程的平均周转时间为:"<<sum / n<<endl;
-    system("pause");
-    system("cls");
+    
+    out_pause();
 }
 
 int find(int id)
@@ -113,9 +129,8 @@ void show_state(int time, queue<Node> Ready)
         }
     }
     cout<<endl;
-
-    system("pause");
-    system("cls");
+    
+    out_pause();
 }
 
 void FCFS()
@@ -150,7 +165,6 @@ void FCFS()
             PCB[temp_id].start_time = time;
             PCB[temp_id].end_time = time + PCB[temp_id].burst_time;
             PCB[temp_id].state = 2;
-            PCB[temp_id].waiting_time = PCB[temp_id].start_time - PCB[temp_id].arrival_time;
             PCB[temp_id].turnaround_time = PCB[temp_id].end_time - PCB[temp_id].arrival_time;
         }
         
@@ -244,18 +258,18 @@ void SRTF()
                 check_shorst(Ready, temp, temp_id);  //检查正在运行的进程是否为最短剩余
             }
 
-            if(temp.state == 1)
+            if(PCB[temp_id].state == 1)
             {
                 PCB[temp_id].start_time = time;
                 PCB[temp_id].remaining_time--;
                 PCB[temp_id].state = 2;
             }
-            else if(temp.state = 4)
+            else if(PCB[temp_id].state = 4)
             {
                 PCB[temp_id].remaining_time--;
                 PCB[temp_id].state = 2;
             }
-            else if(temp.state == 2)
+            else if(PCB[temp_id].state == 2)
             {
                 PCB[temp_id].remaining_time--;
             }
@@ -302,6 +316,8 @@ void RR()  //同一时间到达
     cout<<"请输入轮转时间片长度:";
     cin>>timer;
 
+    in_pause();
+
     int time = 0;
     int cnt = 0;
     bool is_run = false;
@@ -309,7 +325,6 @@ void RR()  //同一时间到达
     Node temp;
     int temp_id;
 
-    int p = 0;  //默认从就绪队列里第一个进程开始
     int c = 0;  //当前小计时器
     while(cnt < n)
     {
@@ -327,7 +342,8 @@ void RR()  //同一时间到达
             temp = Ready.front();
             temp_id = find(temp.pid);
             Ready.pop();  //先弹出到后期视情况再决定是否重回就绪队列
-            if(PCB[temp_id].state = 1)  //该进程首次启动
+
+            if(PCB[temp_id].state == 1)  //该进程首次启动
             {
                 PCB[temp_id].start_time = time;
                 PCB[temp_id].state = 2;
@@ -403,8 +419,8 @@ int main()
         menu();
         cout<<"请输入你的选项:";
         cin>>choice;
-        system("pause");
-        system("cls");
+
+        in_pause();
         
         switch(choice)
         {
@@ -429,7 +445,6 @@ int main()
             default :
                 cout<<"此选项无效"<<endl;
         }
-        
     }
     return 0;
 }
