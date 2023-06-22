@@ -3,6 +3,7 @@ using namespace std;
 
 const int N = 10;
 int n;
+char ch[100][100];
 
 struct Node
 {
@@ -45,7 +46,7 @@ void input()
     cin>>n;
     for(int i = 0; i < n; i++)
     {
-        PCB[i].pid = i + 1;
+        PCB[i].pid = i;
         cout<<"输入第"<<i + 1<<"个进程到达时间:";
         cin>>PCB[i].arrival_time;
         cout<<"输入第"<<i + 1<<"个进程工作时间:";
@@ -56,7 +57,7 @@ void input()
     in_pause();
 }
 
-void output()
+void output(int time)
 {
     double sum = 0;
     printf("PID \t 到达时间 \t 开始时间 \t 工作时间 \t 结束时间 \t 周转时间\n");
@@ -70,6 +71,21 @@ void output()
     }
     cout<<n<<"个进程的平均周转时间为:"<<sum / n<<endl;
     
+    cout<<endl<<"甘特图如下(@为运行, *为等待)"<<endl;
+    for(int i = 0; i <= time; i++)
+    {
+        printf("%02d ",i);
+    }
+    cout<<"[time]"<<endl;
+    for(int i = 0; i < n; i++)
+    {
+        
+        for(int j = 0; j < time; j++)
+        {
+            cout<<"  "<<ch[i][j];
+        }
+        cout<<"| pid->"<<PCB[i].pid<<endl;
+    }
     out_pause();
 }
 
@@ -133,6 +149,16 @@ void show_state(int time, queue<Node> Ready)
     out_pause();
 }
 
+void query_state(int time)
+{
+    for(int i = 0; i < n; i++)
+    {
+        if(PCB[i].state == 2) ch[PCB[i].pid][time] = '@';
+        else if(PCB[i].state == 4 || PCB[i].state == 1) ch[PCB[i].pid][time] = '*';
+        else ch[PCB[i].pid][time] = ' ';
+    }
+}
+
 void FCFS()
 { 
     sort(PCB, PCB + n, cmp);  //按进程到达时间升序排序
@@ -166,8 +192,10 @@ void FCFS()
             PCB[temp_id].end_time = time + PCB[temp_id].burst_time;
             PCB[temp_id].state = 2;
             PCB[temp_id].turnaround_time = PCB[temp_id].end_time - PCB[temp_id].arrival_time;
+
         }
         
+        query_state(time);
         show_state(time, Ready);
 
         //时间片按块来算, 进程开始时间和结束时间按时间点来算:https://cdn.jsdelivr.net/gh/chousinbin/Image/202306192222744.png
@@ -180,7 +208,7 @@ void FCFS()
 
         time++;
     }
-    output();
+    output(time);
 }
 
 void init_remaining_time()  //初始化: 剩余时间 = 工作时间
@@ -290,6 +318,7 @@ void SRTF()
             is_run = true;
         }
 
+        query_state(time);
         show_state(time, Ready);  //显示当前时间片, 各进程状态
         
         if(is_run && PCB[temp_id].remaining_time == 0)  //当前进程待执行时间为0, 说明进程结束
@@ -305,7 +334,7 @@ void SRTF()
 
         time++;
     }
-    output();  //输出各进程周转时间和所有进程的平均周转时间
+    output(time);  //输出各进程周转时间和所有进程的平均周转时间
 }
 
 void RR()  //同一时间到达
@@ -361,6 +390,7 @@ void RR()  //同一时间到达
             PCB[temp_id].remaining_time--;
         }
 
+        query_state(time);
         show_state(time, Ready);
 
         if(PCB[temp_id].remaining_time == 0)  //这个时间片后该进程结束
@@ -383,7 +413,7 @@ void RR()  //同一时间到达
 
         time++;
     }
-    output();
+    output(time);
 }
 
 void menu()
