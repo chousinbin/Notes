@@ -13,7 +13,6 @@ struct Node
     int start_time;
     int end_time;
     int turnaround_time;
-    int waiting_time;
     int remaining_time;
     int priority;
     int state; //0为未到达, 1为到达加入就绪队列, 2为正在运行, 3为进程完成, 4为被暂停
@@ -25,15 +24,12 @@ bool cmp(Node x, Node y)
     return x.remaining_time < y.remaining_time;  //如果到达时间相同按最短剩余排序
 }
 
-void in_pause()
+bool cmp_p(Node x, Node y)
 {
-    getchar();
-    cout<<"请输入任意键继续";
-    getchar();
-    system("cls");
+    return x.priority > y.priority;
 }
 
-void out_pause()
+void pause()
 {
     cout<<"请输入任意键继续";
     getchar();
@@ -51,11 +47,32 @@ void input()
         cin>>PCB[i].arrival_time;
         cout<<"输入第"<<i + 1<<"个进程工作时间:";
         cin>>PCB[i].burst_time;
-        PCB[i].end_time = 999;
+        PCB[i].end_time = 999;  //防止误判导致进程未开始执行就结束
 
     }
-    in_pause();
+    getchar();
+    pause();
 }
+
+void input_PNP()
+{
+    cout<<"请输入进程数:";
+    cin>>n;
+    for(int i = 0; i < n; i++)
+    {
+        PCB[i].pid = i;
+        cout<<"输入进程pid -> "<<i<<"的到达时间:";
+        cin>>PCB[i].arrival_time;
+        cout<<"输入进程pid -> "<<i<<"的工作时间:";
+        cin>>PCB[i].burst_time;
+        cout<<"输入进程pid -> "<<i<<"的优先级:";
+        cin>>PCB[i].priority;
+        PCB[i].end_time = 999;  //防止误判导致进程未开始执行就结束
+    }
+    getchar();
+    pause();
+}
+
 
 void output(int time)
 {
@@ -82,11 +99,11 @@ void output(int time)
         
         for(int j = 0; j < time; j++)
         {
-            cout<<"  "<<ch[i][j];
+            cout<<"  "<<ch[PCB[i].pid][j];
         }
         cout<<"| pid->"<<PCB[i].pid<<endl;
     }
-    out_pause();
+    pause();
 }
 
 int find(int id)
@@ -146,7 +163,7 @@ void show_state(int time, queue<Node> Ready)
     }
     cout<<endl;
     
-    out_pause();
+    pause();
 }
 
 void query_state(int time)
@@ -192,7 +209,6 @@ void FCFS()
             PCB[temp_id].end_time = time + PCB[temp_id].burst_time;
             PCB[temp_id].state = 2;
             PCB[temp_id].turnaround_time = PCB[temp_id].end_time - PCB[temp_id].arrival_time;
-
         }
         
         query_state(time);
@@ -326,7 +342,6 @@ void SRTF()
             PCB[temp_id].end_time = time + 1;
             PCB[temp_id].state = 3;
             PCB[temp_id].turnaround_time = PCB[temp_id].end_time - PCB[temp_id].arrival_time;
-            PCB[temp_id].waiting_time = PCB[temp_id].turnaround_time - PCB[temp_id].burst_time;
             
             is_run = false;
             cnt++;
@@ -345,7 +360,8 @@ void RR()  //同一时间到达
     cout<<"请输入轮转时间片长度:";
     cin>>timer;
 
-    in_pause();
+    getchar();
+    pause();
 
     int time = 0;
     int cnt = 0;
@@ -401,7 +417,6 @@ void RR()  //同一时间到达
             is_run = false;
             cnt++;
             PCB[temp_id].turnaround_time = PCB[temp_id].end_time - PCB[temp_id].arrival_time;
-            PCB[temp_id].waiting_time = PCB[temp_id].turnaround_time - PCB[temp_id].burst_time;
         }
         else if(c == timer)  //当前时间片走完但还有剩余工作时长, 挂起此进程
         {
@@ -416,15 +431,75 @@ void RR()  //同一时间到达
     output(time);
 }
 
-void menu()
+void sort_p(queue<Node> &Ready)
 {
-    cout<<"=======主菜单======="<<endl;
-    cout<<"1. FCFS算法"<<endl;
-    cout<<"2. SRTF算法(最短剩余优先)"<<endl;
-    cout<<"3. RR算法(同时到达)"<<endl;
-    cout<<"0. 退出程序"<<endl;
-    cout<<"====================="<<endl;
+    int len = Ready.size();
+    Node temp_PCB[len];
+    for(int i = 0; Ready.empty() == false; i++)
+    {
+        temp_PCB[i] = PCB[Ready.front().pid];
+        Ready.pop();
+    }
+
+    sort(temp_PCB, temp_PCB + len, cmp_p);
+    
+    for(int i = 0; i < len; i++)
+    {
+        Ready.push(temp_PCB[i]);
+    }
 }
+
+void PNP()  //优先级非抢占调度
+{
+    sort(PCB, PCB + n, cmp);
+
+    int cnt = 0;
+    int time = 0;
+    bool is_run = false;
+    queue<Node> Ready;
+    Node temp;
+    int temp_id;
+
+    while(cnt < n)
+    {
+        for(int i = 0; i < n; i++)  //每到一个时间片, 查找到达的进程并添加到就绪队列并标记进程状态
+        {
+            if(time >= PCB[i].arrival_time && PCB[i].state == 0)
+            {
+                Ready.push(PCB[i]);
+                PCB[i].state = 1;
+                sort_p(Ready);  //每加一个进程到就绪队列, 按优先级排序, 高的在队头
+            }
+        }
+
+        if(is_run == false && Ready.empty() == false)  //如果这个时间片没有进程正在运行 && 就绪队列非空
+        {
+            is_run = true;
+            temp = Ready.front();
+            Ready.pop();
+            temp_id = find(temp.pid);
+
+            PCB[temp_id].start_time = time;
+            PCB[temp_id].end_time = time + PCB[temp_id].burst_time;
+            PCB[temp_id].state = 2;
+            PCB[temp_id].turnaround_time = PCB[temp_id].end_time - PCB[temp_id].arrival_time;
+        }
+
+        query_state(time);
+        show_state(time, Ready);
+
+        if(PCB[temp_id].end_time - 1 == time)  //如果当前时间片是当前正在运行进程的结束时间, 标记该进程为完成, 弹出就绪队列
+        {
+            PCB[temp_id].state = 3;
+            is_run = false;
+            cnt++;
+        }
+
+        time++;
+    }
+    output(time);
+}
+
 void to_zero()
 {
     for(int i = 0; i < n; i++)
@@ -438,9 +513,20 @@ void to_zero()
         PCB[i].start_time = 0;
         PCB[i].state = 0;
         PCB[i].turnaround_time = 0;
-        PCB[i].waiting_time = 0;
     }
 }
+
+void menu()
+{
+    cout<<"=======主菜单======="<<endl;
+    cout<<"1. FCFS算法"<<endl;
+    cout<<"2. SRTF算法(最短剩余优先)"<<endl;
+    cout<<"3. RR算法(同时到达)"<<endl;
+    cout<<"4. 优先级算法(非抢占)"<<endl;
+    cout<<"0. 退出程序"<<endl;
+    cout<<"====================="<<endl;
+}
+
 int main()
 {
     int choice;
@@ -450,7 +536,8 @@ int main()
         cout<<"请输入你的选项:";
         cin>>choice;
 
-        in_pause();
+        getchar();
+        pause();
         
         switch(choice)
         {
@@ -468,13 +555,19 @@ int main()
                 to_zero();
                 break;
             case 3 :
+                cout<<"当前为同时到达板轮转时间片, 确保所有进程同一时间到达"<<endl;
                 input();
                 RR();
                 to_zero();
                 break;
+            case 4 :
+                input_PNP();
+                PNP();
+                to_zero();
+                break;
             default :
                 cout<<"此选项无效"<<endl;
-                out_pause();
+                pause();
         }
     }
     return 0;
