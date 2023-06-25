@@ -12,6 +12,7 @@ int r[N];
 int ne[N];
 int idx;  //id
 
+
 void init()  //链表初始化
 {
     head = tail = -1;
@@ -90,26 +91,18 @@ void input()
     pause();
 }
 
-void show_state()
+void show_state(bool st_location, bool st_type)
 {
+    if(st_location) cout<<endl<<"请求完成之前内存状态"<<endl;
+    else cout<<endl<<"请求完成之后内存状态"<<endl;
+
     cout<<"====Memory===="<<endl;
     for(int i = head; i != -1; i = ne[i])
-        cout<<"id -> "<<e[i]<<"  "<<"R -> "<<r[i]<<endl;
+    {
+        if(st_type) cout<<"id -> "<<e[i]<<"  "<<"R -> "<<r[i]<<endl;
+        else cout<<"id -> "<<e[i]<<endl;
+    }
     cout<<"=============="<<endl;
-}
-
-void pre_state()
-{
-    cout<<endl<<"请求完成之前内存状态"<<endl;
-    show_state();
-    cout<<endl;
-}
-
-void last_state()
-{
-    cout<<endl<<"请求完成之后内存状态"<<endl;
-    show_state();
-    pause();
 }
 
 void output(int cnt)
@@ -129,7 +122,7 @@ void FIFO()
     for(int p = 0; p < n; p++)
     {
         cout<<"当前请求页面为: <"<<pages[p]<<'>'<<endl;
-        pre_state();
+        show_state(true, false);
 
         if(query_val(pages[p]) != -1)  //从链表里面查pages[p]
         {
@@ -151,7 +144,8 @@ void FIFO()
             }
         }
 
-        last_state();
+        show_state(false, false);
+        pause();
     }
     output(cnt);
 }
@@ -165,7 +159,7 @@ void LRU()  //最近最少使用
     for(int p = 0; p < n; p++)
     {
         cout<<"当前请求页面为: <"<<pages[p]<<'>'<<endl;
-        pre_state();
+        show_state(true, false);
 
         if(query_val(pages[p]) != -1)  //如果查到, 找到在内存位置, 不改变内存顺序, 挪到队尾
         {
@@ -192,7 +186,8 @@ void LRU()  //最近最少使用
             }
         }
 
-        last_state();
+        show_state(false, false);
+        pause();
     }
     output(cnt);
 }
@@ -206,7 +201,7 @@ void SecondChance()
     for(int p = 0; p < n; p++)
     {
         cout<<"当前请求页面为: <"<<pages[p]<<'>'<<endl;
-        pre_state();
+        show_state(true, true);
 
         if(query_val(pages[p]) != -1)  //从链表里面查pages[p]
         {
@@ -234,7 +229,8 @@ void SecondChance()
             }
         }
 
-        last_state();
+        show_state(false, true);
+        pause();
     }
     output(cnt);
 }
