@@ -3433,7 +3433,7 @@ class Outer {
         };
         /*
         基于类的匿名内部类相当于
-        class 匿名内部类的隐藏名 implements 类名 {
+        class 匿名内部类的隐藏名 extends 类名 {
         
         }
         */
@@ -3466,7 +3466,7 @@ class Outer {
         };
         /*
         基于类的匿名内部类相当于
-        class 匿名内部类的隐藏名(Outer$2) implements 类名 {
+        class 匿名内部类的隐藏名(Outer$2) exte 类名 {
         
         }
         */

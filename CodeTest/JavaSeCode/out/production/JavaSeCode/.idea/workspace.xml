@@ -454,7 +454,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.Apply">
+  <component name="RunManager" selected="Application.Add">
     <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
@@ -466,12 +466,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Apply" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.inner_class.innerclass02.Apply" />
+    <configuration name="Add" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.test.Add" />
       <module name="JavaSeCode" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.inner_class.innerclass02.*" />
+          <option name="PATTERN" value="com.test.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -479,12 +479,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestBankAccount (2)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.DJTU_Java.TestBankAccount" />
+    <configuration name="Apply" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.inner_class.innerclass02.Apply" />
       <module name="JavaSeCode" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.DJTU_Java.*" />
+          <option name="PATTERN" value="com.inner_class.innerclass02.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -532,19 +532,19 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.Add" />
       <item itemvalue="Application.Apply" />
-      <item itemvalue="Application.TestBankAccount (2)" />
       <item itemvalue="Application.User (1)" />
       <item itemvalue="Application.User" />
       <item itemvalue="Application.test1" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Add" />
         <item itemvalue="Application.Apply" />
         <item itemvalue="Application.test1" />
         <item itemvalue="Application.User (1)" />
         <item itemvalue="Application.User" />
-        <item itemvalue="Application.TestBankAccount (2)" />
       </list>
     </recent_temporary>
   </component>
@@ -600,7 +600,7 @@
       <workItem from="1684138393037" duration="1376000" />
       <workItem from="1684315517758" duration="2000" />
       <workItem from="1684379103712" duration="4000" />
-      <workItem from="1684465096912" duration="1735000" />
+      <workItem from="1684465096912" duration="2092000" />
     </task>
     <servers />
   </component>
