@@ -1,4 +1,4 @@
-package com.zxb.javalab.test;
+package com.SinbinZhou.JavaLab.test;
 
 import javax.swing.*;
 import java.awt.*;

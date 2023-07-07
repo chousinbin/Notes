@@ -1,4 +1,6 @@
-package com.zxb.javalab.Demo;
+package com.SinbinZhou.JavaLab.Demo;
+
+import com.SinbinZhou.JavaLab.Demo.View.LoginView;
 
 /**
  * @ClassName: com.zxb.javalab.Demo.Test

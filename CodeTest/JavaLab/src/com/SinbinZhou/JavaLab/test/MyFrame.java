@@ -1,11 +1,10 @@
-package com.zxb.javalab.Demo;
+package com.SinbinZhou.JavaLab.test;
 
-import java.awt.*;
 import javax.swing.*;
 
 
 /**
- * @ClassName: com.zxb.javalab.Demo.MyFrame
+ * @ClassName: com.zxb.javalab.test.MyFrame
  * @UserName: SinBin
  * @date: 2023-06-29 18:58
  * @Description:
@@ -18,14 +17,21 @@ public class MyFrame extends JFrame {
         init();
         setTitle("学生管理系统");
         setSize(1280, 960);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setVisible(true);
-        setResizable(false);
+        setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     void init() {
-        setLayout(new FlowLayout());
+        JTabbedPane jTabbedPane = new JTabbedPane();
+        jTabbedPane.addTab("123", new JPanel());
+        add(jTabbedPane);
 
+    }
+
+    public static void main(String[] args) {
+        new MyFrame();
     }
 }
