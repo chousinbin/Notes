@@ -1,4 +1,6 @@
 package com.SinbinZhou.JavaLab.Demo.Listener;
+import com.SinbinZhou.JavaLab.Demo.Model.Account;
+import com.SinbinZhou.JavaLab.Demo.Jdbc.AccountVerify;
 import com.SinbinZhou.JavaLab.Demo.View.LoginView;
 import com.SinbinZhou.JavaLab.Demo.View.MainView;
 
@@ -21,13 +23,20 @@ public class LoginViewListener implements ActionListener {
             //从组件获取用户名和密码
             String usr = loginView.getUsrText().getText();
             char[] chars = loginView.getPwdText().getPassword();
+            //验证是否为空
+            if(usr == null || "".equals(usr.trim()) || chars == null) {
+                JOptionPane.showMessageDialog(loginView, "请检查用户名和密码");
+                return;
+            }
             String pwd = new String(chars);
             //从数据库users表中查询用户
-            boolean st = true;
+            Account account = new Account();
+            account.setUsrName(usr);
+            account.setPwd(pwd);
+            boolean st = AccountVerify.accountVerify(account);
             if(st) {
                 loginView.dispose();
                 new MainView();
-
             } else {
                 /*
                 待优化

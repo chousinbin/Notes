@@ -1,7 +1,5 @@
 package com.SinbinZhou.JavaLab.Demo.View;
 
-import com.SinbinZhou.JavaLab.Demo.MyJTable;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -23,7 +21,7 @@ public class MainView extends JFrame {
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //设置选项卡标签字体
-        tabbedPane.setFont(new Font("黑体", Font.PLAIN , 36));
+        tabbedPane.setFont(new Font("黑体", Font.PLAIN, 36));
         tabbedPane.addTab("添加药品", new AddPart());
         tabbedPane.addTab("销售药品", new DeletePart());
         tabbedPane.addTab("修改信息", new UpdatePart());
@@ -31,14 +29,5 @@ public class MainView extends JFrame {
 
         add(tabbedPane);
     }
-
-
-    void queryPart() {
-        JPanel queryPanel = new JPanel();
-        queryPanel.setLayout(new BorderLayout());
-        MyJTable myJTable = new MyJTable();
-        JScrollPane jScrollPane = new JScrollPane(myJTable);
-        queryPanel.add(jScrollPane);
-        tabbedPane.addTab("查询库存", queryPanel);
-    }
 }
+

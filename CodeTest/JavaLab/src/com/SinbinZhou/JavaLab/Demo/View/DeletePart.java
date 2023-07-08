@@ -45,8 +45,8 @@ public class DeletePart extends JPanel{
         totalPriceLabel = new JLabel("总额");
         totalPriceText = new JTextField();
 
-        Font font = new Font("宋体", Font.PLAIN, 36);
-        Dimension dimension = new Dimension(300, 50);
+        Font font = new Font("宋体", Font.PLAIN, 50);
+        Dimension dimension = new Dimension(500, 60);
 
         queryProductLabel.setFont(font);
         queryProductText.setFont(font);

@@ -17,19 +17,19 @@ public class AddPart extends JPanel {
     private JTextField nameText;
     private JTextField productionFactoryText;
     private JTextField productionPlaceText;
-    private JTextField batchNumberText;
     private JTextField productionDateText;
     private JTextField expirationDateText;
     private JTextField purchasePriceText;
     private JTextField purchaseQuantityText;
+    private JTextField salePriceText;
     private JLabel nameLabel;
     private JLabel productionFactoryLabel;
     private JLabel productionPlaceLabel;
-    private JLabel batchNumberLabel;
     private JLabel productionDateLabel;
     private JLabel expirationDateLabel;
     private JLabel purchasePriceLabel;
     private JLabel purchaseQuantityLabel;
+    private JLabel salePriceLabel;
 
 
     public AddPart() {
@@ -45,8 +45,6 @@ public class AddPart extends JPanel {
         productionFactoryLabel.setFont(font);
         productionPlaceLabel = new JLabel("生产地址");
         productionPlaceLabel.setFont(font);
-        batchNumberLabel = new JLabel("生产批号");
-        batchNumberLabel.setFont(font);
         productionDateLabel = new JLabel("生产日期");
         productionDateLabel.setFont(font);
         expirationDateLabel = new JLabel("有效期");
@@ -55,6 +53,8 @@ public class AddPart extends JPanel {
         purchasePriceLabel.setFont(font);
         purchaseQuantityLabel = new JLabel("进货数量");
         purchaseQuantityLabel.setFont(font);
+        salePriceLabel = new JLabel("售价");
+        salePriceLabel.setFont(font);
 
         nameText = new JTextField();
         nameText.setPreferredSize(dimension);
@@ -65,9 +65,6 @@ public class AddPart extends JPanel {
         productionPlaceText = new JTextField();
         productionPlaceText.setPreferredSize(dimension);
         productionPlaceText.setFont(font);
-        batchNumberText = new JTextField();
-        batchNumberText.setPreferredSize(dimension);
-        batchNumberText.setFont(font);
         productionDateText = new JTextField();
         productionDateText.setPreferredSize(dimension);
         productionDateText.setFont(font);
@@ -80,6 +77,9 @@ public class AddPart extends JPanel {
         purchaseQuantityText = new JTextField();
         purchaseQuantityText.setPreferredSize(dimension);
         purchaseQuantityText.setFont(font);
+        salePriceText = new JTextField();
+        salePriceText.setPreferredSize(dimension);
+        salePriceText.setFont(font);
 
         add(nameLabel);
         Spring tempWidth = Spring.sum(Spring.sum(Spring.width(nameLabel), Spring.width(nameText)),
@@ -120,23 +120,11 @@ public class AddPart extends JPanel {
         springLayout.putConstraint(SpringLayout.NORTH, productionPlaceText, 0,
                 SpringLayout.NORTH, productionPlaceLabel);
 
-        add(batchNumberLabel);
-        springLayout.putConstraint(SpringLayout.EAST, batchNumberLabel, 0,
-                SpringLayout.EAST, nameLabel);
-        springLayout.putConstraint(SpringLayout.NORTH, batchNumberLabel, 40,
-                SpringLayout.SOUTH, productionPlaceLabel);
-
-        add(batchNumberText);
-        springLayout.putConstraint(SpringLayout.WEST, batchNumberText, 20,
-                SpringLayout.EAST, batchNumberLabel);
-        springLayout.putConstraint(SpringLayout.NORTH, batchNumberText, 0,
-                SpringLayout.NORTH, batchNumberLabel);
-
         add(productionDateLabel);
         springLayout.putConstraint(SpringLayout.EAST, productionDateLabel, 0,
                 SpringLayout.EAST, nameLabel);
         springLayout.putConstraint(SpringLayout.NORTH, productionDateLabel, 40,
-                SpringLayout.SOUTH, batchNumberLabel);
+                SpringLayout.SOUTH, productionPlaceLabel);
 
         add(productionDateText);
         springLayout.putConstraint(SpringLayout.WEST, productionDateText, 20,
@@ -180,13 +168,26 @@ public class AddPart extends JPanel {
         springLayout.putConstraint(SpringLayout.NORTH, purchaseQuantityText, 0,
                 SpringLayout.NORTH, purchaseQuantityLabel);
 
+        add(salePriceLabel);
+        springLayout.putConstraint(SpringLayout.EAST, salePriceLabel, 0,
+                SpringLayout.EAST, nameLabel);
+        springLayout.putConstraint(SpringLayout.NORTH, salePriceLabel, 40,
+                SpringLayout.SOUTH, purchaseQuantityLabel);
+
+        add(salePriceText);
+        springLayout.putConstraint(SpringLayout.WEST, salePriceText, 20,
+                SpringLayout.EAST, salePriceLabel);
+        springLayout.putConstraint(SpringLayout.NORTH, salePriceText, 0,
+                SpringLayout.NORTH, salePriceLabel);
+
+
         AddPartListener listener = new AddPartListener(this);
 
         confirmButton = new JButton("确认入库");
         confirmButton.setFont(font);
         confirmButton.addActionListener(listener);
         springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, confirmButton, 300,
-                SpringLayout.VERTICAL_CENTER, purchaseQuantityText);
+                SpringLayout.VERTICAL_CENTER, salePriceLabel);
         springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, confirmButton, 0,
                 SpringLayout.HORIZONTAL_CENTER, this);
         add(confirmButton);
@@ -221,10 +222,6 @@ public class AddPart extends JPanel {
         return productionPlaceText;
     }
 
-    public JTextField getBatchNumberText() {
-        return batchNumberText;
-    }
-
     public JTextField getProductionDateText() {
         return productionDateText;
     }
@@ -239,5 +236,9 @@ public class AddPart extends JPanel {
 
     public JTextField getPurchaseQuantityText() {
         return purchaseQuantityText;
+    }
+
+    public JTextField getSalePriceText() {
+        return salePriceText;
     }
 }
