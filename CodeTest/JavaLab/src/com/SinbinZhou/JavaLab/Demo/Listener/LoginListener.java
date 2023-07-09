@@ -1,6 +1,6 @@
 package com.SinbinZhou.JavaLab.Demo.Listener;
 import com.SinbinZhou.JavaLab.Demo.Model.Account;
-import com.SinbinZhou.JavaLab.Demo.Jdbc.AccountVerify;
+import com.SinbinZhou.JavaLab.Demo.Controller.LoginController;
 import com.SinbinZhou.JavaLab.Demo.View.LoginView;
 import com.SinbinZhou.JavaLab.Demo.View.MainView;
 
@@ -13,9 +13,9 @@ import java.awt.event.*;
  * @Description:
  * 登录界面两个按钮的监视器
  */
-public class LoginViewListener implements ActionListener {
+public class LoginListener implements ActionListener {
     LoginView loginView;
-    public LoginViewListener(LoginView loginView) {
+    public LoginListener(LoginView loginView) {
         this.loginView = loginView;
     }
     public void actionPerformed(ActionEvent e) {
@@ -33,7 +33,7 @@ public class LoginViewListener implements ActionListener {
             Account account = new Account();
             account.setUsrName(usr);
             account.setPwd(pwd);
-            boolean st = AccountVerify.accountVerify(account);
+            boolean st = LoginController.accountVerify(account);
             if(st) {
                 loginView.dispose();
                 new MainView();

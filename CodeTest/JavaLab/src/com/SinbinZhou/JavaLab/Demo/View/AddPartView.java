@@ -11,7 +11,7 @@ import java.awt.*;
  * @date: 2023-07-07 17:49
  * @Description:
  */
-public class AddPart extends JPanel {
+public class AddPartView extends JPanel {
     private JButton confirmButton;
     private JButton resetButton;
     private JTextField nameText;
@@ -32,7 +32,7 @@ public class AddPart extends JPanel {
     private JLabel salePriceLabel;
 
 
-    public AddPart() {
+    public AddPartView() {
         SpringLayout springLayout = new SpringLayout();
         setLayout(springLayout);
 
@@ -93,8 +93,8 @@ public class AddPart extends JPanel {
         add(nameText);
         springLayout.putConstraint(SpringLayout.WEST, nameText, 20,
                 SpringLayout.EAST, nameLabel);
-        springLayout.putConstraint(SpringLayout.NORTH, nameText, 0,
-                SpringLayout.NORTH, nameLabel);
+        springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, nameText, 0,
+                SpringLayout.VERTICAL_CENTER, nameLabel);
 
         add(productionFactoryLabel);
         springLayout.putConstraint(SpringLayout.EAST, productionFactoryLabel, 0,
@@ -105,8 +105,8 @@ public class AddPart extends JPanel {
         add(productionFactoryText);
         springLayout.putConstraint(SpringLayout.WEST, productionFactoryText, 20,
                 SpringLayout.EAST, productionFactoryLabel);
-        springLayout.putConstraint(SpringLayout.NORTH, productionFactoryText, 0,
-                SpringLayout.NORTH, productionFactoryLabel);
+        springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, productionFactoryText, 0,
+                SpringLayout.VERTICAL_CENTER, productionFactoryLabel);
 
         add(productionPlaceLabel);
         springLayout.putConstraint(SpringLayout.EAST, productionPlaceLabel, 0,
@@ -117,8 +117,8 @@ public class AddPart extends JPanel {
         add(productionPlaceText);
         springLayout.putConstraint(SpringLayout.WEST, productionPlaceText, 20,
                 SpringLayout.EAST, productionPlaceLabel);
-        springLayout.putConstraint(SpringLayout.NORTH, productionPlaceText, 0,
-                SpringLayout.NORTH, productionPlaceLabel);
+        springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, productionPlaceText, 0,
+                SpringLayout.VERTICAL_CENTER, productionPlaceLabel);
 
         add(productionDateLabel);
         springLayout.putConstraint(SpringLayout.EAST, productionDateLabel, 0,
@@ -129,8 +129,8 @@ public class AddPart extends JPanel {
         add(productionDateText);
         springLayout.putConstraint(SpringLayout.WEST, productionDateText, 20,
                 SpringLayout.EAST, productionDateLabel);
-        springLayout.putConstraint(SpringLayout.NORTH, productionDateText, 0,
-                SpringLayout.NORTH, productionDateLabel);
+        springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, productionDateText, 0,
+                SpringLayout.VERTICAL_CENTER, productionDateLabel);
 
         add(expirationDateLabel);
         springLayout.putConstraint(SpringLayout.EAST, expirationDateLabel, 0,
@@ -141,8 +141,8 @@ public class AddPart extends JPanel {
         add(expirationDateText);
         springLayout.putConstraint(SpringLayout.WEST, expirationDateText, 20,
                 SpringLayout.EAST, expirationDateLabel);
-        springLayout.putConstraint(SpringLayout.NORTH, expirationDateText, 0,
-                SpringLayout.NORTH, expirationDateLabel);
+        springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, expirationDateText, 0,
+                SpringLayout.VERTICAL_CENTER, expirationDateLabel);
 
         add(purchasePriceLabel);
         springLayout.putConstraint(SpringLayout.EAST, purchasePriceLabel, 0,
@@ -153,8 +153,8 @@ public class AddPart extends JPanel {
         add(purchasePriceText);
         springLayout.putConstraint(SpringLayout.WEST, purchasePriceText, 20,
                 SpringLayout.EAST, purchasePriceLabel);
-        springLayout.putConstraint(SpringLayout.NORTH, purchasePriceText, 0,
-                SpringLayout.NORTH, purchasePriceLabel);
+        springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, purchasePriceText, 0,
+                SpringLayout.VERTICAL_CENTER, purchasePriceLabel);
 
         add(purchaseQuantityLabel);
         springLayout.putConstraint(SpringLayout.EAST, purchaseQuantityLabel, 0,
@@ -165,8 +165,8 @@ public class AddPart extends JPanel {
         add(purchaseQuantityText);
         springLayout.putConstraint(SpringLayout.WEST, purchaseQuantityText, 20,
                 SpringLayout.EAST, purchaseQuantityLabel);
-        springLayout.putConstraint(SpringLayout.NORTH, purchaseQuantityText, 0,
-                SpringLayout.NORTH, purchaseQuantityLabel);
+        springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, purchaseQuantityText, 0,
+                SpringLayout.VERTICAL_CENTER, purchaseQuantityLabel);
 
         add(salePriceLabel);
         springLayout.putConstraint(SpringLayout.EAST, salePriceLabel, 0,
@@ -177,8 +177,8 @@ public class AddPart extends JPanel {
         add(salePriceText);
         springLayout.putConstraint(SpringLayout.WEST, salePriceText, 20,
                 SpringLayout.EAST, salePriceLabel);
-        springLayout.putConstraint(SpringLayout.NORTH, salePriceText, 0,
-                SpringLayout.NORTH, salePriceLabel);
+        springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, salePriceText, 0,
+                SpringLayout.VERTICAL_CENTER, salePriceLabel);
 
 
         AddPartListener listener = new AddPartListener(this);

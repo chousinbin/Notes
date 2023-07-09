@@ -1,4 +1,4 @@
-package com.SinbinZhou.JavaLab.Demo.Jdbc;
+package com.SinbinZhou.JavaLab.Demo.Controller;
 
 import java.sql.*;
 

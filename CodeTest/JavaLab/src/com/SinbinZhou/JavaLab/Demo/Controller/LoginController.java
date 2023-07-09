@@ -1,4 +1,4 @@
-package com.SinbinZhou.JavaLab.Demo.Jdbc;
+package com.SinbinZhou.JavaLab.Demo.Controller;
 
 import com.SinbinZhou.JavaLab.Demo.Model.Account;
 
@@ -12,7 +12,7 @@ import java.sql.ResultSet;
  * @date: 2023-07-08 10:55
  * @Description:
  */
-public class AccountVerify {
+public class LoginController {
     public static boolean accountVerify(Account account) {
         String sql = "select password from user where usrName = ?";
         Connection conn = null;

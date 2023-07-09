@@ -1,7 +1,5 @@
 package com.SinbinZhou.JavaLab.test;
 
-import com.SinbinZhou.JavaLab.Demo.Listener.DeletePartListener;
-
 import javax.swing.*;
 import java.awt.*;
 

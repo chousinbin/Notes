@@ -1,6 +1,6 @@
 package com.SinbinZhou.JavaLab.Demo.View;
 
-import com.SinbinZhou.JavaLab.Demo.Listener.DeletePartListener;
+import com.SinbinZhou.JavaLab.Demo.Listener.SalePartListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,7 @@ import java.awt.*;
  * @date: 2023-07-07 22:18
  * @Description:
  */
-public class DeletePart extends JPanel{
+public class SalePartController extends JPanel{
     private JLabel queryProductLabel;
     private JTextField queryProductText;
     private JButton queryProductButton;
@@ -23,6 +23,7 @@ public class DeletePart extends JPanel{
     private JButton settlementButton;
     private JLabel totalPriceLabel;
     private JTextField totalPriceText;
+    private MyJTable myJTable;
 
     SpringLayout springLayout = new SpringLayout();
 
@@ -30,13 +31,14 @@ public class DeletePart extends JPanel{
     JPanel topPanel = new JPanel(springLayout);
     JPanel downPanel = new JPanel(springLayout);
 
-    public DeletePart() {
+    public SalePartController() {
         setLayout(new BorderLayout());
 
         queryProductLabel = new JLabel("品名");
         queryProductText = new JTextField();
         queryProductButton = new JButton("查询");
         scrollPane = new JScrollPane();
+        myJTable = new MyJTable();
         productIDLabel = new JLabel("药品ID");
         productIDText = new JTextField();
         sealNumberLabel = new JLabel("出售数量");
@@ -106,6 +108,7 @@ public class DeletePart extends JPanel{
 
     private void init_centerPanel() {
         centerPanel.add(scrollPane);
+        scrollPane.setViewportView(myJTable);
         centerPanel.setPreferredSize(new Dimension(0, 600));
     }
 
@@ -168,9 +171,9 @@ public class DeletePart extends JPanel{
     }
 
     private void init_listener() {
-        DeletePartListener deletePartListener = new DeletePartListener(this);
-        queryProductButton.addActionListener(deletePartListener);
-        settlementButton.addActionListener(deletePartListener);
+        SalePartListener salePartListener = new SalePartListener(this);
+        queryProductButton.addActionListener(salePartListener);
+        settlementButton.addActionListener(salePartListener);
     }
 
     public JTextField getQueryProductText() {
@@ -199,5 +202,9 @@ public class DeletePart extends JPanel{
 
     public JScrollPane getScrollPane() {
         return scrollPane;
+    }
+
+    public MyJTable getMyJTable() {
+        return myJTable;
     }
 }

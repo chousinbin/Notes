@@ -10,7 +10,7 @@ import java.util.Vector;
  * @Description:
  * 表格实体
  */
-public class TableModel extends DefaultTableModel {
+public class MyTableModel extends DefaultTableModel {
     private  Vector<Vector<Object>> date;
     private  Vector<Object> columns;
 

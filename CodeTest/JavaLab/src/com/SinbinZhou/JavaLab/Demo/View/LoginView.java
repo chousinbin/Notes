@@ -1,5 +1,5 @@
 package com.SinbinZhou.JavaLab.Demo.View;
-import com.SinbinZhou.JavaLab.Demo.Listener.LoginViewListener;
+import com.SinbinZhou.JavaLab.Demo.Listener.LoginListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -86,7 +86,7 @@ public class LoginView extends JFrame {
         contentPane.add(centerPanel, BorderLayout.CENTER);
     }
     void addListener() {
-        LoginViewListener listener = new LoginViewListener(this);
+        LoginListener listener = new LoginListener(this);
         loginButton.addActionListener(listener);
         resetButton.addActionListener(listener);
         pwdText.addActionListener(listener);

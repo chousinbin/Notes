@@ -1,8 +1,8 @@
 package com.SinbinZhou.JavaLab.Demo.Listener;
 
-import com.SinbinZhou.JavaLab.Demo.Jdbc.ProductionAdd;
+import com.SinbinZhou.JavaLab.Demo.Controller.AddPartController;
 import com.SinbinZhou.JavaLab.Demo.Model.Production;
-import com.SinbinZhou.JavaLab.Demo.View.AddPart;
+import com.SinbinZhou.JavaLab.Demo.View.AddPartView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -15,26 +15,26 @@ import java.awt.event.ActionListener;
  * @Description:
  */
 public class AddPartListener implements ActionListener {
-    AddPart addPart;
+    AddPartView addPartView;
 
-    public AddPartListener(AddPart addPart) {
-        this.addPart = addPart;
+    public AddPartListener(AddPartView addPartView) {
+        this.addPartView = addPartView;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == addPart.getConfirmButton()) {
+        if(e.getSource() == addPartView.getConfirmButton()) {
             /*
             接收插入信息, 调用JDBC
              */
-            String name = addPart.getNameText().getText();
-            String factory = addPart.getProductionFactoryText().getText();
-            String address = addPart.getProductionPlaceText().getText();
-            String productionDate = addPart.getProductionDateText().getText();
-            String expirationDate = addPart.getExpirationDateText().getText();
-            String purchasePriceString = addPart.getPurchasePriceText().getText();
-            String purchaseQuantityString = addPart.getPurchaseQuantityText().getText();
-            String salePriceString = addPart.getSalePriceText().getText();
+            String name = addPartView.getNameText().getText();
+            String factory = addPartView.getProductionFactoryText().getText();
+            String address = addPartView.getProductionPlaceText().getText();
+            String productionDate = addPartView.getProductionDateText().getText();
+            String expirationDate = addPartView.getExpirationDateText().getText();
+            String purchasePriceString = addPartView.getPurchasePriceText().getText();
+            String purchaseQuantityString = addPartView.getPurchaseQuantityText().getText();
+            String salePriceString = addPartView.getSalePriceText().getText();
 
             if(name == null || "".equals(name.trim()) ||
                     factory == null || "".equals(factory.trim()) ||
@@ -44,7 +44,7 @@ public class AddPartListener implements ActionListener {
                     purchasePriceString == null || "".equals(purchasePriceString.trim()) ||
                     purchaseQuantityString == null || "".equals(purchaseQuantityString.trim()) ||
                     salePriceString == null || "".equals(salePriceString.trim()) ) {
-                JOptionPane.showMessageDialog(addPart, "信息不能为空");
+                JOptionPane.showMessageDialog(addPartView, "信息不能为空");
                 return;
             }
 
@@ -62,27 +62,27 @@ public class AddPartListener implements ActionListener {
             production.setPurchasePrice(purchasePrice);
             production.setPurchaseQuantity(purchaseQuantity);
             production.setSalePrice(salePrice);
-            boolean st = ProductionAdd.productionAdd(production);
+            boolean st = AddPartController.productionAdd(production);
             if(st == false) {
-                JOptionPane.showMessageDialog(addPart, "入库失败");
+                JOptionPane.showMessageDialog(addPartView, "入库失败");
             } else {
-                JOptionPane.showMessageDialog(addPart, "入库成功");
+                JOptionPane.showMessageDialog(addPartView, "入库成功");
                 cleanInformation();
             }
         }
-        if(e.getSource() == addPart.getResetButton()) {
+        if(e.getSource() == addPartView.getResetButton()) {
             cleanInformation();
         }
     }
 
     private void cleanInformation() {
-        addPart.getNameText().setText("");
-        addPart.getProductionFactoryText().setText("");
-        addPart.getProductionPlaceText().setText("");
-        addPart.getProductionDateText().setText("");
-        addPart.getExpirationDateText().setText("");
-        addPart.getPurchasePriceText().setText("");
-        addPart.getPurchaseQuantityText().setText("");
-        addPart.getSalePriceText().setText("");
+        addPartView.getNameText().setText("");
+        addPartView.getProductionFactoryText().setText("");
+        addPartView.getProductionPlaceText().setText("");
+        addPartView.getProductionDateText().setText("");
+        addPartView.getExpirationDateText().setText("");
+        addPartView.getPurchasePriceText().setText("");
+        addPartView.getPurchaseQuantityText().setText("");
+        addPartView.getSalePriceText().setText("");
     }
 }

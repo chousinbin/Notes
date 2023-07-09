@@ -1,6 +1,5 @@
-package com.SinbinZhou.JavaLab.Demo.Jdbc;
+package com.SinbinZhou.JavaLab.Demo.Controller;
 
-import com.SinbinZhou.JavaLab.Demo.Model.Account;
 import com.SinbinZhou.JavaLab.Demo.Model.Production;
 
 import java.sql.Connection;
@@ -13,7 +12,7 @@ import java.sql.ResultSet;
  * @date: 2023-07-08 11:50
  * @Description:
  */
-public class ProductionAdd {
+public class AddPartController {
     public static boolean productionAdd(Production production) {
         String sql = "insert into product values (null, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection conn = null;

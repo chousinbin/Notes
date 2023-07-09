@@ -22,10 +22,10 @@ public class MainView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //设置选项卡标签字体
         tabbedPane.setFont(new Font("黑体", Font.PLAIN, 36));
-        tabbedPane.addTab("添加药品", new AddPart());
-        tabbedPane.addTab("销售药品", new DeletePart());
-        tabbedPane.addTab("修改信息", new UpdatePart());
-        tabbedPane.addTab("药品盘点", new QueryPart());
+        tabbedPane.addTab("添加药品", new AddPartView());
+        tabbedPane.addTab("销售药品", new SalePartController());
+        tabbedPane.addTab("修改信息", new UpdatePartView());
+        tabbedPane.addTab("药品盘点", new StockPartView());
 
         add(tabbedPane);
     }
