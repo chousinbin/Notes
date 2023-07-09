@@ -1,6 +1,6 @@
 package com.SinbinZhou.JavaLab.Demo.Controller;
 
-import com.SinbinZhou.JavaLab.Demo.Model.Production;
+import com.SinbinZhou.JavaLab.Demo.Model.ProductionModel;
 import com.SinbinZhou.JavaLab.Demo.Model.MyTableModel;
 
 import java.sql.*;
@@ -17,9 +17,8 @@ import java.util.Vector;
  * 表格模式应该根据实体设置date和columns
  */
 public class SalePartController {
-
+    //模糊查询关键词, 不显示进价
     public static MyTableModel query(String key, MyTableModel myTableModel) {
-        //模糊查询关键词, 不显示进价
         String sql = "SELECT id, name, factory, address, productionDate, " +
                 "expirationDate, purchaseQuantity, salePrice" +
                 " FROM product WHERE " +
@@ -27,16 +26,14 @@ public class SalePartController {
                 "factory LIKE '%" + key + "%' OR " +
                 "address LIKE '%" + key + "%'";
         Connection conn = null;
-        Statement st = null;
+        PreparedStatement ps = null;
         ResultSet rs = null;
         Vector<Vector<Object>> data = new Vector<>();
 
         try {
             conn = DBUtil.getConnection();
-            st = conn.createStatement();
-            rs = st.executeQuery(sql);
-            //数据库中无结果直接返回null
-
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
             while(rs.next()) {
                 Vector<Object> dt = new Vector<>();
                 for (int i = 1; i <= 8; i++) {
@@ -44,7 +41,6 @@ public class SalePartController {
                 }
                 data.addElement(dt);
             }
-
             //向实体对象添加数据
             myTableModel.setDate(data);
             //向实体对象添加表头
@@ -58,38 +54,10 @@ public class SalePartController {
             columns.addElement("库存数量");
             columns.addElement("售价");
             myTableModel.setColumns(columns);
-
+            //表格实体设置表头和数据
             myTableModel.setDataVector(data, columns);
             return myTableModel;
         } catch (SQLException e) {
-            System.out.println("发生异常");
-            e.printStackTrace();
-        } finally {
-            DBUtil.closeResultSet(rs);
-            DBUtil.closeSt(st);
-            DBUtil.closeConnection(conn);
-        }
-        return null;
-    }
-
-    //根据id查询商品, 返回该id商品的库存和售价, 返回类型为Product
-    public static Production idQuery(Production production) {
-        int qid = production.getId();
-        String sql = "select purchaseQuantity, salePrice from product where id = " + qid + "";
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            conn = DBUtil.getConnection();
-            ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while(rs.next())
-            {
-                production.setPurchaseQuantity(rs.getInt(1));
-                production.setSalePrice(rs.getDouble(2));
-            }
-            return production;
-        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             DBUtil.closeResultSet(rs);
@@ -99,10 +67,39 @@ public class SalePartController {
         return null;
     }
 
-    public static void update(Production production) {
+    //根据id查询商品, 返回该id商品的库存和售价, 返回类型为Product
+    public static ProductionModel idQuery(ProductionModel productionModel) {
+        int qid = productionModel.getId();
+        String sql = "select purchaseQuantity, salePrice from product where " +
+                "id = " + qid + "";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while(rs.next())
+            {
+                productionModel.setPurchaseQuantity(rs.getInt(1));
+                productionModel.setSalePrice(rs.getDouble(2));
+            }
+            return productionModel;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.closeResultSet(rs);
+            DBUtil.closePs(ps);
+            DBUtil.closeConnection(conn);
+        }
+        return null;
+    }
+    //更新库存
+    public static void update(ProductionModel productionModel) {
         String sql = "update product set purchaseQuantity = " +
-                production.getPurchaseQuantity() + " " +
-                "where id = " + production.getId() + "";
+                productionModel.getPurchaseQuantity() + " " +
+                "where id = " + productionModel.getId() + "";
         Connection conn = null;
         PreparedStatement ps = null;
 

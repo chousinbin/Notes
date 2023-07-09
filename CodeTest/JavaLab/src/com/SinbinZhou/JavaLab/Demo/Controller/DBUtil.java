@@ -48,22 +48,11 @@ public class DBUtil {
             }
         }
     }
-
+    //关闭结果
     public static void closeResultSet(ResultSet resultSet) {
         if(resultSet != null) {
             try {
                 resultSet.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-
-    public static void closeSt(Statement st) {
-        if(st != null) {
-            try {
-                st.close();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

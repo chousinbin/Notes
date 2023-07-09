@@ -1,11 +1,13 @@
 package com.SinbinZhou.JavaLab.Demo.Listener;
-import com.SinbinZhou.JavaLab.Demo.Model.Account;
+
+import com.SinbinZhou.JavaLab.Demo.Model.AccountModel;
 import com.SinbinZhou.JavaLab.Demo.Controller.LoginController;
 import com.SinbinZhou.JavaLab.Demo.View.LoginView;
 import com.SinbinZhou.JavaLab.Demo.View.MainView;
+import com.SinbinZhou.JavaLab.Demo.View.MyJOptionPane;
 
-import javax.swing.*;
 import java.awt.event.*;
+
 /**
  * @ClassName: LoginListener
  * @UserName: SinBin
@@ -14,7 +16,7 @@ import java.awt.event.*;
  * 登录界面两个按钮的监视器
  */
 public class LoginListener implements ActionListener {
-    LoginView loginView;
+    private LoginView loginView;
     public LoginListener(LoginView loginView) {
         this.loginView = loginView;
     }
@@ -25,26 +27,24 @@ public class LoginListener implements ActionListener {
             char[] chars = loginView.getPwdText().getPassword();
             //验证是否为空
             if(usr == null || "".equals(usr.trim()) || chars == null) {
-                JOptionPane.showMessageDialog(loginView, "请检查用户名和密码");
+                MyJOptionPane.showMessageDialog(null, "请检查用户名和密码", "提示");
                 return;
             }
+            //把数据填入账户实体
             String pwd = new String(chars);
-            //从数据库users表中查询用户
-            Account account = new Account();
-            account.setUsrName(usr);
-            account.setPwd(pwd);
-            boolean st = LoginController.accountVerify(account);
+            AccountModel accountModel = new AccountModel();
+            accountModel.setUsrName(usr);
+            accountModel.setPwd(pwd);
+            //向数据库查询验证账户密码
+            boolean st = LoginController.accountVerify(accountModel);
             if(st) {
                 loginView.dispose();
                 new MainView();
             } else {
-                /*
-                待优化
-                默认 消息框大小 和 文字大小 过小
-                 */
-                JOptionPane.showMessageDialog(loginView, "请检查用户名和密码");
+                MyJOptionPane.showMessageDialog(null, "请检查用户名和密码", "提示");
             }
         }
+        //清空文本框
         if(e.getSource() == loginView.getResetButton()) {
             loginView.getUsrText().setText("");
             loginView.getPwdText().setText("");

@@ -5,7 +5,6 @@ import com.SinbinZhou.JavaLab.Demo.Model.MyTableModel;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.util.Vector;
 
@@ -21,8 +20,8 @@ public class MyJTable extends JTable {
         setModel(myTableModel);
         //设置渲染格式
         Vector<Object> columns = myTableModel.getColumns();
-        for (int i = 0; i < columns.size(); i++) {
-            TableColumn column = getColumn(columns.get(i));
+        for (Object o : columns) {
+            TableColumn column = getColumn(o);
             column.setCellRenderer(new MyCellRender());
         }
     }

@@ -1,6 +1,6 @@
 package com.SinbinZhou.JavaLab.Demo.Controller;
 
-import com.SinbinZhou.JavaLab.Demo.Model.Account;
+import com.SinbinZhou.JavaLab.Demo.Model.AccountModel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,22 +13,25 @@ import java.sql.ResultSet;
  * @Description:
  */
 public class LoginController {
-    public static boolean accountVerify(Account account) {
+    public static boolean accountVerify(AccountModel accountModel) {
         String sql = "select password from user where usrName = ?";
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet resultSet = null;
+
         try {
             conn = DBUtil.getConnection();
             if(conn == null) {
                 return false;
             }
+
             ps = conn.prepareStatement(sql);
-            ps.setString(1, account.getUsrName());
+            ps.setString(1, accountModel.getUsrName());
             resultSet = ps.executeQuery();
+
             while (resultSet.next()) {
                 String pwd = resultSet.getString(1);
-                if(account.getPwd().equals(pwd)) {
+                if(accountModel.getPwd().equals(pwd)) {
                     return true;
                 }
             }

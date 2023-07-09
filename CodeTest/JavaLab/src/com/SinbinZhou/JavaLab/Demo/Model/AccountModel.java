@@ -7,7 +7,7 @@ package com.SinbinZhou.JavaLab.Demo.Model;
  * @Description:
  * 账户实体
  */
-public class Account {
+public class AccountModel {
     private Integer id;
     private String usrName;
     private String pwd;

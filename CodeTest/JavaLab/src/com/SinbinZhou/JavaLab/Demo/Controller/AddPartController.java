@@ -1,10 +1,9 @@
 package com.SinbinZhou.JavaLab.Demo.Controller;
 
-import com.SinbinZhou.JavaLab.Demo.Model.Production;
+import com.SinbinZhou.JavaLab.Demo.Model.ProductionModel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 /**
  * @ClassName: ProductionAdd
@@ -13,28 +12,26 @@ import java.sql.ResultSet;
  * @Description:
  */
 public class AddPartController {
-    public static boolean productionAdd(Production production) {
-        String sql = "insert into product values (null, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static boolean productionAdd(ProductionModel productionModel) {
+        String sql = "INSERT INTO product VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement ps = null;
-        ResultSet resultSet = null;
         try {
             conn = DBUtil.getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setString(1, production.getName());
-            ps.setString(2, production.getFactory());
-            ps.setString(3, production.getAddress());
-            ps.setString(4, production.getProductionDate());
-            ps.setString(5, production.getExpirationDate());
-            ps.setDouble(6, production.getPurchasePrice());
-            ps.setInt(7, production.getPurchaseQuantity());
-            ps.setDouble(8, production.getSalePrice());
+            ps.setString(1, productionModel.getName());
+            ps.setString(2, productionModel.getFactory());
+            ps.setString(3, productionModel.getAddress());
+            ps.setString(4, productionModel.getProductionDate());
+            ps.setString(5, productionModel.getExpirationDate());
+            ps.setDouble(6, productionModel.getPurchasePrice());
+            ps.setInt(7, productionModel.getPurchaseQuantity());
+            ps.setDouble(8, productionModel.getSalePrice());
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         } finally {
-            DBUtil.closeResultSet(resultSet);
             DBUtil.closePs(ps);
             DBUtil.closeConnection(conn);
         }

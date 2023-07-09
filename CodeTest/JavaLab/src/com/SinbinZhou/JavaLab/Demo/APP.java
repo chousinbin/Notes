@@ -3,14 +3,13 @@ package com.SinbinZhou.JavaLab.Demo;
 import com.SinbinZhou.JavaLab.Demo.View.LoginView;
 
 /**
- * @ClassName: com.zxb.javalab.Demo.Test
+ * @ClassName: APP
  * @UserName: SinBin
- * @date: 2023-06-29 19:07
+ * @date: 2023-07-09 23:38
  * @Description:
  */
-public class Test {
+public class APP {
     public static void main(String[] args) {
-
         new LoginView();
     }
 }

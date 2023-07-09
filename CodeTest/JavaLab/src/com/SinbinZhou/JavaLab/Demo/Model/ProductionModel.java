@@ -7,7 +7,7 @@ package com.SinbinZhou.JavaLab.Demo.Model;
  * @Description:
  * 产品实体
  */
-public class Production {
+public class ProductionModel {
     private int id;
     private String name;
     private String factory;

@@ -12,6 +12,7 @@ import java.util.Vector;
  * @Description:
  */
 public class StockPartController {
+    //查询整张表
     public static MyTableModel stockQueryAll(MyTableModel myTableModel) {
         String sql = "select * from product";
         Connection conn = null;
@@ -59,6 +60,7 @@ public class StockPartController {
         return null;
     }
 
+    //模糊查询
     public static MyTableModel stockQueryPart(String key, MyTableModel myTableModel) {
         //模糊查询关键词
         String sql = "SELECT * FROM product WHERE " +
@@ -113,7 +115,7 @@ public class StockPartController {
         }
         return null;
     }
-
+    //从数据库删除记录
     public static void stockDelete(int id) {
         String sql = "DELETE FROM product WHERE id = " + id +"";
         Connection conn = null;

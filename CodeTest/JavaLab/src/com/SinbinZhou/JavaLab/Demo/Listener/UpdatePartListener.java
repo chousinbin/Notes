@@ -3,11 +3,10 @@ package com.SinbinZhou.JavaLab.Demo.Listener;
 import com.SinbinZhou.JavaLab.Demo.Controller.StockPartController;
 import com.SinbinZhou.JavaLab.Demo.Controller.UpdatePartController;
 import com.SinbinZhou.JavaLab.Demo.Model.MyTableModel;
-import com.SinbinZhou.JavaLab.Demo.Model.Production;
+import com.SinbinZhou.JavaLab.Demo.Model.ProductionModel;
 import com.SinbinZhou.JavaLab.Demo.View.MyJTable;
 import com.SinbinZhou.JavaLab.Demo.View.UpdatePartView;
 
-import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
@@ -20,8 +19,8 @@ import java.awt.event.ActionListener;
  * @Description:
  */
 public class UpdatePartListener implements ActionListener , ListSelectionListener {
-    UpdatePartView updatePartView;
-    Production production;
+    private UpdatePartView updatePartView;
+    private ProductionModel productionModel;
 
     public UpdatePartListener(UpdatePartView updatePartView) {
         this.updatePartView = updatePartView;
@@ -31,7 +30,7 @@ public class UpdatePartListener implements ActionListener , ListSelectionListene
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == updatePartView.getUpdateButton()) {
             //判断是否已经选中要修改的信息
-            if(production == null) {
+            if(productionModel == null) {
                 return;
             }
             //获取文本框数据
@@ -55,24 +54,22 @@ public class UpdatePartListener implements ActionListener , ListSelectionListene
                 return;
             }
             //文本框数据到入到实体
-            production.setName(name);
-            production.setFactory(factory);
-            production.setAddress(address);
-            production.setProductionDate(productionDate);
-            production.setExpirationDate(expirationDate);
-            production.setPurchasePrice(Double.parseDouble(purchasePrice));
-            production.setPurchaseQuantity(Integer.parseInt(purchaseNum));
-            production.setSalePrice(Double.parseDouble(salePrice));
-
-            //根据id和更新的实体
-            UpdatePartController.updateSelected(production);
+            productionModel.setName(name);
+            productionModel.setFactory(factory);
+            productionModel.setAddress(address);
+            productionModel.setProductionDate(productionDate);
+            productionModel.setExpirationDate(expirationDate);
+            productionModel.setPurchasePrice(Double.parseDouble(purchasePrice));
+            productionModel.setPurchaseQuantity(Integer.parseInt(purchaseNum));
+            productionModel.setSalePrice(Double.parseDouble(salePrice));
+            //根据id和更新的实体进行数据库记录更新
+            UpdatePartController.updateSelected(productionModel);
             //修改完成之后, 查询最新数据库, 把结果显示到JTable中
             MyTableModel myTableModel = StockPartController.stockQueryAll(new MyTableModel());
             updatePartView.getMyJTable().setMyTableModel(myTableModel);
         }
-
+        //查询数据库, 返回列表模型, 添加到面板
         if(e.getSource() == updatePartView.getSearchButton()) {
-            //查询数据库, 返回列表模型, 添加到面板
             MyTableModel myTableModel = StockPartController.stockQueryAll(new MyTableModel());
             updatePartView.getMyJTable().setMyTableModel(myTableModel);
         }
@@ -86,25 +83,25 @@ public class UpdatePartListener implements ActionListener , ListSelectionListene
         if(selectedRom != -1)
         {
             //把选中行的数据提取到实体对象中
-            production = new Production();
-            production.setId((int)myJTable.getValueAt(selectedRom, 0));
-            production.setName((String)myJTable.getValueAt(selectedRom, 1));
-            production.setFactory((String) myJTable.getValueAt(selectedRom, 2));
-            production.setAddress((String) myJTable.getValueAt(selectedRom, 3));
-            production.setProductionDate((String) myJTable.getValueAt(selectedRom, 4));
-            production.setExpirationDate((String) myJTable.getValueAt(selectedRom, 5));
-            production.setPurchasePrice((double)myJTable.getValueAt(selectedRom, 6));
-            production.setPurchaseQuantity((int)myJTable.getValueAt(selectedRom, 7));
-            production.setSalePrice((double)myJTable.getValueAt(selectedRom, 8));
+            productionModel = new ProductionModel();
+            productionModel.setId((int)myJTable.getValueAt(selectedRom, 0));
+            productionModel.setName((String)myJTable.getValueAt(selectedRom, 1));
+            productionModel.setFactory((String) myJTable.getValueAt(selectedRom, 2));
+            productionModel.setAddress((String) myJTable.getValueAt(selectedRom, 3));
+            productionModel.setProductionDate((String) myJTable.getValueAt(selectedRom, 4));
+            productionModel.setExpirationDate((String) myJTable.getValueAt(selectedRom, 5));
+            productionModel.setPurchasePrice((double)myJTable.getValueAt(selectedRom, 6));
+            productionModel.setPurchaseQuantity((int)myJTable.getValueAt(selectedRom, 7));
+            productionModel.setSalePrice((double)myJTable.getValueAt(selectedRom, 8));
             //实体对象存放的选中的数据 显示到 修改框
-            updatePartView.getNameText().setText(production.getName());
-            updatePartView.getProductionFactoryText().setText(production.getFactory());
-            updatePartView.getProductionPlaceText().setText(production.getAddress());
-            updatePartView.getProductionDateText().setText(production.getProductionDate());
-            updatePartView.getExpirationDateText().setText(production.getExpirationDate());
-            updatePartView.getPurchasePriceText().setText(production.getPurchasePrice() + "");
-            updatePartView.getPurchaseQuantityText().setText(production.getPurchaseQuantity() + "");
-            updatePartView.getSalePriceText().setText(production.getSalePrice() + "");
+            updatePartView.getNameText().setText(productionModel.getName());
+            updatePartView.getProductionFactoryText().setText(productionModel.getFactory());
+            updatePartView.getProductionPlaceText().setText(productionModel.getAddress());
+            updatePartView.getProductionDateText().setText(productionModel.getProductionDate());
+            updatePartView.getExpirationDateText().setText(productionModel.getExpirationDate());
+            updatePartView.getPurchasePriceText().setText(productionModel.getPurchasePrice() + "");
+            updatePartView.getPurchaseQuantityText().setText(productionModel.getPurchaseQuantity() + "");
+            updatePartView.getSalePriceText().setText(productionModel.getSalePrice() + "");
         }
     }
 }

@@ -30,176 +30,201 @@ public class AddPartView extends JPanel {
     private JLabel purchasePriceLabel;
     private JLabel purchaseQuantityLabel;
     private JLabel salePriceLabel;
-
+    private SpringLayout springLayout;
+    private Font font;
+    private Dimension dimension;
+    private AddPartListener listener;
 
     public AddPartView() {
-        SpringLayout springLayout = new SpringLayout();
+        //创建对象
+        createObject();
+        //设置布局
         setLayout(springLayout);
+        //初始化字体
+        initFont();
+        //初始化尺寸
+        initDimension();
+        //添加组件
+        addComponents();
+        //调整布局
+        initLayout();
+        //为组件添加监听器
+        confirmButton.addActionListener(listener);
+        resetButton.addActionListener(listener);
+    }
 
-        Font font = new Font("宋体", Font.PLAIN, 36);
-        Dimension dimension = new Dimension(300, 50);
-
-        nameLabel = new JLabel("药品名称");
-        nameLabel.setFont(font);
-        productionFactoryLabel = new JLabel("生产厂家");
-        productionFactoryLabel.setFont(font);
-        productionPlaceLabel = new JLabel("生产地址");
-        productionPlaceLabel.setFont(font);
-        productionDateLabel = new JLabel("生产日期");
-        productionDateLabel.setFont(font);
-        expirationDateLabel = new JLabel("有效期");
-        expirationDateLabel.setFont(font);
-        purchasePriceLabel = new JLabel("进货价格");
-        purchasePriceLabel.setFont(font);
-        purchaseQuantityLabel = new JLabel("进货数量");
-        purchaseQuantityLabel.setFont(font);
-        salePriceLabel = new JLabel("售价");
-        salePriceLabel.setFont(font);
-
-        nameText = new JTextField();
-        nameText.setPreferredSize(dimension);
-        nameText.setFont(font);
-        productionFactoryText = new JTextField();
-        productionFactoryText.setPreferredSize(dimension);
-        productionFactoryText.setFont(font);
-        productionPlaceText = new JTextField();
-        productionPlaceText.setPreferredSize(dimension);
-        productionPlaceText.setFont(font);
-        productionDateText = new JTextField();
-        productionDateText.setPreferredSize(dimension);
-        productionDateText.setFont(font);
-        expirationDateText = new JTextField();
-        expirationDateText.setPreferredSize(dimension);
-        expirationDateText.setFont(font);
-        purchasePriceText = new JTextField();
-        purchasePriceText.setPreferredSize(dimension);
-        purchasePriceText.setFont(font);
-        purchaseQuantityText = new JTextField();
-        purchaseQuantityText.setPreferredSize(dimension);
-        purchaseQuantityText.setFont(font);
-        salePriceText = new JTextField();
-        salePriceText.setPreferredSize(dimension);
-        salePriceText.setFont(font);
-
+    private void addComponents() {
         add(nameLabel);
+        add(nameText);
+        add(productionFactoryLabel);
+        add(productionFactoryText);
+        add(productionPlaceLabel);
+        add(productionPlaceText);
+        add(productionDateLabel);
+        add(productionDateText);
+        add(expirationDateLabel);
+        add(expirationDateText);
+        add(purchasePriceLabel);
+        add(purchasePriceText);
+        add(purchaseQuantityLabel);
+        add(purchaseQuantityText);
+        add(salePriceLabel);
+        add(salePriceText);
+        add(confirmButton);
+        add(resetButton);
+    }
+
+    private void initDimension() {
+        nameText.setPreferredSize(dimension);
+        productionFactoryText.setPreferredSize(dimension);
+        productionPlaceText.setPreferredSize(dimension);
+        productionDateText.setPreferredSize(dimension);
+        expirationDateText.setPreferredSize(dimension);
+        purchasePriceText.setPreferredSize(dimension);
+        purchaseQuantityText.setPreferredSize(dimension);
+        salePriceText.setPreferredSize(dimension);
+    }
+
+    private void initFont() {
+        nameLabel.setFont(font);
+        productionFactoryLabel.setFont(font);
+        productionPlaceLabel.setFont(font);
+        productionDateLabel.setFont(font);
+        expirationDateLabel.setFont(font);
+        purchasePriceLabel.setFont(font);
+        purchaseQuantityLabel.setFont(font);
+        salePriceLabel.setFont(font);
+        nameText.setFont(font);
+        productionFactoryText.setFont(font);
+        productionPlaceText.setFont(font);
+        productionDateText.setFont(font);
+        expirationDateText.setFont(font);
+        purchasePriceText.setFont(font);
+        purchaseQuantityText.setFont(font);
+        salePriceText.setFont(font);
+        confirmButton.setFont(font);
+        resetButton.setFont(font);
+    }
+
+    private void createObject() {
+        springLayout= new SpringLayout();
+        font = new Font("宋体", Font.PLAIN, 36);
+        dimension = new Dimension(300, 50);
+        nameLabel = new JLabel("药品名称");
+        productionFactoryLabel = new JLabel("生产厂家");
+        productionPlaceLabel = new JLabel("生产地址");
+        productionDateLabel = new JLabel("生产日期");
+        expirationDateLabel = new JLabel("有效期");
+        purchasePriceLabel = new JLabel("进货价格");
+        purchaseQuantityLabel = new JLabel("进货数量");
+        salePriceLabel = new JLabel("售价");
+        nameText = new JTextField();
+        productionFactoryText = new JTextField();
+        productionPlaceText = new JTextField();
+        productionDateText = new JTextField();
+        expirationDateText = new JTextField();
+        purchasePriceText = new JTextField();
+        purchaseQuantityText = new JTextField();
+        salePriceText = new JTextField();
+        confirmButton = new JButton("确认入库");
+        resetButton = new JButton("重置信息");
+        listener = new AddPartListener(this);
+    }
+
+    private void initLayout() {
         Spring tempWidth = Spring.sum(Spring.sum(Spring.width(nameLabel), Spring.width(nameText)),
                 Spring.constant(20));
         int offSetX = tempWidth.getValue() / 2;
+
         springLayout.putConstraint(SpringLayout.WEST, nameLabel, -offSetX,
                 SpringLayout.HORIZONTAL_CENTER, this);
         springLayout.putConstraint(SpringLayout.NORTH, nameLabel, 300,
                 SpringLayout.NORTH, this);
 
-        add(nameText);
         springLayout.putConstraint(SpringLayout.WEST, nameText, 20,
                 SpringLayout.EAST, nameLabel);
         springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, nameText, 0,
                 SpringLayout.VERTICAL_CENTER, nameLabel);
 
-        add(productionFactoryLabel);
         springLayout.putConstraint(SpringLayout.EAST, productionFactoryLabel, 0,
                 SpringLayout.EAST, nameLabel);
         springLayout.putConstraint(SpringLayout.NORTH, productionFactoryLabel, 40,
                 SpringLayout.SOUTH, nameLabel);
 
-        add(productionFactoryText);
         springLayout.putConstraint(SpringLayout.WEST, productionFactoryText, 20,
                 SpringLayout.EAST, productionFactoryLabel);
         springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, productionFactoryText, 0,
                 SpringLayout.VERTICAL_CENTER, productionFactoryLabel);
 
-        add(productionPlaceLabel);
         springLayout.putConstraint(SpringLayout.EAST, productionPlaceLabel, 0,
                 SpringLayout.EAST, nameLabel);
         springLayout.putConstraint(SpringLayout.NORTH, productionPlaceLabel, 40,
                 SpringLayout.SOUTH, productionFactoryLabel);
 
-        add(productionPlaceText);
         springLayout.putConstraint(SpringLayout.WEST, productionPlaceText, 20,
                 SpringLayout.EAST, productionPlaceLabel);
         springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, productionPlaceText, 0,
                 SpringLayout.VERTICAL_CENTER, productionPlaceLabel);
 
-        add(productionDateLabel);
         springLayout.putConstraint(SpringLayout.EAST, productionDateLabel, 0,
                 SpringLayout.EAST, nameLabel);
         springLayout.putConstraint(SpringLayout.NORTH, productionDateLabel, 40,
                 SpringLayout.SOUTH, productionPlaceLabel);
 
-        add(productionDateText);
         springLayout.putConstraint(SpringLayout.WEST, productionDateText, 20,
                 SpringLayout.EAST, productionDateLabel);
         springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, productionDateText, 0,
                 SpringLayout.VERTICAL_CENTER, productionDateLabel);
 
-        add(expirationDateLabel);
         springLayout.putConstraint(SpringLayout.EAST, expirationDateLabel, 0,
                 SpringLayout.EAST, nameLabel);
         springLayout.putConstraint(SpringLayout.NORTH, expirationDateLabel, 40,
                 SpringLayout.SOUTH, productionDateLabel);
 
-        add(expirationDateText);
         springLayout.putConstraint(SpringLayout.WEST, expirationDateText, 20,
                 SpringLayout.EAST, expirationDateLabel);
         springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, expirationDateText, 0,
                 SpringLayout.VERTICAL_CENTER, expirationDateLabel);
 
-        add(purchasePriceLabel);
         springLayout.putConstraint(SpringLayout.EAST, purchasePriceLabel, 0,
                 SpringLayout.EAST, nameLabel);
         springLayout.putConstraint(SpringLayout.NORTH, purchasePriceLabel, 40,
                 SpringLayout.SOUTH, expirationDateLabel);
 
-        add(purchasePriceText);
         springLayout.putConstraint(SpringLayout.WEST, purchasePriceText, 20,
                 SpringLayout.EAST, purchasePriceLabel);
         springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, purchasePriceText, 0,
                 SpringLayout.VERTICAL_CENTER, purchasePriceLabel);
 
-        add(purchaseQuantityLabel);
         springLayout.putConstraint(SpringLayout.EAST, purchaseQuantityLabel, 0,
                 SpringLayout.EAST, nameLabel);
         springLayout.putConstraint(SpringLayout.NORTH, purchaseQuantityLabel, 40,
                 SpringLayout.SOUTH, purchasePriceLabel);
 
-        add(purchaseQuantityText);
         springLayout.putConstraint(SpringLayout.WEST, purchaseQuantityText, 20,
                 SpringLayout.EAST, purchaseQuantityLabel);
         springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, purchaseQuantityText, 0,
                 SpringLayout.VERTICAL_CENTER, purchaseQuantityLabel);
 
-        add(salePriceLabel);
         springLayout.putConstraint(SpringLayout.EAST, salePriceLabel, 0,
                 SpringLayout.EAST, nameLabel);
         springLayout.putConstraint(SpringLayout.NORTH, salePriceLabel, 40,
                 SpringLayout.SOUTH, purchaseQuantityLabel);
 
-        add(salePriceText);
         springLayout.putConstraint(SpringLayout.WEST, salePriceText, 20,
                 SpringLayout.EAST, salePriceLabel);
         springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, salePriceText, 0,
                 SpringLayout.VERTICAL_CENTER, salePriceLabel);
 
-
-        AddPartListener listener = new AddPartListener(this);
-
-        confirmButton = new JButton("确认入库");
-        confirmButton.setFont(font);
-        confirmButton.addActionListener(listener);
         springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, confirmButton, 300,
                 SpringLayout.VERTICAL_CENTER, salePriceLabel);
         springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, confirmButton, 0,
                 SpringLayout.HORIZONTAL_CENTER, this);
-        add(confirmButton);
 
-        resetButton = new JButton("重置信息");
-        resetButton.setFont(font);
-        resetButton.addActionListener(listener);
         springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, resetButton, 100,
                 SpringLayout.VERTICAL_CENTER, confirmButton);
         springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, resetButton, 0,
                 SpringLayout.HORIZONTAL_CENTER, this);
-        add(resetButton);
     }
 
     public JButton getConfirmButton() {

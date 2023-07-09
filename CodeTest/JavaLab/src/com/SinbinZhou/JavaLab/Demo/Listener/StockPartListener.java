@@ -44,6 +44,7 @@ public class StockPartListener implements ActionListener {
             MyJTable myJTable = stockPartView.getMyJTable();
             //选中行的索引
             int selectedRom = myJTable.getSelectedRow();
+            if(selectedRom == -1) return;
             //存放行数据的数组
             Object[] rowDate = new Object[myJTable.getColumnCount()];
             //提取选中行的数据
@@ -54,12 +55,13 @@ public class StockPartListener implements ActionListener {
             int id = (int)rowDate[0];
             //执行删除操作
             StockPartController.stockDelete(id);
-            //删除完重新回显查询结果
+            //回显的查询结果要和上次查询类型一样
             if(preSt == false) {
                 myTableModel = StockPartController.stockQueryAll(new MyTableModel());
             } else {
                 myTableModel = StockPartController.stockQueryPart(key, new MyTableModel());
             }
+            //删除完重新回显查询结果
             stockPartView.getMyJTable().setMyTableModel(myTableModel);
         }
     }

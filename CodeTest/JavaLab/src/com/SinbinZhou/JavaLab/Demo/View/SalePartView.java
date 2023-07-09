@@ -11,7 +11,7 @@ import java.awt.*;
  * @date: 2023-07-07 22:18
  * @Description:
  */
-public class SalePartController extends JPanel{
+public class SalePartView extends JPanel {
     private JLabel queryProductLabel;
     private JTextField queryProductText;
     private JButton queryProductButton;
@@ -24,16 +24,58 @@ public class SalePartController extends JPanel{
     private JLabel totalPriceLabel;
     private JTextField totalPriceText;
     private MyJTable myJTable;
+    private SpringLayout springLayout;
+    private JPanel centerPanel;
+    private JPanel topPanel;
+    private JPanel downPanel;
+    private Font font;
+    private Dimension dimension;
 
-    SpringLayout springLayout = new SpringLayout();
-
-    JPanel centerPanel = new JPanel(new BorderLayout());
-    JPanel topPanel = new JPanel(springLayout);
-    JPanel downPanel = new JPanel(springLayout);
-
-    public SalePartController() {
+    public SalePartView() {
         setLayout(new BorderLayout());
+        //创建组件对象
+        createObject();
+        //初始化字体
+        initFont();
+        //初始化尺寸
+        initDimension();
+        //初始化布局
+        init_topPanel();
+        init_centerPanel();
+        init_downPanel();
+        //添加到主面板
+        add(topPanel, BorderLayout.NORTH);
+        add(centerPanel, BorderLayout.CENTER);
+        add(downPanel, BorderLayout.SOUTH);
+        //初始化监听器
+        init_listener();
+    }
 
+    private void initDimension() {
+        scrollPane.setPreferredSize(new Dimension(2880, 600));
+        queryProductText.setPreferredSize(dimension);
+        productIDText.setPreferredSize(dimension);
+        sealNumberText.setPreferredSize(dimension);
+    }
+
+    private void initFont() {
+        queryProductLabel.setFont(font);
+        queryProductText.setFont(font);
+        queryProductButton.setFont(font);
+        productIDLabel.setFont(font);
+        productIDText.setFont(font);
+        sealNumberLabel.setFont(font);
+        sealNumberText.setFont(font);
+        settlementButton.setFont(font);
+        totalPriceLabel.setFont(font);
+        totalPriceText.setFont(new Font("黑体", Font.BOLD, 80));
+    }
+
+    private void createObject() {
+        springLayout = new SpringLayout();
+        centerPanel = new JPanel(new BorderLayout());
+        downPanel = new JPanel(springLayout);
+        topPanel = new JPanel(springLayout);
         queryProductLabel = new JLabel("品名");
         queryProductText = new JTextField();
         queryProductButton = new JButton("查询");
@@ -46,35 +88,8 @@ public class SalePartController extends JPanel{
         settlementButton = new JButton("结算");
         totalPriceLabel = new JLabel("总额");
         totalPriceText = new JTextField();
-
-        Font font = new Font("宋体", Font.PLAIN, 50);
-        Dimension dimension = new Dimension(500, 60);
-
-        queryProductLabel.setFont(font);
-        queryProductText.setFont(font);
-        queryProductButton.setFont(font);
-        productIDLabel.setFont(font);
-        productIDText.setFont(font);
-        sealNumberLabel.setFont(font);
-        sealNumberText.setFont(font);
-        settlementButton.setFont(font);
-        totalPriceLabel.setFont(font);
-        totalPriceText.setFont(new Font("黑体", Font.BOLD, 80));
-
-        scrollPane.setPreferredSize(new Dimension(2880, 600));
-        queryProductText.setPreferredSize(dimension);
-        productIDText.setPreferredSize(dimension);
-        sealNumberText.setPreferredSize(dimension);
-
-        init_topPanel();
-        init_centerPanel();
-        init_downPanel();
-
-        add(topPanel, BorderLayout.NORTH);
-        add(centerPanel, BorderLayout.CENTER);
-        add(downPanel, BorderLayout.SOUTH);
-
-        init_listener();
+        font = new Font("宋体", Font.PLAIN, 50);
+        dimension = new Dimension(500, 60);
     }
 
     private void init_topPanel() {
@@ -97,7 +112,7 @@ public class SalePartController extends JPanel{
 
         springLayout.putConstraint(SpringLayout.WEST, queryProductText, 20,
                 SpringLayout.EAST, queryProductLabel);
-        springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, queryProductText,0,
+        springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, queryProductText, 0,
                 SpringLayout.VERTICAL_CENTER, queryProductLabel);
 
         springLayout.putConstraint(SpringLayout.WEST, queryProductButton, 20,
@@ -113,7 +128,7 @@ public class SalePartController extends JPanel{
     }
 
     private void init_downPanel() {
-        downPanel.setPreferredSize(new Dimension(0,500));
+        downPanel.setPreferredSize(new Dimension(0, 500));
 
         downPanel.add(productIDLabel);
         downPanel.add(productIDText);
@@ -198,10 +213,6 @@ public class SalePartController extends JPanel{
 
     public JTextField getTotalPriceText() {
         return totalPriceText;
-    }
-
-    public JScrollPane getScrollPane() {
-        return scrollPane;
     }
 
     public MyJTable getMyJTable() {

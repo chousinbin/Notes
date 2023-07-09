@@ -12,18 +12,18 @@ import java.awt.*;
  * 登录界面
  */
 public class LoginView extends JFrame {
-    private JLabel titleLabel = new JLabel("药品进销存管理软件", JLabel.CENTER);
-    private JLabel usrLabel = new JLabel("用户名:");
-    private JLabel pwdLabel = new JLabel("密码:");
-    private JTextField usrText = new JTextField();
-    private JPasswordField pwdText = new JPasswordField();
-    private JButton loginButton = new JButton("登录");
-    private JButton resetButton = new JButton("重置");
-    private SpringLayout springLayout = new SpringLayout();
-    private JPanel centerPanel = new JPanel(springLayout);
-    private Container contentPane = getContentPane();
+    private JLabel titleLabel;
+    private JLabel usrLabel;
+    private JLabel pwdLabel;
+    private JTextField usrText;
+    private JPasswordField pwdText;
+    private JButton loginButton;
+    private JButton resetButton;
+    private SpringLayout springLayout;
+    private JPanel centerPanel;
 
     public LoginView() {
+        createObject();
         initSizeFront();  //字体的初始化, 文本框的大小的初始化
         initLayout();  //初始化JPanel面板的弹簧布局, 以及组件添加
         addListener();  //为组件增加监听器
@@ -36,6 +36,17 @@ public class LoginView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    private void createObject() {
+        titleLabel = new JLabel("药品进销存管理软件", JLabel.CENTER);
+        usrLabel = new JLabel("用户名:");
+        pwdLabel = new JLabel("密码:");
+        usrText = new JTextField();
+        pwdText = new JPasswordField();
+        loginButton = new JButton("登录");
+        resetButton = new JButton("重置");
+        springLayout = new SpringLayout();
+        centerPanel = new JPanel(springLayout);
+    }
     void initSizeFront() {
         //初始化标题大小和字体
         titleLabel.setPreferredSize(new Dimension(0,180));
@@ -82,9 +93,10 @@ public class LoginView extends JFrame {
         springLayout.putConstraint(SpringLayout.SOUTH, resetButton, 0, SpringLayout.SOUTH, loginButton);
 
         //把标题和面板加到主面板
-        contentPane.add(titleLabel, BorderLayout.NORTH);
-        contentPane.add(centerPanel, BorderLayout.CENTER);
+        add(titleLabel, BorderLayout.NORTH);
+        add(centerPanel, BorderLayout.CENTER);
     }
+
     void addListener() {
         LoginListener listener = new LoginListener(this);
         loginButton.addActionListener(listener);

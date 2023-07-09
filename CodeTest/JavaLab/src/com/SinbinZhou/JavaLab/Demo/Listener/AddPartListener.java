@@ -1,10 +1,10 @@
 package com.SinbinZhou.JavaLab.Demo.Listener;
 
 import com.SinbinZhou.JavaLab.Demo.Controller.AddPartController;
-import com.SinbinZhou.JavaLab.Demo.Model.Production;
+import com.SinbinZhou.JavaLab.Demo.Model.ProductionModel;
 import com.SinbinZhou.JavaLab.Demo.View.AddPartView;
+import com.SinbinZhou.JavaLab.Demo.View.MyJOptionPane;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
  * @Description:
  */
 public class AddPartListener implements ActionListener {
-    AddPartView addPartView;
+    private AddPartView addPartView;
 
     public AddPartListener(AddPartView addPartView) {
         this.addPartView = addPartView;
@@ -23,10 +23,9 @@ public class AddPartListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        //入库按钮, 入库
         if(e.getSource() == addPartView.getConfirmButton()) {
-            /*
-            接收插入信息, 调用JDBC
-             */
+            //接收插入信息
             String name = addPartView.getNameText().getText();
             String factory = addPartView.getProductionFactoryText().getText();
             String address = addPartView.getProductionPlaceText().getText();
@@ -35,7 +34,7 @@ public class AddPartListener implements ActionListener {
             String purchasePriceString = addPartView.getPurchasePriceText().getText();
             String purchaseQuantityString = addPartView.getPurchaseQuantityText().getText();
             String salePriceString = addPartView.getSalePriceText().getText();
-
+            //判断是否未录入完整
             if(name == null || "".equals(name.trim()) ||
                     factory == null || "".equals(factory.trim()) ||
                     address == null || "".equals(address.trim()) ||
@@ -44,32 +43,34 @@ public class AddPartListener implements ActionListener {
                     purchasePriceString == null || "".equals(purchasePriceString.trim()) ||
                     purchaseQuantityString == null || "".equals(purchaseQuantityString.trim()) ||
                     salePriceString == null || "".equals(salePriceString.trim()) ) {
-                JOptionPane.showMessageDialog(addPartView, "信息不能为空");
+
+                MyJOptionPane.showMessageDialog(null, "商品信息不完整", "提示");
                 return;
             }
-
+            //数据转换
             double purchasePrice = Double.parseDouble(purchasePriceString);
             int purchaseQuantity = Integer.parseInt(purchaseQuantityString);
             double salePrice = Double.parseDouble(salePriceString);
-
-
-            Production production = new Production();
-            production.setName(name);
-            production.setFactory(factory);
-            production.setAddress(address);
-            production.setProductionDate(productionDate);
-            production.setExpirationDate(expirationDate);
-            production.setPurchasePrice(purchasePrice);
-            production.setPurchaseQuantity(purchaseQuantity);
-            production.setSalePrice(salePrice);
-            boolean st = AddPartController.productionAdd(production);
+            //把数据传入商品实体对象
+            ProductionModel productionModel = new ProductionModel();
+            productionModel.setName(name);
+            productionModel.setFactory(factory);
+            productionModel.setAddress(address);
+            productionModel.setProductionDate(productionDate);
+            productionModel.setExpirationDate(expirationDate);
+            productionModel.setPurchasePrice(purchasePrice);
+            productionModel.setPurchaseQuantity(purchaseQuantity);
+            productionModel.setSalePrice(salePrice);
+            //向数据库插入
+            boolean st = AddPartController.productionAdd(productionModel);
             if(st == false) {
-                JOptionPane.showMessageDialog(addPartView, "入库失败");
+                MyJOptionPane.showMessageDialog(null, "入库失败", "提示");
             } else {
-                JOptionPane.showMessageDialog(addPartView, "入库成功");
-                cleanInformation();
+                MyJOptionPane.showMessageDialog(null, "入库成功", "提示");
+                cleanInformation();  //入库成功 清除文本框信息
             }
         }
+        //重置信息
         if(e.getSource() == addPartView.getResetButton()) {
             cleanInformation();
         }

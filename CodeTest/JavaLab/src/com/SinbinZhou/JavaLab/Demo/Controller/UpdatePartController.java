@@ -1,6 +1,6 @@
 package com.SinbinZhou.JavaLab.Demo.Controller;
 
-import com.SinbinZhou.JavaLab.Demo.Model.Production;
+import com.SinbinZhou.JavaLab.Demo.Model.ProductionModel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +12,8 @@ import java.sql.PreparedStatement;
  * @Description:
  */
 public class UpdatePartController {
-    public static void updateSelected(Production production) {
+    //更新记录信息
+    public static void updateSelected(ProductionModel productionModel) {
         String sql = "UPDATE product SET name=?, factory=?, address=?, productionDate=?, " +
                 "expirationDate=?, purchasePrice=?, purchaseQuantity=?, salePrice=? " +
                 "WHERE id=?";
@@ -22,15 +23,15 @@ public class UpdatePartController {
         try {
             conn = DBUtil.getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setString(1, production.getName());
-            ps.setString(2, production.getFactory());
-            ps.setString(3, production.getAddress());
-            ps.setString(4, production.getProductionDate());
-            ps.setString(5, production.getExpirationDate());
-            ps.setDouble(6, production.getPurchasePrice());
-            ps.setInt(7, production.getPurchaseQuantity());
-            ps.setDouble(8, production.getSalePrice());
-            ps.setInt(9, production.getId());
+            ps.setString(1, productionModel.getName());
+            ps.setString(2, productionModel.getFactory());
+            ps.setString(3, productionModel.getAddress());
+            ps.setString(4, productionModel.getProductionDate());
+            ps.setString(5, productionModel.getExpirationDate());
+            ps.setDouble(6, productionModel.getPurchasePrice());
+            ps.setInt(7, productionModel.getPurchaseQuantity());
+            ps.setDouble(8, productionModel.getSalePrice());
+            ps.setInt(9, productionModel.getId());
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
