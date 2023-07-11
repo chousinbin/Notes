@@ -176,7 +176,7 @@ public class UpdatePartView extends JPanel {
         productionDateLabel = new JLabel("生产日期");
         expirationDateLabel = new JLabel("有效期");
         purchasePriceLabel = new JLabel("进货价格");
-        purchaseQuantityLabel = new JLabel("进货数量");
+        purchaseQuantityLabel = new JLabel("库存数量");
         salePriceLabel = new JLabel("售价");
         nameText = new JTextField();
         productionFactoryText = new JTextField();

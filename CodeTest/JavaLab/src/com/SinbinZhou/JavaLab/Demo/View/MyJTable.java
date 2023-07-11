@@ -37,6 +37,6 @@ public class MyJTable extends JTable {
         setGridColor(Color.BLACK);
         setRowHeight(60);
         //单行选择
-        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 }
