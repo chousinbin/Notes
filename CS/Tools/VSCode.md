@@ -2,7 +2,9 @@
 
 
 
-## 文件建立
+## 修改.exe生成位置
+
+### 文件建立
 
 现在关闭Vscode，在桌面新建一个文件夹，命名随意，然后直接拖拽到Vscode图标处打开，这个文件就是我们的工作区。
 
@@ -33,7 +35,7 @@ int main()
 
 
 
-## 重定向
+### 重定向
 
 为了方便大家修改，直接给出文件，修改位置有特殊标注。可以使用Ctrl+F组合键搜索，简单粗暴的可以直接删除生成的文件内容，复制下面对应文件操作。
 
@@ -174,10 +176,161 @@ int main()
 
 ![](https://cdn.jsdelivr.net/gh/chousinbin/Image/202207181604118.png)
 
-## 测试
+### 测试
 
 ![](https://cdn.jsdelivr.net/gh/chousinbin/Image/202207181605389.gif)
 
 ![](https://cdn.jsdelivr.net/gh/chousinbin/Image/202207181605600.png)
 
 原帖：https://cloud.tencent.com/developer/article/2015634
+
+## 指定位置保存编译生成的可执行文件
+
+如图所示, 项目目录为algorithm, exe文件统一生成后存放在algorithm/build/中, 可在主目录任意创建子目录保存cpp源文件
+
+<img src="https://cdn.jsdelivr.net/gh/chousinbin/Image/202311040001985.png" alt="image-20231104000133895" style="zoom: 50%;" />
+
+#### 实现
+
+通过在.vscode中的setting.json中添加字段
+
+```json
+"code-runner.executorMap":{
+    "cpp": "cd $dir ; g++ $fileName -o d:\\Github\\Notes\\code\\algorithm\\build\\$fileNameWithoutExt ; d:\\Github\\Notes\\code\\algorithm\\build\\$fileNameWithoutExt",
+}
+```
+
+其中:
+
+`cd $dir`切换到当前源文件所在目录
+
+`g++ $fileName -o`编译当前源文件
+
+第一个`d:\\Github\\Notes\\code\\algorithm\\build\\$fileNameWithoutExt`表明exe文件输出的位置
+
+第二个`d:\\Github\\Notes\\code\\algorithm\\build\\$fileNameWithoutExt`表明要打开的exe文件
+
+#### 完整setting.json
+
+```json
+{
+    "files.associations": {
+        "iostream": "cpp",
+        "ostream": "cpp",
+        "random": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "regex": "cpp",
+        "utility": "cpp",
+        "valarray": "cpp",
+        "*.tcc": "cpp",
+        "type_traits": "cpp",
+        "atomic": "cpp",
+        "cctype": "cpp",
+        "cfenv": "cpp",
+        "charconv": "cpp",
+        "chrono": "cpp",
+        "cinttypes": "cpp",
+        "clocale": "cpp",
+        "cmath": "cpp",
+        "codecvt": "cpp",
+        "complex": "cpp",
+        "condition_variable": "cpp",
+        "csetjmp": "cpp",
+        "csignal": "cpp",
+        "cstdarg": "cpp",
+        "cstddef": "cpp",
+        "cstdint": "cpp",
+        "cstdio": "cpp",
+        "cstdlib": "cpp",
+        "cstring": "cpp",
+        "ctime": "cpp",
+        "cuchar": "cpp",
+        "cwchar": "cpp",
+        "cwctype": "cpp",
+        "deque": "cpp",
+        "forward_list": "cpp",
+        "list": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "exception": "cpp",
+        "algorithm": "cpp",
+        "functional": "cpp",
+        "iterator": "cpp",
+        "map": "cpp",
+        "memory": "cpp",
+        "memory_resource": "cpp",
+        "numeric": "cpp",
+        "optional": "cpp",
+        "ratio": "cpp",
+        "set": "cpp",
+        "string": "cpp",
+        "system_error": "cpp",
+        "tuple": "cpp",
+        "fstream": "cpp",
+        "future": "cpp",
+        "iomanip": "cpp",
+        "iosfwd": "cpp",
+        "istream": "cpp",
+        "limits": "cpp",
+        "mutex": "cpp",
+        "new": "cpp",
+        "scoped_allocator": "cpp",
+        "shared_mutex": "cpp",
+        "sstream": "cpp",
+        "stdexcept": "cpp",
+        "streambuf": "cpp",
+        "thread": "cpp",
+        "typeindex": "cpp",
+        "typeinfo": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled",
+    "code-runner.executorMap":{
+        "javascript": "node",
+        "java": "cd $dir ; javac $fileName ; java $fileNameWithoutExt",
+        "c": "cd $dir ; gcc $fileName -o $fileNameWithoutExt ; $dir$fileNameWithoutExt",
+        "cpp": "cd $dir ; g++ $fileName -o d:\\Github\\Notes\\code\\algorithm\\build\\$fileNameWithoutExt ; d:\\Github\\Notes\\code\\algorithm\\build\\$fileNameWithoutExt",
+        "objective-c": "cd $dir ; gcc -framework Cocoa $fileName -o $fileNameWithoutExt ; $dir$fileNameWithoutExt",
+        "php": "php",
+        "python": "python -u",
+        "perl": "perl",
+        "perl6": "perl6",
+        "ruby": "ruby",
+        "go": "go run",
+        "lua": "lua",
+        "groovy": "groovy",
+        "powershell": "powershell -ExecutionPolicy ByPass -File",
+        "bat": "cmd /c",
+        "shellscript": "bash",
+        "fsharp": "fsi",
+        "csharp": "scriptcs",
+        "vbscript": "cscript //Nologo",
+        "typescript": "ts-node",
+        "coffeescript": "coffee",
+        "scala": "scala",
+        "swift": "swift",
+        "julia": "julia",
+        "crystal": "crystal",
+        "ocaml": "ocaml",
+        "r": "Rscript",
+        "applescript": "osascript",
+        "clojure": "lein exec",
+        "haxe": "haxe --cwd $dirWithoutTrailingSlash --run $fileNameWithoutExt",
+        "rust": "cd $dir ; rustc $fileName ; $dir$fileNameWithoutExt",
+        "racket": "racket",
+        "ahk": "autohotkey",
+        "autoit": "autoit3",
+        "dart": "dart",
+        "pascal": "cd $dir ; fpc $fileName ; $dir$fileNameWithoutExt",
+        "d": "cd $dir ; dmd $fileName ; $dir$fileNameWithoutExt",
+        "haskell": "runhaskell",
+        "nim": "nim compile --verbosity:0 --hints:off --run",
+        "lisp": "sbcl --script",
+        "kit": "kitc --run"
+    },
+}
+```
+
