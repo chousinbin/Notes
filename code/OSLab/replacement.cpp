@@ -2,9 +2,9 @@
 using namespace std;
 
 const int N = 30;
-int n;  //Ò³ÃæÇëÇóÊı
-int len;  //±ê¼ÇÄÚ´æÕ¼ÓÃ³¤¶È
-int pages[N];  //Ò³ÃæÇëÇóĞòÁĞ
+int n;  //é¡µé¢è¯·æ±‚æ•°
+int len;  //æ ‡è®°å†…å­˜å ç”¨é•¿åº¦
+int pages[N];  //é¡µé¢è¯·æ±‚åºåˆ—
 
 int head, tail;
 int e[N];
@@ -13,13 +13,13 @@ int ne[N];
 int idx;  //id
 
 
-void init()  //Á´±í³õÊ¼»¯
+void init()  //é“¾è¡¨åˆå§‹åŒ–
 {
     head = tail = -1;
     idx = 0;
 }
 
-void insert(int x)  //Î²²å·¨
+void insert(int x)  //å°¾æ’æ³•
 {
     if(head == -1) 
     {
@@ -34,17 +34,17 @@ void insert(int x)  //Î²²å·¨
     tail = idx++;
 }
 
-void del(int k)  //É¾³ıÏÂ±êÎªkµÄ½ÚµãµÄÏÂÒ»¸ö½Úµã
+void del(int k)  //åˆ é™¤ä¸‹æ ‡ä¸ºkçš„èŠ‚ç‚¹çš„ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
 {
     ne[k] = ne[ne[k]];
 }
 
-void del_head()  //É¾³ıÍ·½Úµã
+void del_head()  //åˆ é™¤å¤´èŠ‚ç‚¹
 {
     head = ne[head];
 }
 
-int query_len()  //·µ»ØÁ´±í³¤¶È
+int query_len()  //è¿”å›é“¾è¡¨é•¿åº¦
 {
     int cnt = 0;
     for(int i = head; i != -1; i = ne[i])
@@ -52,14 +52,14 @@ int query_len()  //·µ»ØÁ´±í³¤¶È
     return cnt;
 }
 
-int query_val(int x)  //·µ»ØÖµÎªxµÄ½ÚµãµÄÏÂ±ê && Ò²³äµ±²éÑ¯ÄÚ´æÖĞÓĞÎŞÖµÎªxµÄ½Úµã, Èç¹ûÓĞ·µ»ØÏÂ±ê0~n, Ã»ÓĞµÄ»°·µ»Ø-1
+int query_val(int x)  //è¿”å›å€¼ä¸ºxçš„èŠ‚ç‚¹çš„ä¸‹æ ‡ && ä¹Ÿå……å½“æŸ¥è¯¢å†…å­˜ä¸­æœ‰æ— å€¼ä¸ºxçš„èŠ‚ç‚¹, å¦‚æœæœ‰è¿”å›ä¸‹æ ‡0~n, æ²¡æœ‰çš„è¯è¿”å›-1
 {
     for(int i = head; i != -1; i = ne[i])
         if(e[i] == x) return i;
-    return -1;  //Î´²éµ½·µ»Ø-1
+    return -1;  //æœªæŸ¥åˆ°è¿”å›-1
 }
 
-int query_last(int x)  //·µ»ØÖµÎªxµÄ½ÚµãµÄÉÏ¸ö½ÚµãµÄÏÂ±ê
+int query_last(int x)  //è¿”å›å€¼ä¸ºxçš„èŠ‚ç‚¹çš„ä¸Šä¸ªèŠ‚ç‚¹çš„ä¸‹æ ‡
 {
     for(int i = head; ne[i] != -1; i = ne[i])
     {
@@ -68,23 +68,23 @@ int query_last(int x)  //·µ»ØÖµÎªxµÄ½ÚµãµÄÉÏ¸ö½ÚµãµÄÏÂ±ê
     return -1;
 }
 
-void pause()  //ÔİÍ£ÈÎÒâ¼ü¼ÌĞøÇåÆÁ
+void pause()  //æš‚åœä»»æ„é”®ç»§ç»­æ¸…å±
 {
-    cout<<"Çë°´ÈÎÒâ¼ü¼ÌĞø";
+    cout<<"è¯·æŒ‰ä»»æ„é”®ç»§ç»­";
     getchar();
     system("cls");
 }
 
 void input()
 {
-    cout<<"ÇëÊäÈëÄÚ´æ³¤¶È(1-10):";
+    cout<<"è¯·è¾“å…¥å†…å­˜é•¿åº¦(1-10):";
     cin>>len;
-    cout<<"ÇëÊäÈëÒ³ÇëÇóÊı(1-30):";
+    cout<<"è¯·è¾“å…¥é¡µè¯·æ±‚æ•°(1-30):";
     cin>>n;
 
     for(int i = 0; i < n; i++)
     {
-        printf("ÊäÈëµÚ%02d¸öÒ³ÃæID:", i + 1);
+        printf("è¾“å…¥ç¬¬%02dä¸ªé¡µé¢ID:", i + 1);
         cin>>pages[i];
     }
     getchar();
@@ -93,8 +93,8 @@ void input()
 
 void show_state(bool st_location, bool st_type)
 {
-    if(st_location) cout<<endl<<"ÇëÇóÍê³ÉÖ®Ç°ÄÚ´æ×´Ì¬"<<endl;
-    else cout<<endl<<"ÇëÇóÍê³ÉÖ®ºóÄÚ´æ×´Ì¬"<<endl;
+    if(st_location) cout<<endl<<"è¯·æ±‚å®Œæˆä¹‹å‰å†…å­˜çŠ¶æ€"<<endl;
+    else cout<<endl<<"è¯·æ±‚å®Œæˆä¹‹åå†…å­˜çŠ¶æ€"<<endl;
 
     cout<<"====Memory===="<<endl;
     for(int i = head; i != -1; i = ne[i])
@@ -107,9 +107,9 @@ void show_state(bool st_location, bool st_type)
 
 void output(int cnt)
 {
-    cout<<"ÃüÖĞ´ÎÊı:"<<cnt<<"   "<<"×ÜÊı:"<<n<<endl;
-    cout<<"È±Ò³ÂÊ:"<<(double)(n- cnt) / n * 100<<'%'<<endl;
-    cout<<"ÃüÖĞÂÊ:"<<(double)(cnt) / n * 100<<'%'<<endl;
+    cout<<"å‘½ä¸­æ¬¡æ•°:"<<cnt<<"   "<<"æ€»æ•°:"<<n<<endl;
+    cout<<"ç¼ºé¡µç‡:"<<(double)(n- cnt) / n * 100<<'%'<<endl;
+    cout<<"å‘½ä¸­ç‡:"<<(double)(cnt) / n * 100<<'%'<<endl;
     pause();
 }
 
@@ -117,28 +117,28 @@ void FIFO()
 {
     input();
     init();
-    int cnt = 0;  //¼ÇÂ¼³É¹¦´ÎÊı
+    int cnt = 0;  //è®°å½•æˆåŠŸæ¬¡æ•°
     
     for(int p = 0; p < n; p++)
     {
-        cout<<"µ±Ç°ÇëÇóÒ³ÃæÎª: <"<<pages[p]<<'>'<<endl;
+        cout<<"å½“å‰è¯·æ±‚é¡µé¢ä¸º: <"<<pages[p]<<'>'<<endl;
         show_state(true, false);
 
-        if(query_val(pages[p]) != -1)  //´ÓÁ´±íÀïÃæ²épages[p]
+        if(query_val(pages[p]) != -1)  //ä»é“¾è¡¨é‡Œé¢æŸ¥pages[p]
         {
             cnt++;
-            cout<<"µ±Ç°ÇëÇóÒ³ÃæÃüÖĞ"<<endl;
+            cout<<"å½“å‰è¯·æ±‚é¡µé¢å‘½ä¸­"<<endl;
         }
-        else  //²é²»µ½
+        else  //æŸ¥ä¸åˆ°
         {
-            cout<<"µ±Ç°ÇëÇóÒ³ÃæÎ´ÃüÖĞ"<<endl;
-            if(query_len() < len)  //ÓĞ¿ÕÎ»ÖÃ
+            cout<<"å½“å‰è¯·æ±‚é¡µé¢æœªå‘½ä¸­"<<endl;
+            if(query_len() < len)  //æœ‰ç©ºä½ç½®
             {
                 insert(pages[p]);
             }
-            else  //Ã»¿ÕÈ±
+            else  //æ²¡ç©ºç¼º
             {
-                cout<<"±»ÖÃ»»µôµÄÊÇ: <"<<e[head]<<'>'<<endl;
+                cout<<"è¢«ç½®æ¢æ‰çš„æ˜¯: <"<<e[head]<<'>'<<endl;
                 del_head();
                 insert(pages[p]);
             }
@@ -150,37 +150,37 @@ void FIFO()
     output(cnt);
 }
 
-void LRU()  //×î½ü×îÉÙÊ¹ÓÃ
+void LRU()  //æœ€è¿‘æœ€å°‘ä½¿ç”¨
 {
     input();
     init();
-    int cnt = 0;  //¼ÇÂ¼³É¹¦´ÎÊı
+    int cnt = 0;  //è®°å½•æˆåŠŸæ¬¡æ•°
 
     for(int p = 0; p < n; p++)
     {
-        cout<<"µ±Ç°ÇëÇóÒ³ÃæÎª: <"<<pages[p]<<'>'<<endl;
+        cout<<"å½“å‰è¯·æ±‚é¡µé¢ä¸º: <"<<pages[p]<<'>'<<endl;
         show_state(true, false);
 
-        if(query_val(pages[p]) != -1)  //Èç¹û²éµ½, ÕÒµ½ÔÚÄÚ´æÎ»ÖÃ, ²»¸Ä±äÄÚ´æË³Ğò, Å²µ½¶ÓÎ²
+        if(query_val(pages[p]) != -1)  //å¦‚æœæŸ¥åˆ°, æ‰¾åˆ°åœ¨å†…å­˜ä½ç½®, ä¸æ”¹å˜å†…å­˜é¡ºåº, æŒªåˆ°é˜Ÿå°¾
         {
             cnt++;
-            cout<<"µ±Ç°ÇëÇóÒ³ÃæÃüÖĞ"<<endl;
+            cout<<"å½“å‰è¯·æ±‚é¡µé¢å‘½ä¸­"<<endl;
             
-            if(e[head] == pages[p]) del_head();  //Èç¹ûÔÚÁ´±íÍ·, É¾³ıÍ·½Úµã
-            else del(query_last(pages[p]));  //²»ÔÚÁ´±íÍ·, ²éÕÒx½ÚµãµÄÉÏÒ»¸ö½ÚµãµÄÏÂ±ê, É¾³ıÕâ¸öx½Úµã
+            if(e[head] == pages[p]) del_head();  //å¦‚æœåœ¨é“¾è¡¨å¤´, åˆ é™¤å¤´èŠ‚ç‚¹
+            else del(query_last(pages[p]));  //ä¸åœ¨é“¾è¡¨å¤´, æŸ¥æ‰¾xèŠ‚ç‚¹çš„ä¸Šä¸€ä¸ªèŠ‚ç‚¹çš„ä¸‹æ ‡, åˆ é™¤è¿™ä¸ªxèŠ‚ç‚¹
 
-            insert(pages[p]);  //ÒÆµ½Á´±íÎ²
+            insert(pages[p]);  //ç§»åˆ°é“¾è¡¨å°¾
         }
         else
         {
-            cout<<"µ±Ç°ÇëÇóÒ³ÃæÎ´ÃüÖĞ"<<endl;
-            if(query_len() < len)  //ÓĞ¿ÕÎ»ÖÃ
+            cout<<"å½“å‰è¯·æ±‚é¡µé¢æœªå‘½ä¸­"<<endl;
+            if(query_len() < len)  //æœ‰ç©ºä½ç½®
             {
                 insert(pages[p]);
             }
-            else  //Ã»¿ÕÈ±
+            else  //æ²¡ç©ºç¼º
             {
-                cout<<"±»ÖÃ»»µôµÄÊÇ: <"<<e[head]<<'>'<<endl;
+                cout<<"è¢«ç½®æ¢æ‰çš„æ˜¯: <"<<e[head]<<'>'<<endl;
                 del_head();
                 insert(pages[p]);
             }
@@ -196,32 +196,32 @@ void SecondChance()
 {
     input();
     init();
-    int cnt = 0;  //¼ÇÂ¼³É¹¦´ÎÊı
+    int cnt = 0;  //è®°å½•æˆåŠŸæ¬¡æ•°
     
     for(int p = 0; p < n; p++)
     {
-        cout<<"µ±Ç°ÇëÇóÒ³ÃæÎª: <"<<pages[p]<<'>'<<endl;
+        cout<<"å½“å‰è¯·æ±‚é¡µé¢ä¸º: <"<<pages[p]<<'>'<<endl;
         show_state(true, true);
 
-        if(query_val(pages[p]) != -1)  //´ÓÁ´±íÀïÃæ²épages[p]
+        if(query_val(pages[p]) != -1)  //ä»é“¾è¡¨é‡Œé¢æŸ¥pages[p]
         {
             cnt++;
-            cout<<"µ±Ç°ÇëÇóÒ³ÃæÃüÖĞ"<<endl;
-            r[query_val(pages[p])] = 1;  //ÃüÖĞ, ±êÖ¾Î»ÎªÖÃÎª1
+            cout<<"å½“å‰è¯·æ±‚é¡µé¢å‘½ä¸­"<<endl;
+            r[query_val(pages[p])] = 1;  //å‘½ä¸­, æ ‡å¿—ä½ä¸ºç½®ä¸º1
         }
-        else  //²é²»µ½
+        else  //æŸ¥ä¸åˆ°
         {
-            cout<<"µ±Ç°ÇëÇóÒ³ÃæÎ´ÃüÖĞ"<<endl;
-            if(query_len() < len)  //ÓĞ¿ÕÎ»ÖÃ
+            cout<<"å½“å‰è¯·æ±‚é¡µé¢æœªå‘½ä¸­"<<endl;
+            if(query_len() < len)  //æœ‰ç©ºä½ç½®
             {
                 insert(pages[p]);
             }
-            else  //Ã»¿ÕÈ±
+            else  //æ²¡ç©ºç¼º
             {
-                while(r[head] == 1)  //Èç¹û±íÍ·±êÖ¾Î»Îª1
+                while(r[head] == 1)  //å¦‚æœè¡¨å¤´æ ‡å¿—ä½ä¸º1
                 {
-                    insert(e[head]);  //Å²µ½Á´±íÎ²,±êÖ¾Î»¹é0, ÕâÀï²åÈëĞÂ½Úµã±êÖ¾Î»Ä¬ÈÏÎª0, 
-                    del_head();  //É¾³ı±íÍ·
+                    insert(e[head]);  //æŒªåˆ°é“¾è¡¨å°¾,æ ‡å¿—ä½å½’0, è¿™é‡Œæ’å…¥æ–°èŠ‚ç‚¹æ ‡å¿—ä½é»˜è®¤ä¸º0, 
+                    del_head();  //åˆ é™¤è¡¨å¤´
                 }
 
                 del_head();
@@ -237,11 +237,11 @@ void SecondChance()
 
 void menu()
 {
-    cout<<"=======Ö÷²Ëµ¥======="<<endl;
-    cout<<"1. FIFOËã·¨"<<endl;
-    cout<<"2. LRUËã·¨"<<endl;
-    cout<<"3. SecondChanceËã·¨"<<endl;
-    cout<<"0. ÍË³ö³ÌĞò"<<endl;
+    cout<<"=======ä¸»èœå•======="<<endl;
+    cout<<"1. FIFOç®—æ³•"<<endl;
+    cout<<"2. LRUç®—æ³•"<<endl;
+    cout<<"3. SecondChanceç®—æ³•"<<endl;
+    cout<<"0. é€€å‡ºç¨‹åº"<<endl;
     cout<<"====================="<<endl;
 }
 
@@ -251,7 +251,7 @@ int main()
     while(true)
     {
         menu();
-        cout<<"ÇëÊäÈëÄãµÄÑ¡Ïî:";
+        cout<<"è¯·è¾“å…¥ä½ çš„é€‰é¡¹:";
         cin>>choice;
 
         pause();
@@ -271,7 +271,7 @@ int main()
                 SecondChance();
                 break;
             default :
-                cout<<"´ËÑ¡ÏîÎŞĞ§"<<endl;
+                cout<<"æ­¤é€‰é¡¹æ— æ•ˆ"<<endl;
                 pause();
         }
     }

@@ -15,13 +15,13 @@ struct Node
     int turnaround_time;
     int remaining_time;
     int priority;
-    int state; //0ÎªÎ´µ½´ï, 1Îªµ½´ï¼ÓÈë¾ÍĞ÷¶ÓÁĞ, 2ÎªÕıÔÚÔËĞĞ, 3Îª½ø³ÌÍê³É, 4Îª±»ÔİÍ£
+    int state; //0ä¸ºæœªåˆ°è¾¾, 1ä¸ºåˆ°è¾¾åŠ å…¥å°±ç»ªé˜Ÿåˆ—, 2ä¸ºæ­£åœ¨è¿è¡Œ, 3ä¸ºè¿›ç¨‹å®Œæˆ, 4ä¸ºè¢«æš‚åœ
 }PCB[N];
 
 bool cmp(Node x, Node y)
 {
     if(x.arrival_time != y.arrival_time)  return x.arrival_time < y.arrival_time;
-    return x.remaining_time < y.remaining_time;  //Èç¹ûµ½´ïÊ±¼äÏàÍ¬°´×î¶ÌÊ£ÓàÅÅĞò
+    return x.remaining_time < y.remaining_time;  //å¦‚æœåˆ°è¾¾æ—¶é—´ç›¸åŒæŒ‰æœ€çŸ­å‰©ä½™æ’åº
 }
 
 bool cmp_p(Node x, Node y)
@@ -31,23 +31,23 @@ bool cmp_p(Node x, Node y)
 
 void pause()
 {
-    cout<<"ÇëÊäÈëÈÎÒâ¼ü¼ÌĞø";
+    cout<<"è¯·è¾“å…¥ä»»æ„é”®ç»§ç»­";
     getchar();
     system("cls");
 }
 
 void input()
 {
-    cout<<"ÇëÊäÈë½ø³ÌÊı:";
+    cout<<"è¯·è¾“å…¥è¿›ç¨‹æ•°:";
     cin>>n;
     for(int i = 0; i < n; i++)
     {
         PCB[i].pid = i;
-        cout<<"ÊäÈëµÚ"<<i + 1<<"¸ö½ø³Ìµ½´ïÊ±¼ä:";
+        cout<<"è¾“å…¥ç¬¬"<<i + 1<<"ä¸ªè¿›ç¨‹åˆ°è¾¾æ—¶é—´:";
         cin>>PCB[i].arrival_time;
-        cout<<"ÊäÈëµÚ"<<i + 1<<"¸ö½ø³Ì¹¤×÷Ê±¼ä:";
+        cout<<"è¾“å…¥ç¬¬"<<i + 1<<"ä¸ªè¿›ç¨‹å·¥ä½œæ—¶é—´:";
         cin>>PCB[i].burst_time;
-        PCB[i].end_time = 999;  //·ÀÖ¹ÎóÅĞµ¼ÖÂ½ø³ÌÎ´¿ªÊ¼Ö´ĞĞ¾Í½áÊø
+        PCB[i].end_time = 999;  //é˜²æ­¢è¯¯åˆ¤å¯¼è‡´è¿›ç¨‹æœªå¼€å§‹æ‰§è¡Œå°±ç»“æŸ
 
     }
     getchar();
@@ -56,18 +56,18 @@ void input()
 
 void input_PNP()
 {
-    cout<<"ÇëÊäÈë½ø³ÌÊı:";
+    cout<<"è¯·è¾“å…¥è¿›ç¨‹æ•°:";
     cin>>n;
     for(int i = 0; i < n; i++)
     {
         PCB[i].pid = i;
-        cout<<"ÊäÈë½ø³Ìpid -> "<<i<<"µÄµ½´ïÊ±¼ä:";
+        cout<<"è¾“å…¥è¿›ç¨‹pid -> "<<i<<"çš„åˆ°è¾¾æ—¶é—´:";
         cin>>PCB[i].arrival_time;
-        cout<<"ÊäÈë½ø³Ìpid -> "<<i<<"µÄ¹¤×÷Ê±¼ä:";
+        cout<<"è¾“å…¥è¿›ç¨‹pid -> "<<i<<"çš„å·¥ä½œæ—¶é—´:";
         cin>>PCB[i].burst_time;
-        cout<<"ÊäÈë½ø³Ìpid -> "<<i<<"µÄÓÅÏÈ¼¶:";
+        cout<<"è¾“å…¥è¿›ç¨‹pid -> "<<i<<"çš„ä¼˜å…ˆçº§:";
         cin>>PCB[i].priority;
-        PCB[i].end_time = 999;  //·ÀÖ¹ÎóÅĞµ¼ÖÂ½ø³ÌÎ´¿ªÊ¼Ö´ĞĞ¾Í½áÊø
+        PCB[i].end_time = 999;  //é˜²æ­¢è¯¯åˆ¤å¯¼è‡´è¿›ç¨‹æœªå¼€å§‹æ‰§è¡Œå°±ç»“æŸ
     }
     getchar();
     pause();
@@ -77,7 +77,7 @@ void input_PNP()
 void output(int time)
 {
     double sum = 0;
-    printf("PID \t µ½´ïÊ±¼ä \t ¿ªÊ¼Ê±¼ä \t ¹¤×÷Ê±¼ä \t ½áÊøÊ±¼ä \t ÖÜ×ªÊ±¼ä\n");
+    printf("PID \t åˆ°è¾¾æ—¶é—´ \t å¼€å§‹æ—¶é—´ \t å·¥ä½œæ—¶é—´ \t ç»“æŸæ—¶é—´ \t å‘¨è½¬æ—¶é—´\n");
     for(int i = 0; i < n; i++)
     {
         printf("%d %8d %16d %16d %16d %16d\n", PCB[i].pid, 
@@ -86,9 +86,9 @@ void output(int time)
         
         sum += PCB[i].turnaround_time;
     }
-    cout<<n<<"¸ö½ø³ÌµÄÆ½¾ùÖÜ×ªÊ±¼äÎª:"<<sum / n<<endl;
+    cout<<n<<"ä¸ªè¿›ç¨‹çš„å¹³å‡å‘¨è½¬æ—¶é—´ä¸º:"<<sum / n<<endl;
     
-    cout<<endl<<"¸ÊÌØÍ¼ÈçÏÂ(@ÎªÔËĞĞ, *ÎªµÈ´ı)"<<endl;
+    cout<<endl<<"ç”˜ç‰¹å›¾å¦‚ä¸‹(@ä¸ºè¿è¡Œ, *ä¸ºç­‰å¾…)"<<endl;
     for(int i = 0; i <= time; i++)
     {
         printf("%02d ",i);
@@ -122,38 +122,38 @@ int find(int id)
 
 void show_state(int time, queue<Node> Ready)
 {
-    //Êä³öµ±Ç°Ê±¼äÆ¬µÄ¸÷½ø³Ì×´Ì¬
-    cout<<"µ±Ç°Ê±¼äÆ¬:["<<time<<'-'<<time + 1<<']'<<endl;
+    //è¾“å‡ºå½“å‰æ—¶é—´ç‰‡çš„å„è¿›ç¨‹çŠ¶æ€
+    cout<<"å½“å‰æ—¶é—´ç‰‡:["<<time<<'-'<<time + 1<<']'<<endl;
     for(int i = 0; i < n; i++)
     {
-        cout<<"pidÎª"<<PCB[i].pid<<"µÄ½ø³Ì×´Ì¬Îª:";
+        cout<<"pidä¸º"<<PCB[i].pid<<"çš„è¿›ç¨‹çŠ¶æ€ä¸º:";
         if(PCB[i].state == 0)
         {
-            cout<<"Î´µ½´ï"<<endl;
+            cout<<"æœªåˆ°è¾¾"<<endl;
         }
         else if(PCB[i].state == 1)
         {
-            cout<<"¾ÍĞ÷ÖĞ"<<endl;
+            cout<<"å°±ç»ªä¸­"<<endl;
         }
         else if(PCB[i].state == 2)
         {
-            cout<<"ÔËĞĞÖĞ"<<endl;
+            cout<<"è¿è¡Œä¸­"<<endl;
         }
         else if(PCB[i].state == 3)
         {
-            cout<<"ÒÑ½áÊø"<<endl;
+            cout<<"å·²ç»“æŸ"<<endl;
         }
         else if(PCB[i].state == 4)
         {
-            cout<<"ÔİÍ£ÖĞ"<<endl;
+            cout<<"æš‚åœä¸­"<<endl;
         }
     }
 
-    //Êä³öµ±Ç°Ê±¼äÆ¬µÄ¾ÍĞ÷¶ÓÁĞÇé¿ö
-    if(Ready.empty()) cout<<"¾ÍĞ÷¶ÓÁĞÎª¿Õ"<<endl;
+    //è¾“å‡ºå½“å‰æ—¶é—´ç‰‡çš„å°±ç»ªé˜Ÿåˆ—æƒ…å†µ
+    if(Ready.empty()) cout<<"å°±ç»ªé˜Ÿåˆ—ä¸ºç©º"<<endl;
     else
     {
-        cout<<"´¦ÓÚ¾ÍĞ÷¶ÓÁĞµÄ½ø³ÌÓĞ:"<<endl;
+        cout<<"å¤„äºå°±ç»ªé˜Ÿåˆ—çš„è¿›ç¨‹æœ‰:"<<endl;
         for(int i = 0; i < Ready.size(); i++)
         {
             cout<<"PID:"<<Ready.front().pid<<endl;
@@ -178,18 +178,18 @@ void query_state(int time)
 
 void FCFS()
 { 
-    sort(PCB, PCB + n, cmp);  //°´½ø³Ìµ½´ïÊ±¼äÉıĞòÅÅĞò
+    sort(PCB, PCB + n, cmp);  //æŒ‰è¿›ç¨‹åˆ°è¾¾æ—¶é—´å‡åºæ’åº
     
-    int cnt = 0;  //¼ÇÂ¼½ø³ÌÍê³É¸öÊı
+    int cnt = 0;  //è®°å½•è¿›ç¨‹å®Œæˆä¸ªæ•°
     int time = 0;
     bool is_run = false;
-    queue<Node> Ready;  //¾ÍĞ÷¶ÓÁĞ
+    queue<Node> Ready;  //å°±ç»ªé˜Ÿåˆ—
     Node temp;
     int temp_id;
 
     while(cnt < n)
     {
-        for(int i = 0; i < n; i++)  //Ã¿µ½Ò»¸öÊ±¼äÆ¬, ²éÕÒµ½´ïµÄ½ø³Ì²¢Ìí¼Óµ½¾ÍĞ÷¶ÓÁĞ²¢±ê¼Ç½ø³Ì×´Ì¬
+        for(int i = 0; i < n; i++)  //æ¯åˆ°ä¸€ä¸ªæ—¶é—´ç‰‡, æŸ¥æ‰¾åˆ°è¾¾çš„è¿›ç¨‹å¹¶æ·»åŠ åˆ°å°±ç»ªé˜Ÿåˆ—å¹¶æ ‡è®°è¿›ç¨‹çŠ¶æ€
         {
             if(time >= PCB[i].arrival_time && PCB[i].state == 0)
             {
@@ -198,7 +198,7 @@ void FCFS()
             }
         }
         
-        if(is_run == false && Ready.empty() == false)  //Èç¹ûÕâ¸öÊ±¼äÆ¬Ã»ÓĞ½ø³ÌÕıÔÚÔËĞĞ && ¾ÍĞ÷¶ÓÁĞ·Ç¿Õ
+        if(is_run == false && Ready.empty() == false)  //å¦‚æœè¿™ä¸ªæ—¶é—´ç‰‡æ²¡æœ‰è¿›ç¨‹æ­£åœ¨è¿è¡Œ && å°±ç»ªé˜Ÿåˆ—éç©º
         {
             is_run = true;
             temp = Ready.front();
@@ -214,8 +214,8 @@ void FCFS()
         query_state(time);
         show_state(time, Ready);
 
-        //Ê±¼äÆ¬°´¿éÀ´Ëã, ½ø³Ì¿ªÊ¼Ê±¼äºÍ½áÊøÊ±¼ä°´Ê±¼äµãÀ´Ëã:https://cdn.jsdelivr.net/gh/chousinbin/Image/202306192222744.png
-        if(PCB[temp_id].end_time - 1 == time)  //Èç¹ûµ±Ç°Ê±¼äÆ¬ÊÇµ±Ç°ÕıÔÚÔËĞĞ½ø³ÌµÄ½áÊøÊ±¼ä, ±ê¼Ç¸Ã½ø³ÌÎªÍê³É, µ¯³ö¾ÍĞ÷¶ÓÁĞ
+        //æ—¶é—´ç‰‡æŒ‰å—æ¥ç®—, è¿›ç¨‹å¼€å§‹æ—¶é—´å’Œç»“æŸæ—¶é—´æŒ‰æ—¶é—´ç‚¹æ¥ç®—:https://cdn.jsdelivr.net/gh/chousinbin/Image/202306192222744.png
+        if(PCB[temp_id].end_time - 1 == time)  //å¦‚æœå½“å‰æ—¶é—´ç‰‡æ˜¯å½“å‰æ­£åœ¨è¿è¡Œè¿›ç¨‹çš„ç»“æŸæ—¶é—´, æ ‡è®°è¯¥è¿›ç¨‹ä¸ºå®Œæˆ, å¼¹å‡ºå°±ç»ªé˜Ÿåˆ—
         {
             PCB[temp_id].state = 3;
             is_run = false;
@@ -227,7 +227,7 @@ void FCFS()
     output(time);
 }
 
-void init_remaining_time()  //³õÊ¼»¯: Ê£ÓàÊ±¼ä = ¹¤×÷Ê±¼ä
+void init_remaining_time()  //åˆå§‹åŒ–: å‰©ä½™æ—¶é—´ = å·¥ä½œæ—¶é—´
 {
     for(int i = 0; i < n; i++)
     {
@@ -235,10 +235,10 @@ void init_remaining_time()  //³õÊ¼»¯: Ê£ÓàÊ±¼ä = ¹¤×÷Ê±¼ä
     }
 }
 
-void check_shorst(queue<Node> &Ready, Node &temp, int &temp_id)  //¼ì²é¾ÍĞ÷¶ÓÁĞÊÇ·ñÓĞ½ø³ÌµÄÊ£ÓàÊ±¼ä < Ä¿Ç°tempµÄÊ£ÓàÊ±¼ä
+void check_shorst(queue<Node> &Ready, Node &temp, int &temp_id)  //æ£€æŸ¥å°±ç»ªé˜Ÿåˆ—æ˜¯å¦æœ‰è¿›ç¨‹çš„å‰©ä½™æ—¶é—´ < ç›®å‰tempçš„å‰©ä½™æ—¶é—´
 {
     /*
-    temp¿ÉÄÜÊÇÕıÔÚÔËĞĞ/Ã»ÓĞÔËĞĞ¹ı½«ÒªÔËĞĞµÄ½ø³Ì
+    tempå¯èƒ½æ˜¯æ­£åœ¨è¿è¡Œ/æ²¡æœ‰è¿è¡Œè¿‡å°†è¦è¿è¡Œçš„è¿›ç¨‹
     */
     int p = -1;
     for(int i = 0; i < Ready.size(); i++)
@@ -251,39 +251,39 @@ void check_shorst(queue<Node> &Ready, Node &temp, int &temp_id)  //¼ì²é¾ÍĞ÷¶ÓÁĞÊ
         Ready.pop();
     }
 
-    if(p >= 0)  //ËµÃ÷¾ÍĞ÷¶ÓÁĞÀïÃæÓĞ±Ètemp½ø³ÌÊ£ÓàÊ±¼ä¶ÌµÄ½ø³Ì
+    if(p >= 0)  //è¯´æ˜å°±ç»ªé˜Ÿåˆ—é‡Œé¢æœ‰æ¯”tempè¿›ç¨‹å‰©ä½™æ—¶é—´çŸ­çš„è¿›ç¨‹
     {
-        for(int i = 0; i < p; i++)  //°Ñ×î¶ÌµÄÒÆµ½¾ÍĞ÷¶ÓÁĞµÄ¶ÓÍ·
+        for(int i = 0; i < p; i++)  //æŠŠæœ€çŸ­çš„ç§»åˆ°å°±ç»ªé˜Ÿåˆ—çš„é˜Ÿå¤´
         {
             Ready.push(Ready.front());
             Ready.pop();
         }
 
-        Ready.push(temp);  //µ±Ç°temp½ø³Ì¼Óµ½¾ÍĞ÷¶ÓÁĞ
-        if(PCB[find(temp.pid)].state == 2) PCB[find(temp.pid)].state = 4;  //ÌØÅĞ: tempÊÇÕıÔÚÔËĞĞµÄ½ø³Ì ×´Ì¬ÉèÎª4ÔİÍ£ÖĞ
-        temp = Ready.front();  //¸üĞÂtemp½ø³Ì
+        Ready.push(temp);  //å½“å‰tempè¿›ç¨‹åŠ åˆ°å°±ç»ªé˜Ÿåˆ—
+        if(PCB[find(temp.pid)].state == 2) PCB[find(temp.pid)].state = 4;  //ç‰¹åˆ¤: tempæ˜¯æ­£åœ¨è¿è¡Œçš„è¿›ç¨‹ çŠ¶æ€è®¾ä¸º4æš‚åœä¸­
+        temp = Ready.front();  //æ›´æ–°tempè¿›ç¨‹
         Ready.pop();
     }
-    temp_id = find(temp.pid);  //tempÊÇ·ñ¸üĞÂ, ¶¼Òª»ñÈ¡ / ¸üĞÂtemp½ø³ÌÔÚPCBÖĞµÄÏÂ±ê
+    temp_id = find(temp.pid);  //tempæ˜¯å¦æ›´æ–°, éƒ½è¦è·å– / æ›´æ–°tempè¿›ç¨‹åœ¨PCBä¸­çš„ä¸‹æ ‡
 }
 
 void SRTF()
 {
-    sort(PCB, PCB + n, cmp);  //ÏÈ°´µ½´ïÊ±¼äÉıĞò, Èç¹ûµ½´ïÊ±¼äÏàÍ¬, °´Ê£ÓàÊ±¼äÉıĞò
-    init_remaining_time();  //³õÊ¼»¯Ê£ÓàÊ±¼ä
+    sort(PCB, PCB + n, cmp);  //å…ˆæŒ‰åˆ°è¾¾æ—¶é—´å‡åº, å¦‚æœåˆ°è¾¾æ—¶é—´ç›¸åŒ, æŒ‰å‰©ä½™æ—¶é—´å‡åº
+    init_remaining_time();  //åˆå§‹åŒ–å‰©ä½™æ—¶é—´
 
     int time = 0;
     int cnt = 0;
     bool is_run = false;
-    bool is_new_arrival = false;  //Ä¬ÈÏÃ»ÓĞĞÂ½ø³Ìµ½´ï
-    queue<Node> Ready;  //¾ÍĞ÷¶ÓÁĞ
+    bool is_new_arrival = false;  //é»˜è®¤æ²¡æœ‰æ–°è¿›ç¨‹åˆ°è¾¾
+    queue<Node> Ready;  //å°±ç»ªé˜Ÿåˆ—
     Node temp;
     int temp_id;
 
     while(cnt < n)
     {
-        is_new_arrival = false;  //Ã¿µ½Ò»¸öĞÂµÄÊ±¼äÆ¬, °ÑĞÂ½ø³Ìµ½´ï±êÖ¾¹éÎªFALSE
-        for(int i = 0; i < n; i++)  //Ã¿µ½Ò»¸öĞÂÊ±¼äÆ¬, ¼ì²éĞÂµ½´ï½ø³Ì²¢¼ÓÈë¾ÍĞ÷¶ÓÁĞ
+        is_new_arrival = false;  //æ¯åˆ°ä¸€ä¸ªæ–°çš„æ—¶é—´ç‰‡, æŠŠæ–°è¿›ç¨‹åˆ°è¾¾æ ‡å¿—å½’ä¸ºFALSE
+        for(int i = 0; i < n; i++)  //æ¯åˆ°ä¸€ä¸ªæ–°æ—¶é—´ç‰‡, æ£€æŸ¥æ–°åˆ°è¾¾è¿›ç¨‹å¹¶åŠ å…¥å°±ç»ªé˜Ÿåˆ—
         {
             if(PCB[i].arrival_time <= time && PCB[i].state == 0)
             {
@@ -294,12 +294,12 @@ void SRTF()
         }
 
         
-        if(is_run)//Èç¹ûµ±Ç°ÓĞ½ø³ÌÕıÔÚÔËĞĞ
+        if(is_run)//å¦‚æœå½“å‰æœ‰è¿›ç¨‹æ­£åœ¨è¿è¡Œ
         {
             
-            if(is_new_arrival)  //ÓĞ½ø³ÌĞÂµ½´ï
+            if(is_new_arrival)  //æœ‰è¿›ç¨‹æ–°åˆ°è¾¾
             {
-                check_shorst(Ready, temp, temp_id);  //¼ì²éÕıÔÚÔËĞĞµÄ½ø³ÌÊÇ·ñÎª×î¶ÌÊ£Óà
+                check_shorst(Ready, temp, temp_id);  //æ£€æŸ¥æ­£åœ¨è¿è¡Œçš„è¿›ç¨‹æ˜¯å¦ä¸ºæœ€çŸ­å‰©ä½™
             }
 
             if(PCB[temp_id].state == 1)
@@ -319,14 +319,14 @@ void SRTF()
             }
         }
 
-        if(is_run == false && Ready.empty() == false)  //Èç¹ûµ±Ç°Ã»ÓĞ½ø³ÌÔËĞĞ && ¾ÍĞ÷¶ÓÁĞ·Ç¿Õ
+        if(is_run == false && Ready.empty() == false)  //å¦‚æœå½“å‰æ²¡æœ‰è¿›ç¨‹è¿è¡Œ && å°±ç»ªé˜Ÿåˆ—éç©º
         {   
-            temp = Ready.front();  //´Ó¾ÍĞ÷¶ÓÁĞÈÎÈ¡Ò»¸ö½ø³Ì
+            temp = Ready.front();  //ä»å°±ç»ªé˜Ÿåˆ—ä»»å–ä¸€ä¸ªè¿›ç¨‹
             Ready.pop();
 
-            check_shorst(Ready, temp, temp_id);  //¼ì²é½«ÒªÔËĞĞµÄ½ø³ÌÊÇ·ñÎª×î¶ÌÊ£Óà
+            check_shorst(Ready, temp, temp_id);  //æ£€æŸ¥å°†è¦è¿è¡Œçš„è¿›ç¨‹æ˜¯å¦ä¸ºæœ€çŸ­å‰©ä½™
 
-            if(PCB[temp_id].state == 1)  //Èç¹ûÒªÔËĞĞµÄ½ø³ÌÊÇÊ×´ÎÔËĞĞ
+            if(PCB[temp_id].state == 1)  //å¦‚æœè¦è¿è¡Œçš„è¿›ç¨‹æ˜¯é¦–æ¬¡è¿è¡Œ
                 PCB[temp_id].start_time = time;
 
             PCB[temp_id].remaining_time--;
@@ -335,9 +335,9 @@ void SRTF()
         }
 
         query_state(time);
-        show_state(time, Ready);  //ÏÔÊ¾µ±Ç°Ê±¼äÆ¬, ¸÷½ø³Ì×´Ì¬
+        show_state(time, Ready);  //æ˜¾ç¤ºå½“å‰æ—¶é—´ç‰‡, å„è¿›ç¨‹çŠ¶æ€
         
-        if(is_run && PCB[temp_id].remaining_time == 0)  //µ±Ç°½ø³Ì´ıÖ´ĞĞÊ±¼äÎª0, ËµÃ÷½ø³Ì½áÊø
+        if(is_run && PCB[temp_id].remaining_time == 0)  //å½“å‰è¿›ç¨‹å¾…æ‰§è¡Œæ—¶é—´ä¸º0, è¯´æ˜è¿›ç¨‹ç»“æŸ
         {
             PCB[temp_id].end_time = time + 1;
             PCB[temp_id].state = 3;
@@ -349,15 +349,15 @@ void SRTF()
 
         time++;
     }
-    output(time);  //Êä³ö¸÷½ø³ÌÖÜ×ªÊ±¼äºÍËùÓĞ½ø³ÌµÄÆ½¾ùÖÜ×ªÊ±¼ä
+    output(time);  //è¾“å‡ºå„è¿›ç¨‹å‘¨è½¬æ—¶é—´å’Œæ‰€æœ‰è¿›ç¨‹çš„å¹³å‡å‘¨è½¬æ—¶é—´
 }
 
-void RR()  //Í¬Ò»Ê±¼äµ½´ï
+void RR()  //åŒä¸€æ—¶é—´åˆ°è¾¾
 {
     init_remaining_time();
     sort(PCB, PCB + n, cmp);
     int timer;
-    cout<<"ÇëÊäÈëÂÖ×ªÊ±¼äÆ¬³¤¶È:";
+    cout<<"è¯·è¾“å…¥è½®è½¬æ—¶é—´ç‰‡é•¿åº¦:";
     cin>>timer;
 
     getchar();
@@ -366,14 +366,14 @@ void RR()  //Í¬Ò»Ê±¼äµ½´ï
     int time = 0;
     int cnt = 0;
     bool is_run = false;
-    queue<Node> Ready;  //¾ÍĞ÷¶ÓÁĞ
+    queue<Node> Ready;  //å°±ç»ªé˜Ÿåˆ—
     Node temp;
     int temp_id;
 
-    int c = 0;  //µ±Ç°Ğ¡¼ÆÊ±Æ÷
+    int c = 0;  //å½“å‰å°è®¡æ—¶å™¨
     while(cnt < n)
     {
-        for(int i = 0; i < n; i++)  //Ã¿µ½Ò»¸öĞÂÊ±¼äÆ¬, ¼ì²éĞÂµ½´ï½ø³Ì²¢¼ÓÈë¾ÍĞ÷¶ÓÁĞ
+        for(int i = 0; i < n; i++)  //æ¯åˆ°ä¸€ä¸ªæ–°æ—¶é—´ç‰‡, æ£€æŸ¥æ–°åˆ°è¾¾è¿›ç¨‹å¹¶åŠ å…¥å°±ç»ªé˜Ÿåˆ—
         {
             if(PCB[i].arrival_time <= time && PCB[i].state == 0)
             {
@@ -382,18 +382,18 @@ void RR()  //Í¬Ò»Ê±¼äµ½´ï
             }
         }
 
-        if(is_run == false && Ready.empty() == false)  //¾ÍĞ÷¶ÓÁĞ·Ç¿Õ && Ã»ÓĞ³ÌĞòÔÚÔËĞĞ
+        if(is_run == false && Ready.empty() == false)  //å°±ç»ªé˜Ÿåˆ—éç©º && æ²¡æœ‰ç¨‹åºåœ¨è¿è¡Œ
         {
             temp = Ready.front();
             temp_id = find(temp.pid);
-            Ready.pop();  //ÏÈµ¯³öµ½ºóÆÚÊÓÇé¿öÔÙ¾ö¶¨ÊÇ·ñÖØ»Ø¾ÍĞ÷¶ÓÁĞ
+            Ready.pop();  //å…ˆå¼¹å‡ºåˆ°åæœŸè§†æƒ…å†µå†å†³å®šæ˜¯å¦é‡å›å°±ç»ªé˜Ÿåˆ—
 
-            if(PCB[temp_id].state == 1)  //¸Ã½ø³ÌÊ×´ÎÆô¶¯
+            if(PCB[temp_id].state == 1)  //è¯¥è¿›ç¨‹é¦–æ¬¡å¯åŠ¨
             {
                 PCB[temp_id].start_time = time;
                 PCB[temp_id].state = 2;
             }
-            else  //´Ó¹ÒÆğ»Ö¸´µÄ½ø³Ì
+            else  //ä»æŒ‚èµ·æ¢å¤çš„è¿›ç¨‹
             {
                 PCB[temp_id].state = 2;
             }
@@ -409,7 +409,7 @@ void RR()  //Í¬Ò»Ê±¼äµ½´ï
         query_state(time);
         show_state(time, Ready);
 
-        if(PCB[temp_id].remaining_time == 0)  //Õâ¸öÊ±¼äÆ¬ºó¸Ã½ø³Ì½áÊø
+        if(PCB[temp_id].remaining_time == 0)  //è¿™ä¸ªæ—¶é—´ç‰‡åè¯¥è¿›ç¨‹ç»“æŸ
         {
             PCB[temp_id].end_time = time + 1;
             PCB[temp_id].state = 3;
@@ -418,7 +418,7 @@ void RR()  //Í¬Ò»Ê±¼äµ½´ï
             cnt++;
             PCB[temp_id].turnaround_time = PCB[temp_id].end_time - PCB[temp_id].arrival_time;
         }
-        else if(c == timer)  //µ±Ç°Ê±¼äÆ¬×ßÍêµ«»¹ÓĞÊ£Óà¹¤×÷Ê±³¤, ¹ÒÆğ´Ë½ø³Ì
+        else if(c == timer)  //å½“å‰æ—¶é—´ç‰‡èµ°å®Œä½†è¿˜æœ‰å‰©ä½™å·¥ä½œæ—¶é•¿, æŒ‚èµ·æ­¤è¿›ç¨‹
         {
             PCB[temp_id].state = 4;
             Ready.push(PCB[temp_id]);
@@ -449,7 +449,7 @@ void sort_p(queue<Node> &Ready)
     }
 }
 
-void PNP()  //ÓÅÏÈ¼¶·ÇÇÀÕ¼µ÷¶È
+void PNP()  //ä¼˜å…ˆçº§éæŠ¢å è°ƒåº¦
 {
     sort(PCB, PCB + n, cmp);
 
@@ -462,17 +462,17 @@ void PNP()  //ÓÅÏÈ¼¶·ÇÇÀÕ¼µ÷¶È
 
     while(cnt < n)
     {
-        for(int i = 0; i < n; i++)  //Ã¿µ½Ò»¸öÊ±¼äÆ¬, ²éÕÒµ½´ïµÄ½ø³Ì²¢Ìí¼Óµ½¾ÍĞ÷¶ÓÁĞ²¢±ê¼Ç½ø³Ì×´Ì¬
+        for(int i = 0; i < n; i++)  //æ¯åˆ°ä¸€ä¸ªæ—¶é—´ç‰‡, æŸ¥æ‰¾åˆ°è¾¾çš„è¿›ç¨‹å¹¶æ·»åŠ åˆ°å°±ç»ªé˜Ÿåˆ—å¹¶æ ‡è®°è¿›ç¨‹çŠ¶æ€
         {
             if(time >= PCB[i].arrival_time && PCB[i].state == 0)
             {
                 Ready.push(PCB[i]);
                 PCB[i].state = 1;
-                sort_p(Ready);  //Ã¿¼ÓÒ»¸ö½ø³Ìµ½¾ÍĞ÷¶ÓÁĞ, °´ÓÅÏÈ¼¶ÅÅĞò, ¸ßµÄÔÚ¶ÓÍ·
+                sort_p(Ready);  //æ¯åŠ ä¸€ä¸ªè¿›ç¨‹åˆ°å°±ç»ªé˜Ÿåˆ—, æŒ‰ä¼˜å…ˆçº§æ’åº, é«˜çš„åœ¨é˜Ÿå¤´
             }
         }
 
-        if(is_run == false && Ready.empty() == false)  //Èç¹ûÕâ¸öÊ±¼äÆ¬Ã»ÓĞ½ø³ÌÕıÔÚÔËĞĞ && ¾ÍĞ÷¶ÓÁĞ·Ç¿Õ
+        if(is_run == false && Ready.empty() == false)  //å¦‚æœè¿™ä¸ªæ—¶é—´ç‰‡æ²¡æœ‰è¿›ç¨‹æ­£åœ¨è¿è¡Œ && å°±ç»ªé˜Ÿåˆ—éç©º
         {
             is_run = true;
             temp = Ready.front();
@@ -488,7 +488,7 @@ void PNP()  //ÓÅÏÈ¼¶·ÇÇÀÕ¼µ÷¶È
         query_state(time);
         show_state(time, Ready);
 
-        if(PCB[temp_id].end_time - 1 == time)  //Èç¹ûµ±Ç°Ê±¼äÆ¬ÊÇµ±Ç°ÕıÔÚÔËĞĞ½ø³ÌµÄ½áÊøÊ±¼ä, ±ê¼Ç¸Ã½ø³ÌÎªÍê³É, µ¯³ö¾ÍĞ÷¶ÓÁĞ
+        if(PCB[temp_id].end_time - 1 == time)  //å¦‚æœå½“å‰æ—¶é—´ç‰‡æ˜¯å½“å‰æ­£åœ¨è¿è¡Œè¿›ç¨‹çš„ç»“æŸæ—¶é—´, æ ‡è®°è¯¥è¿›ç¨‹ä¸ºå®Œæˆ, å¼¹å‡ºå°±ç»ªé˜Ÿåˆ—
         {
             PCB[temp_id].state = 3;
             is_run = false;
@@ -518,12 +518,12 @@ void to_zero()
 
 void menu()
 {
-    cout<<"=======Ö÷²Ëµ¥======="<<endl;
-    cout<<"1. FCFSËã·¨"<<endl;
-    cout<<"2. SRTFËã·¨(×î¶ÌÊ£ÓàÓÅÏÈ)"<<endl;
-    cout<<"3. RRËã·¨(Í¬Ê±µ½´ï)"<<endl;
-    cout<<"4. ÓÅÏÈ¼¶Ëã·¨(·ÇÇÀÕ¼)"<<endl;
-    cout<<"0. ÍË³ö³ÌĞò"<<endl;
+    cout<<"=======ä¸»èœå•======="<<endl;
+    cout<<"1. FCFSç®—æ³•"<<endl;
+    cout<<"2. SRTFç®—æ³•(æœ€çŸ­å‰©ä½™ä¼˜å…ˆ)"<<endl;
+    cout<<"3. RRç®—æ³•(åŒæ—¶åˆ°è¾¾)"<<endl;
+    cout<<"4. ä¼˜å…ˆçº§ç®—æ³•(éæŠ¢å )"<<endl;
+    cout<<"0. é€€å‡ºç¨‹åº"<<endl;
     cout<<"====================="<<endl;
 }
 
@@ -533,7 +533,7 @@ int main()
     while(true)
     {
         menu();
-        cout<<"ÇëÊäÈëÄãµÄÑ¡Ïî:";
+        cout<<"è¯·è¾“å…¥ä½ çš„é€‰é¡¹:";
         cin>>choice;
 
         getchar();
@@ -555,7 +555,7 @@ int main()
                 to_zero();
                 break;
             case 3 :
-                cout<<"µ±Ç°ÎªÍ¬Ê±µ½´ï°åÂÖ×ªÊ±¼äÆ¬, È·±£ËùÓĞ½ø³ÌÍ¬Ò»Ê±¼äµ½´ï"<<endl;
+                cout<<"å½“å‰ä¸ºåŒæ—¶åˆ°è¾¾æ¿è½®è½¬æ—¶é—´ç‰‡, ç¡®ä¿æ‰€æœ‰è¿›ç¨‹åŒä¸€æ—¶é—´åˆ°è¾¾"<<endl;
                 input();
                 RR();
                 to_zero();
@@ -566,7 +566,7 @@ int main()
                 to_zero();
                 break;
             default :
-                cout<<"´ËÑ¡ÏîÎŞĞ§"<<endl;
+                cout<<"æ­¤é€‰é¡¹æ— æ•ˆ"<<endl;
                 pause();
         }
     }
