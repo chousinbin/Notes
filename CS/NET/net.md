@@ -77,7 +77,7 @@ radio
 3. wide-area: cellular蜂窝网络
 4. satellite: 卫星
 
-## network core
+## 01x03 network core
 
 ### circuit switching电路交换
 
@@ -132,7 +132,7 @@ the switch must receive the entire packet before it can begin to transmit the fi
 | suitable for real time services | not suitable for real time  |
 | telephone net                   | internet                    |
 
-## Delay and Loss in Packet-Switched Networks
+## 01x04 Delay and Loss in Packet-Switched Networks
 
 ### nodal processing
 
@@ -178,7 +178,7 @@ $d_{end-end} = n(d_{proc} + d_{queue} + d_{trans} + d_{prop})$, n = the number o
 - packet arriving to full queue dropped (aka lost)
 - lost packet may be retransmitted by previous node,by source end system,or not at all
 
-## Protocol Layers and their service models
+## 01x05 Protocol Layers and their service models
 
 | name        | PDU      |
 | ----------- | -------- |
@@ -195,3 +195,74 @@ each layer implements a service
 using the services of the layer directly below it
 
 performing certain actions within that layer
+
+# 02x00 application
+
+## 02x01 principle
+
+### application architecture
+
+- CS
+- p2p
+- hybrid of CS & P2P
+
+### CS
+
+#### server
+
+- always on
+- fixed well known IP
+- server farms for scaling 用于扩展的服务器厂
+
+#### client
+
+- intermittently connected 间歇连接
+- not communicate directly with others
+
+#### example
+
+- web, email, file transfer
+
+### P2P
+
+- no always on
+- directly communicate
+- peers are intermittently connected
+- change IP
+- highly scalable 高可扩展
+- difficult to mange
+
+#### example
+
+Gnutella尼特拉
+
+### hybrid
+
+- between two user is P2P
+- user tell its IP to central server
+- user find other IP in central server
+
+### processed communicate
+
+within same host, two processes communicate using **inter-process communication** (defined by OS).
+
+processes in different hosts communicate by **exchanging messages**\
+
+Client process: process that initiates communication
+
+Server process: process that waits to be contacted
+
+### sockets
+
+process sends/receives messages to/from its socket
+
+| name | app protocol | port                                         |            | transfer protocol          |
+| ---- | ------------ | -------------------------------------------- | ---------- | -------------------------- |
+| web  | HTTP         | 80                                           |            | TCP                        |
+| ftp  | FTP          | 21-control persistent, 20date non persistent |            | TCP                        |
+| mail | SMTP         | 25                                           | persistent | TCP                        |
+|      | POP          | 110                                          | stateless  | Download-and-keep, 不同步  |
+|      | IMAP         | 143                                          | state      | all messages in server同步 |
+| DNS  |              | 53                                           |            | UDP                        |
+| P2P  |              |                                              |            |                            |
+
