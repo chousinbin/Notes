@@ -48,7 +48,7 @@ public class LoginView extends JFrame {
         springLayout = new SpringLayout();
         centerPanel = new JPanel(springLayout);
 
-        adminRadioButton = new JRadioButton("管理员");
+        adminRadioButton = new JRadioButton("管理");
         teacherRadioButton = new JRadioButton("教师");
         studentRadioButton = new JRadioButton("学生");
         roleButtonGroup = new ButtonGroup();

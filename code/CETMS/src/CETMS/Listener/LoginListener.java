@@ -14,9 +14,11 @@ import java.awt.event.ActionListener;
 
 public class LoginListener implements ActionListener {
     private LoginView loginView;
+
     public LoginListener(LoginView loginView) {
         this.loginView = loginView;
     }
+
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == loginView.getLoginButton() || e.getSource() == loginView.getPwdText()) {
             //从组件获取用户名和密码
@@ -35,13 +37,14 @@ public class LoginListener implements ActionListener {
                 accountModel.setAdminPwd(pwd);
                 CurrentUser.setUserId(usr);
                 CurrentUser.setUserPwd(pwd);
-                CurrentUser.setUserType("管理员");
+                CurrentUser.setUserType("admin");
                 boolean st = AdminLoginController.accountVerify(accountModel);
                 if(st) {
                     loginView.dispose();
                     new AdminView();
                 } else {
-                    MyJOptionPane.showMessageDialog(null, "请检查用户名和密码", "提示");
+                    MyJOptionPane.showMessageDialog(null,
+                            "请检查用户名和密码", "提示");
                 }
             }
             //选择教师
@@ -51,13 +54,14 @@ public class LoginListener implements ActionListener {
                 accountModel.setTeacherPwd(pwd);
                 CurrentUser.setUserId(usr);
                 CurrentUser.setUserPwd(pwd);
-                CurrentUser.setUserType("教师");
+                CurrentUser.setUserType("teacher");
                 boolean st = TeacherLoginController.accountVerify(accountModel);
                 if(st) {
                     loginView.dispose();
                     new TeacherView();
                 } else {
-                    MyJOptionPane.showMessageDialog(null, "请检查用户名和密码", "提示");
+                    MyJOptionPane.showMessageDialog(null,
+                            "请检查用户名和密码", "提示");
                 }
             }
             //选择学生
@@ -67,13 +71,14 @@ public class LoginListener implements ActionListener {
                 accountModel.setStudentPwd(pwd);
                 CurrentUser.setUserId(usr);
                 CurrentUser.setUserPwd(pwd);
-                CurrentUser.setUserType("学生");
+                CurrentUser.setUserType("student");
                 boolean st = StudentLoginController.accountVerify(accountModel);
                 if(st) {
                     loginView.dispose();
-                    new AdminView();
+                    new StudentView();
                 } else {
-                    MyJOptionPane.showMessageDialog(null, "请检查用户名和密码", "提示");
+                    MyJOptionPane.showMessageDialog(null,
+                            "请检查用户名和密码", "提示");
                 }
             }
         }

@@ -55,7 +55,8 @@ public class StudentManageListener implements ActionListener, ListSelectionListe
             queryKey = studentManageView.getStudentQueryText().getText();
             if(queryKey == null) preQuerySt = false;
             else preQuerySt = true;
-            MyTableModel myTableModel = StudentManageController.studentQuery(new MyTableModel(), queryKey);
+            MyTableModel myTableModel = StudentManageController.studentQuery
+                    (new MyTableModel(), queryKey);
             studentManageView.getMyJTable().setMyTableModel(myTableModel);
         }
         //触发插入
@@ -69,18 +70,19 @@ public class StudentManageListener implements ActionListener, ListSelectionListe
             String studentMajor = studentManageView.getStudentMajorText().getText();
             String studentClass = studentManageView.getStudentClassText().getText();
             //判断是否未录入完整
-            if(studentId == null || "".equals(studentId.trim()) ||
-                    studentName == null || "".equals(studentName.trim()) ||
-                    studentSex == null || "".equals(studentSex.trim()) ||
-                    studentSchool == null || "".equals(studentSchool.trim()) ||
-                    studentAcademy == null || "".equals(studentAcademy.trim()) ||
-                    studentMajor == null || "".equals(studentMajor.trim()) ||
-                    studentClass == null || "".equals(studentClass.trim())
+            if(studentId == null || "".equals(studentId) ||
+                    studentName == null || "".equals(studentName) ||
+                    studentSex == null || "".equals(studentSex) ||
+                    studentSchool == null || "".equals(studentSchool) ||
+                    studentAcademy == null || "".equals(studentAcademy) ||
+                    studentMajor == null || "".equals(studentMajor) ||
+                    studentClass == null || "".equals(studentClass)
                 ) {
-                MyJOptionPane.showMessageDialog(null, "商品信息不完整", "提示");
+                MyJOptionPane.showMessageDialog(null,
+                        "信息不完整", "提示");
                 return;
             }
-            //把数据传入商品实体对象
+            //把数据传入学生实体对象
             studentModel.setStudentId(studentId);
             studentModel.setStudentName(studentName);
             studentModel.setStudentSex(studentSex);
@@ -90,16 +92,20 @@ public class StudentManageListener implements ActionListener, ListSelectionListe
             studentModel.setStudentClass(studentClass);
             //向数据库插入
             boolean st = StudentManageController.studentAdd(studentModel);
-            if(st == false) {
-                MyJOptionPane.showMessageDialog(null, "添加失败", "提示");
+            if(!st) {
+                MyJOptionPane.showMessageDialog(null,
+                        "添加失败", "提示");
             } else {
-                MyJOptionPane.showMessageDialog(null, "添加成功", "提示");
-                cleanInformation();  //入库成功 清除文本框信息
+                MyJOptionPane.showMessageDialog(null,
+                        "添加成功", "提示");
+                cleanInformation();
                 //更新查询界面
-                MyTableModel myTableModel = StudentManageController.studentQuery(new MyTableModel(), null);
+                MyTableModel myTableModel = StudentManageController.studentQuery
+                        (new MyTableModel(), null);
                 studentManageView.getMyJTable().setMyTableModel(myTableModel);
             }
         }
+        // 删除学生
         if(e.getSource() == studentManageView.getStudentDeleteButton()) {
             MyJTable myJTable = studentManageView.getMyJTable();
             MyTableModel myTableModel = new MyTableModel();
@@ -117,7 +123,7 @@ public class StudentManageListener implements ActionListener, ListSelectionListe
             //执行删除操作
             StudentManageController.studentDelete(studentId);
             //回显的查询结果要和上次查询类型一样
-            if(preQuerySt == false) {
+            if(!preQuerySt) {
                 myTableModel = StudentManageController.studentQuery(new MyTableModel(), null);
             } else {
                 myTableModel = StudentManageController.studentQuery(new MyTableModel(), queryKey);
@@ -127,9 +133,10 @@ public class StudentManageListener implements ActionListener, ListSelectionListe
             //清空输入框
             cleanInformation();
         }
+
         //更新按钮被触发
         if(e.getSource() == studentManageView.getStudentUpdateButton()) {
-            //接收插入信息
+            //接收新的信息
             String studentId = studentManageView.getStudentIdText().getText();
             String studentName = studentManageView.getStudentNameText().getText();
             String studentSex = studentManageView.getStudentSexText().getText();
@@ -138,18 +145,19 @@ public class StudentManageListener implements ActionListener, ListSelectionListe
             String studentMajor = studentManageView.getStudentMajorText().getText();
             String studentClass = studentManageView.getStudentClassText().getText();
             //判断是否未录入完整
-            if(studentId == null || "".equals(studentId.trim()) ||
-                    studentName == null || "".equals(studentName.trim()) ||
-                    studentSex == null || "".equals(studentSex.trim()) ||
-                    studentSchool == null || "".equals(studentSchool.trim()) ||
-                    studentAcademy == null || "".equals(studentAcademy.trim()) ||
-                    studentMajor == null || "".equals(studentMajor.trim()) ||
-                    studentClass == null || "".equals(studentClass.trim())
+            if(studentId == null || "".equals(studentId) ||
+                    studentName == null || "".equals(studentName) ||
+                    studentSex == null || "".equals(studentSex) ||
+                    studentSchool == null || "".equals(studentSchool) ||
+                    studentAcademy == null || "".equals(studentAcademy) ||
+                    studentMajor == null || "".equals(studentMajor) ||
+                    studentClass == null || "".equals(studentClass)
             ) {
-                MyJOptionPane.showMessageDialog(null, "商品信息不完整", "提示");
+                MyJOptionPane.showMessageDialog(null,
+                        "商品信息不完整", "提示");
                 return;
             }
-            //把数据传入商品实体对象
+            // 把数据传入新的学生对象
             newStudentModel = new StudentModel();
             newStudentModel.setStudentId(studentId);
             newStudentModel.setStudentName(studentName);
@@ -160,22 +168,27 @@ public class StudentManageListener implements ActionListener, ListSelectionListe
             newStudentModel.setStudentClass(studentClass);
 
             if(!studentModel.getStudentId().equals(newStudentModel.getStudentId())) {
-                MyJOptionPane.showMessageDialog(null, "不能修改学号", "提示");
+                MyJOptionPane.showMessageDialog(null,
+                        "不能修改学号", "提示");
                 return;
             }
-            //根据id和更新的实体进行数据库记录更新
+            // 根据id和更新的学生实体进行数据库记录更新
             boolean st = StudentManageController.studentUpdate(newStudentModel);
-            if(st == false) {
-                MyJOptionPane.showMessageDialog(null, "修改失败", "提示");
+            if(!st) {
+                MyJOptionPane.showMessageDialog(null,
+                        "修改失败", "提示");
             } else {
-                MyJOptionPane.showMessageDialog(null, "修改成功", "提示");
-                cleanInformation();  //入库成功 清除文本框信息
-                //更新查询界面
-                MyTableModel myTableModel = StudentManageController.studentQuery(new MyTableModel(), null);
+                MyJOptionPane.showMessageDialog(null,
+                        "修改成功", "提示");
+                cleanInformation();
+                // 更新查询界面
+                MyTableModel myTableModel = StudentManageController.studentQuery
+                        (new MyTableModel(), null);
                 studentManageView.getMyJTable().setMyTableModel(myTableModel);
             }
         }
     }
+
     public void cleanInformation() {
         studentManageView.getStudentIdText().setText("");
         studentManageView.getStudentNameText().setText("");

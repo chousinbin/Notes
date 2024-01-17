@@ -1,7 +1,7 @@
 package CETMS.Model;
 
 public class GradeModel {
-    private String gradeId;
+    private int gradeId;
     private String testDate;
     private String testType;
     private String studentId;
@@ -11,11 +11,11 @@ public class GradeModel {
     private float writingGrade;
     private float sumGrade;
 
-    public String getGradeId() {
+    public int getGradeId() {
         return gradeId;
     }
 
-    public void setGradeId(String gradeId) {
+    public void setGradeId(int gradeId) {
         this.gradeId = gradeId;
     }
 
