@@ -1,28 +1,41 @@
 # 前缀和
 
-
-
 ## 一维前缀和
 
+#### 一维前缀和图片
+
+![image-20240124163625957](https://cdn.jsdelivr.net/gh/chousinbin/Image/202401241636982.png)
+
+#### 一维区间和图片
+
+![image-20240124163614568](https://cdn.jsdelivr.net/gh/chousinbin/Image/202401241636597.png)
+
 ```c++
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
+
 using namespace std;
-const int N=1e6+10;
-int a[N],s[N];
+
+const int N = 1e6 + 10;
+
+int a[N], s[N];
+
 int main()
 {
-    int n,m;
-    cin>>n>>m;
-    for(int i=1;i<=n;i++)
-    {
-        cin>>a[i];
-        s[i]=s[i-1]+a[i];//前缀和初始化
-    }
+    int n, m;
+    cin >>n >> m;
+    
+    for(int i = 1; i <= n; i++)
+        cin >> a[i];
+    // 前缀和初始化
+    for(int i = 1; i <= n; i++)
+        s[i] = s[i - 1] + a[i];
+        
     while(m--)
     {
-        int l,r;
-        cin>>l>>r;
-        cout<<s[r]-s[l-1]<<endl;//区间和
+        int l, r;
+        cin >> l >> r;
+        // 区间和
+        cout << s[r] - s[l - 1] << endl;
     }
     return 0;
 }
@@ -32,32 +45,45 @@ int main()
 
 $s[i][j]$ = 第 $i$ 行 $j$ 列格子左上部分所有元素的和
 
-![image-20220215194119265](../../assets/05前缀和与差分/image-20220215194119265.png)
+#### 二维前缀和图片
+
+![image-20240124162839566](https://cdn.jsdelivr.net/gh/chousinbin/Image/202401241628593.png)
+
+#### 二维区间和图片
+
+![image-20240124162917138](https://cdn.jsdelivr.net/gh/chousinbin/Image/202401241629168.png)
+
+#### AC代码
 
 ```c++
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
+
 using namespace std;
-const int N=1010;
-int n,m,k,a[N][N],s[N][N];
+
+const int N = 1001;
+
+int a[N][N], s[N][N];
+
 int main()
 {
-    cin>>n>>m>>k;
-    for(int i=1;i<=n;i++)
+    int n, m, q;
+    cin >> n >> m >> q;
+    
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= m; j++)
+            cin >> a[i][j];
+    // 二维前缀和       
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= m; j++)
+            s[i][j] = s[i - 1][j] + s[i][j - 1] - s[i - 1][j - 1] + a[i][j];
+    
+    while(q--)
     {
-        for(int j=1;j<=m;j++)
-        {
-            cin>>a[i][j];
-            //预处理二维前缀和
-            s[i][j]=s[i-1][j]+s[i][j-1]-s[i-1][j-1]+a[i][j];
-        }
-    }
-    while(k--)
-    {
-        int x1,x2,y1,y2;
-        cin>>x1>>y1>>x2>>y2;
-        //计算二维区间和
-        int res=s[x2][y2]-s[x2][y1-1]-s[x1-1][y2]+s[x1-1][y1-1];
-        cout<<res<<endl;
+        int x1, y1, x2, y2;
+        cin >> x1 >> y1 >> x2 >> y2;
+        // 二维区间和
+        cout << s[x2][y2] - s[x1 - 1][y2] - 
+            s[x2][y1 - 1] + s[x1 - 1][y1 - 1] << endl;
     }
     return 0;
 }
@@ -106,7 +132,7 @@ int main()
 
 ## 二维差分
 
-![image-20220215194055154](../../assets/05前缀和与差分/image-20220215194055154.png)
+![image-20240124220523003](https://cdn.jsdelivr.net/gh/chousinbin/Image/202401242205222.png)
 
 ```c++
 #inclued<bits/stdc++.h>
