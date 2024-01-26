@@ -2,8 +2,6 @@
 
 $everything\ is\ local$
 
-
-
 ## 一、Git概述
 
 **Git**是一个免费的、开源的**分布式版本控制系统**，可以快速高效的处理从小型到大型的各种项目。
@@ -525,7 +523,7 @@ git clone 远程地址
 
 ### 5.6顶级域名
 
-申请顶级域名并且指向`username.github.io`，会使之变为类似`www.username.com`等高大尚的地址。
+申请顶级域名并且指向`username.github.io`，会使之变为类似`www.username.com`的地址。
 
 #### 申请渠道
 
@@ -540,3 +538,102 @@ git clone 远程地址
 
 在原项目的网址后面加上`\compare`可以访问该项目的版本比较页面，另外也有插件可以使得源码比较起来直观。
 
+## 六、配置代理
+
+> Github 时常访问速度慢甚至无法访问，仅仅打开代理不能作用于 Git Bash，需要在Bash 中进行手动配置，代理在 Bash 中才能生效。
+>
+> 也可以使用 Clash 中的 TUN Mode，可以免去配置的麻烦。
+>
+> 对于 HTTPS 配置后大多可以正常生效，SSH配置后未见得会生效，因为 SSH 的 22 端口大多被代理服务商屏蔽，使得代理环境下 SSH 连接报错。
+
+### 协议对比
+
+| 协议名称 | 优点                                 | 缺点                                          |
+| -------- | ------------------------------------ | --------------------------------------------- |
+| HTTPS    | 广泛使用，端口大多数不会被禁         | 每次提交需要验证 Github 账号和密码            |
+| SSH      | 每次提交不需要验证 Github 账号和密码 | 必须先配置 SSH key，22 端口大多被代理服务商禁 |
+
+### 手动配置
+
+#### HTTPS
+
+```shell
+// 设置全局代理
+git config --global https.proxy http://127.0.0.1:7890
+git config --global https.proxy https://127.0.0.1:7890
+
+// 取消全局代理
+git config --global --unset http.proxy
+git config --global --unset https.proxy
+
+// 设置 Github 代理
+git config --global http.https://github.com.proxy socks5://127.0.0.1:7890
+git config --global https.https://github.com.proxy socks5://127.0.0.1:7890
+
+// 取消 Github 代理
+git config --global --unset http.https://github.com.proxy
+git config --global --unset https.https://github.com.proxy
+
+// socks5
+git config --global http.proxy socks5://127.0.0.1:7891
+git config --global https.proxy socks5://127.0.0.1:7891
+```
+
+#### SSH
+
+目录：C:\User\UserName\.ssh\config
+
+```
+# Windows 用户
+ProxyCommand "D:\ProgramDev\Git\mingw64\bin\connect" -S 127.0.0.1:7890 -a none %h %p
+
+# MacOS 用户
+# ProxyCommand nc -v -x 127.0.0.1:51837 %h %p
+
+Host github.com
+  User git
+  Port 22
+  Hostname github.com
+  # 注意修改路径为你的路径
+  IdentityFile "C:\Users\ChouS\.ssh\id_rsa"
+  TCPKeepAlive yes
+
+Host ssh.github.com
+  User git
+  Port 443
+  Hostname ssh.github.com
+  # 注意修改路径为你的路径
+  IdentityFile "C:\Users\ChouS\.ssh\id_rsa"
+  TCPKeepAlive yes
+```
+
+```
+# 测试是否设置成功
+ssh -T git@github.com
+```
+
+### Clash TUN
+
+- 打开 Service Mode，绿色地球标志亮起表示成功打开
+- 打开 Clash 的TUN Mode
+- 无需终端执行代理命令和编写配置文件
+
+![image-20240126210735365](https://cdn.jsdelivr.net/gh/chousinbin/Image/202401262107425.png)
+
+## 七、Windows Terminal 添加 Git Bash
+
+1. 打开设置 - 添加新的配置文件 - 复制配置文件 Windows PowerShell - 复制
+
+   ![image-20240126213757459](https://cdn.jsdelivr.net/gh/chousinbin/Image/202401262137511.png)
+
+2. 名称：Git Bash
+
+3. 命令行：`D:\ProgramDev\Git\bin\bash.exe --login -i`
+
+4. 启动目录：`D:\Github`
+
+5. 图标：`D:\ProgramDev\Git\mingw64\share\git\git-for-windows.ico`
+
+   ![](https://cdn.jsdelivr.net/gh/chousinbin/Image/202401262138495.png)
+
+6. 保存

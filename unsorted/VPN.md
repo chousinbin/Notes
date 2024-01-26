@@ -1,8 +1,14 @@
-[桔子云](https://juzi111.com/user/shop#)：13.9每月100GB
+## 特殊需求
 
-[速蛙云](https://m.faster.buzz/m/shop)：87包年 每月15GB
+- Git SSH：开放 SSH 22 端口
+- 第三方邮件客户端：开放第三方邮件协议
+- 土区 IP
 
-[泡芙云](https://www.paofu.cloud/user)：120包年 每月50GB
+## 机场
 
-[TAG](https://user.taggood-5.xyz/#/dashboard)：140包年250GB
+| 名称   | 22端口 | 第三方邮件协议 | 套餐                 | 土耳其 IP |
+| ------ | ------ | -------------- | -------------------- | --------- |
+| AirTCP | 开放   | 开放           | 15.8 / 100GB / 30 天 | 无        |
+|        |        |                |                      |           |
+|        |        |                |                      |           |
 
