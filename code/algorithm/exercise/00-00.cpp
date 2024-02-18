@@ -1,39 +1,68 @@
 #include <bits/stdc++.h>
 using namespace std;
+
 const int N = 1e5 + 10;
 
-int st[N];
-int p = -1;
+int qu[N];
+int qhead, qend;
+
+void init()
+{
+	qhead = 0;
+	qend = -1;
+}
+
+void push(int x)
+{
+	qu[++qend] = x;
+}
+
+void pop()
+{
+	qhead++;
+}
+
+bool empty()
+{
+	if(qhead > qend) return true;
+	return false;
+}
+
+int query()
+{
+	return qu[qhead];
+}
 
 int main()
 {
-    int n;
-    cin >> n;
+	init();
+	int n;
+	cin >> n;
 
-    while(n--)
-    {
-        string op;
-        cin >> op;
-        
-        int x;
-        if(op == "push")
-        {
-            cin >> x;
-            p++;
-            st[p] = x;
-        }
-        else if(op == "pop")
-        {
-            if(p >= 0) p--;
-        }
-        else if(op == "empty")
-        {
-            if(p == -1) cout << "YES" << endl;
-            else cout << "NO" << endl;
-        }
-        else
-        {
-            cout << st[p] << endl;
-        }
-    }
+	while(n--)
+	{
+		string op;
+		cin >> op;
+		int x;
+
+		if(op == "push")
+		{
+			cin >> x;
+			push(x);
+		}
+		else if(op == "pop")
+		{
+			pop();
+		}
+		else if(op == "empty")
+		{
+			if(empty()) cout << "YES" << endl;
+			else cout << "NO" << endl;
+		}
+		else
+		{
+			cout << query() << endl;
+		}
+	}
+	return 0;
 }
