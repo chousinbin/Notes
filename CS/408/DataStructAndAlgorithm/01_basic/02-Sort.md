@@ -79,6 +79,36 @@ int main()
 
 因为临界值的选取是原数组中间下标对应的值，并不能保证值的大小是理想情况为整个数组的中位数，所以有些情况下中间索引对应的值会被swap到别的位置，这样就不能保证一次递归中，`l + r >> 1` 的值是固定的了，所以不能使用 `x = l + r >>1` ，需要使用 `x = a[l + r >> 1]` 
 
+### sort函数
+
+```cpp
+sort(begin, end);
+// 注意：end 指向尾元素下一位置的指针
+```
+
+### comp() + sort() 
+
+当需要对多重元素排序时，可以使用结构体 + 自定义compare()函数 + sort()进行排序
+
+```cpp
+struct Stu
+{
+    int a, b, c;
+}s[1000];
+
+bool cmp(Stu x, Stu y)
+{
+    if(x.a != y.a) return x.a < y.a;
+    if (x.b != y.b) return x.b < y.b;
+    return x.c < y.c;
+}
+
+int main()
+{
+    sort(s, s + 1000, cmp);
+}
+```
+
 ### 快速选择排序
 
 #### 题目描述

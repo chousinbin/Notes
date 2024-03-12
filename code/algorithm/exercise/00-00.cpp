@@ -1,43 +1,44 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
-
-const int N = 1e5 + 10, M = 1e6 + 10;
-
-int n, m;
-char part[N], s[M];
-// ne 数组存储以 i 结尾的子串，最长公共前后缀的前缀尾下标
-int ne[N];
-
+int mon[13] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; 
+bool check(int date)
+{
+	int year = date / 10000;
+	int month = date % 10000 / 100;
+	int day = date % 100;
+	// 月数非法 
+	if(month == 0 || month > 12) return false;
+	// 除了 2 月的月天数非法 
+	if(day == 0 || month != 2 && day > mon[month]) return false;
+	// 2 月平年闰年的特判
+	if(month == 2)
+	{
+		int leap = year % 100 && year % 4 == 0 || year % 400 == 0;//是闰年的话为1否则为0
+		if(day > 28 + leap) return false; 
+	} 
+	return true;
+}
 int main()
 {
-	cin >> n >> part + 1 >> m >> s + 1;
-	// 构造 ne 数组(ne[1] == 默认 0，从 2 开始)
-	// j 是前缀指针也是公共前后缀的长度， i 是后缀指针
-	for(int i = 2, j = 0; i <= n; i++)
+	int a, b;
+	cin >> a >> b;
+	
+	int res = 0; 
+	for(int i = 1000; i <= 9999; i++)
 	{
-		// 前缀和后缀进行比较，如果不是公共的，一直缩短匹配长度
-		// 直到前缀退回原点
-		while(j > 0 && part[i] != part[j + 1]) j = ne[j];
-		// 如果直接或退回之后匹配成功，公共长度加 1
-		if(part[i] == part[j + 1]) j++;
-		// 以 i 结尾的子串的最长公共前后缀的前缀的尾下标 j
-		ne[i] = j;
-	}
-	// KMP 匹配过程
-	for(int i = 1, j = 0; i <= m; i++)
-	{
-		// 子串部分匹配成功，j 循环向前移动再与 i 比较（伸缩）
-		// 直到退回原点 0
-		while(j > 0 && part[j + 1] != s[i]) j = ne[j];
-		// 元素匹配成功
-		if(part[j + 1] == s[i]) j++;
-		// 子串匹配成功
-		if(j == n)
+        // 把date和翻转过来的x拼接在一起形成回文数 
+		int date = i,x = i;
+		while(x)
 		{
-			cout << i - n << ' ';
-			// 为匹配下一个后移 j 指针
-			j = ne[j];
+		    date = date * 10 + x % 10;
+		    x /= 10;
 		}
+		//判断是否在范围之内
+		if(date < a || date > b) continue;
+		//判断日期是否合法 
+		if(check(date)) res++;
 	}
-	return 0;
+	
+	cout<<res;
+	return 0; 
 }
