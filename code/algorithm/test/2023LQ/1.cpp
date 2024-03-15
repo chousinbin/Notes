@@ -3,7 +3,7 @@ using namespace std;
 
 int get(int a, int b)
 {
-	int l = 1, r = 1e9 + 1;  //根据数据范围，b=0时，v>1e9 
+	int l = 1, r = 1e9 + 1;  //?????????Χ??b=0???v>1e9 
 	while(l < r)
 	{
 		int mid = l + r >> 1;

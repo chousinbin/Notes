@@ -330,7 +330,13 @@ int main()
         "nim": "nim compile --verbosity:0 --hints:off --run",
         "lisp": "sbcl --script",
         "kit": "kitc --run"
-    },
+    }
 }
 ```
 
+## Code Runner无法输入问题
+
+1. `Ctrl` + `,` 打开设置
+2. 搜索：“code runner'”
+3. 找到：“code-runner: run in terminal”
+4. 勾选
