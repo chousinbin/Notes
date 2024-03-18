@@ -208,3 +208,55 @@ int main()
     return 0;
 }
 ```
+
+## 冶炼金属
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int N = 1e4 + 10;
+// 右端点，V_max
+int check_r(int a, int b)
+{
+    int l = 1, r = 1e9;
+    while(l < r)
+    {
+        int mid = l + r + 1 >> 1;
+        // 左半边全合法，得到的是右端点
+        if(a / mid >= b) l = mid;
+        else r = mid - 1;
+    }
+    return r;
+}
+// 左端点，V_min
+int check_l(int a, int b)
+{
+    int l = 1, r = 1e9;
+    while(l < r)
+    {
+        int mid = l + r >> 1;
+        // 右半边全合法，得到的是左端点
+        if(a / mid <= b) r = mid;
+        else l = mid + 1;
+    }
+    return r;
+}
+int main()
+{
+    int n;
+    cin >> n;
+    
+    int V_min = 0, V_max = 1e9;
+    for(int i = 0; i < n; i++)
+    {
+        int a, b;
+        cin >> a >> b;
+        V_min = max(V_min, check_l(a, b));
+        V_max = min(V_max, check_r(a, b));
+    }
+    cout << V_min << ' ' <<V_max;
+    return 0;
+}
+```
+
