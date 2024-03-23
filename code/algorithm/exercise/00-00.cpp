@@ -2,60 +2,72 @@
 using namespace std;
 
 const int N = 1e5 + 10;
-int len, n;
-int p[N], s[N], b[N];
-
-typedef long long LL;
-
-typedef pair<int, int> PII;
-
-
-bool check(int mid)
+void array_reference(int a[], int n)
 {
-    vector<PII> a, b;
+    cout << "Ô­Êı×é£º";
     for(int i = 0; i < n; i++)
     {
-        // æ­¤æ—¶é˜€é—¨æ‰“å¼€ï¼Œå­˜å‚¨è¦†ç›–åŒºé—´
-        if(mid >= s[i])
-        {
-            int l = max(1, p[i] - (mid - s[i]));
-            int r = min((LL)len, (LL)p[i] + (mid - s[i]));
-            a.push_back({l, r});
-        }
+        cout << a[i] << ' ';
     }
-    
-    //åŒºé—´åˆå¹¶
-    sort(a.begin(), a.end());
-    int begin = -1, end = -1;
-    for(int i = 0; i < a.size(); i++)
+    cout << endl << "ĞŞ¸ÄÖ®ºóµÄÊı×é£º";
+    a[0] = 0;
+    for(int i = 0; i < n; i++)
     {
-        // å½“å‰åŒºé—´ä¸ä¸‹ä¸€åŒºé—´æ— äº¤é›†
-        if(end + 1 < a[i].first)
-        {
-            begin = a[i].first;
-            end = a[i].second;
-        }
-        else
-        {
-            end = max(end, a[i].second);
-        }
+        cout << a[i] << ' ';
     }
-    return begin == 1 && end == len;
+    puts("");
+}
+
+void swap_value(int x, int y)
+{
+    int temp = x;
+    x = y;
+    y = temp;
+}
+
+void swap_reference(int &x, int &y)
+{
+    int temp = x;
+    x = y;
+    y = temp;
+}
+
+void swap_pointer(int *p1, int *p2)
+{
+    int temp = *p1;
+    *p1 = *p2;
+    *p2 = temp;
 }
 
 int main()
 {
-    cin >> n >> len;
-    for(int i = 0; i < n; i++) cin >> p[i] >> s[i];
+    // ÑéÖ¤Êı×éÊÇ´«µİÒıÓÃ
+    cout << "ÑéÖ¤Êı×éÊÇ´«µİÒıÓÃ" << endl;
+    int n = 3;
+    int a[n] = {1, 2, 3};
+    array_reference(a, n);
     
-    int l = 0, r = 2e9;
-    while(l < r)
-    {
-        LL mid = (LL)l + r >> 1;
-        if(check(mid)) r = mid;
-        else l = mid + 1;
-    }
+    // ÑéÖ¤ swap ´«Öµ
+    int x = 9, y = 22;
+    cout << "ÑéÖ¤ swap ´«Öµ" << endl;
+    cout << "Ô­Öµ£º" << x << ' ' << y << endl;
+    swap_value(x, y);
+    cout << "´«Öµ½»»»Ö®ºó£º" << x << ' ' << y << endl;
     
-    cout << r;
+    // ÑéÖ¤ swap ´«ÒıÓÃ
+    cout << "ÑéÖ¤ swap ´«ÒıÓÃ" << endl;
+    cout << "Ô­Öµ£º" << x << ' ' << y << endl;
+    swap_reference(x, y);
+    cout << "´«ÒıÓÃ½»»»Ö®ºó£º" << x << ' ' << y << endl;
+    
+    // ÑéÖ¤ swap ´«Ö¸Õë
+    int *p1, *p2;
+    *p1 = 1;
+    *p2 = 2;
+    cout << "ÑéÖ¤ swap ´«Ö¸Õë" << endl;
+    cout << "Ô­Öµ£º" << *p1 << ' ' << *p2 << endl;
+    swap_pointer(p1, p2);
+    cout << "´«Ö¸Õë½»»»Ö®ºó£º" << *p1 << ' ' << *p2 << endl;
+
     return 0;
 }
