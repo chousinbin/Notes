@@ -31,7 +31,7 @@ int main()
             cout << "有两个根：" << r1 << ' ' << r2 << endl;
         else if(discriminant == 0)
             cout << "有一个根：" << r1 << endl;
-        else cout << "the equation has no root" << endl;
+        else cout << "该方程式没有根" << endl;
         cout << "请依次输入 a b c 三个参数，用空格隔开：";
     }
     

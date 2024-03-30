@@ -3,25 +3,26 @@ using namespace std;
 
 class Circle
 {
-    // è®¿é—®ä¿®é¥°ç¬¦
     private:
-    // å±æ€§, å¯ä»¥æœ‰é»˜è®¤å€¼
+
     double radius;
-    // ä»æ­¤å¤„åˆ°ç±»ç»“å°¾å…¨ä¸º public
+    
     public:
-    // æ„é€ å‡½æ•°
+
     Circle()
     {
         radius = 1;
     }
+
     Circle(int newRadius)
     {
         radius = newRadius;
     }
-    // æ–¹æ³•
-    double gatArea()
+
+    // Îö¹¹ÎŞ²ÎÊı ÎŞ·µ»ØÖµ
+    ~Circle()
     {
-        return 3.14 * pow(radius, 2);
+        cout << "¶ÔÏóÏú»Ù";
     }
     
     double getRadius()
@@ -29,13 +30,10 @@ class Circle
         return radius;
     }
 
-};  // ç±»ä»¥åˆ†å·ç»“å°¾
+};  // ÀàÒÔ·ÖºÅ½áÎ²
 
 int main()
 {
-    Circle circle1(10), circle2;
-    circle2 = circle1;
-    cout << circle2.getRadius();
+    Circle circle1(10);
+    cout << circle1.getRadius() << endl;
 }
-
-//TODO ææ„
