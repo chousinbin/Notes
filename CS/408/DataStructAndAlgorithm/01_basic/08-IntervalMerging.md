@@ -100,3 +100,54 @@ int main()
 }
 ```
 
+### 代码实现 2
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+#define x first
+#define y second
+
+const int N = 1e5 + 10;
+
+typedef pair<int, int> PII;
+
+vector<PII> a, b;
+
+int main()
+{
+    int n;
+    cin >> n;
+    
+    for(int i = 0; i < n; i++)
+    {
+        int l, r;
+        cin >> l >> r;
+        a.push_back({l, r});
+    }
+    
+    sort(a.begin(), a.end());
+    
+    int l = a[0].x, r = a[0].y;
+    for(int i = 1; i < a.size(); i++)
+    {
+        if(r < a[i].x)
+        {
+            b.push_back({l ,r});
+            l = a[i].x, r = a[i].y;
+        }
+        else
+        {
+            r = max(r, a[i].y);
+        }
+    }
+    
+    b.push_back({l, r});
+    
+    cout << b.size();
+    
+    return 0;
+}
+```
+
