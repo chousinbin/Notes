@@ -1,6 +1,392 @@
 # DFS
 
-深度优先搜索
+> 深度优先搜索
+
+**所有的递归都可以转换成递归搜索树**
+
+<img src="https://cdn.jsdelivr.net/gh/chousinbin/Image/202210221136934.png" style="zoom:50%;" />
+
+## 简单斐波那契
+
+输出前 $n$ 个斐波那契数。斐波那契初始 `0,1,1,2,3`
+
+### 递推法 $O(n)$
+
+```cpp
+int n;
+cin >> n;
+
+int a = 0, b = 1;
+for(int i = 0; i < n; i++)
+{
+    cout << a << ' ';
+    int c = a + b;
+    a = b, b = c;
+}
+```
+
+### 递归法 $2^n$
+
+```c++
+int Fibonacci(int n)
+{
+	if(n <= 1) return n;
+	else return Fibonacci(n - 1) + Fibonacci(n - 2);
+}
+```
+
+> We are all racing against ourselves
+> There is no end ahead
+> The struggle never stops
+>
+> ---2024-4-5 21:30:21
+
+## 递归实现指数型枚举
+
+### 问题描述
+
+从 $1∼n$ 这 $n$ 个整数中随机选取任意多个，输出所有可能的选择方案。
+
+### 输入格式
+
+输入一个整数 $n$。
+
+### 输出格式
+
+每行输出一种方案。
+
+同一行内的数必须升序排列，相邻两个数用恰好 $1$ 个空格隔开。
+
+对于没有选任何数的方案，输出空行。
+
+本题有自定义校验器$（SPJ）$，各行（不同方案）之间的顺序任意。
+
+### 解题思路
+
+- 转化为递归搜索树，利用一个数组表示两种状态选或不选，所有情况遍历一遍；
+- 根据选或不选进行输出；
+- 核心为$DFS$ 回溯（恢复现场）。
+
+### 实现代码
+
+```c++
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = 20;
+
+int n;
+bool is_selected[N];
+
+// u 表示当前枚举第几个数
+void dfs(int u)
+{
+	if(u > n)
+	{
+		for(int i = 1; i <= n; i++)
+			if(is_selected[i] == true) 
+				cout << i << ' ';
+		
+		cout << endl;
+		return;
+	}
+	
+	// 不选
+	is_selected[u] = false;
+	dfs(u + 1);
+	// 选
+	is_selected[u] = true;
+	dfs(u + 1);
+}
+int main()
+{
+	cin >> n;
+	
+	dfs(1);
+	
+	return 0;
+}
+```
+
+## 递归实现排列型枚举
+
+把 $1∼n$ 这 $n$ 个整数排成一行后随机打乱顺序，输出所有可能的次序。
+
+### 输入格式
+
+一个整数 $n$。
+
+### 输出格式
+
+按照从小到大的顺序输出所有方案，每行 $1$ 个。
+
+首先，同一行相邻两个数用一个空格隔开。
+
+其次，对于两个不同的行，对应下标的数一一比较，字典序较小的排在前面。
+
+### AC代码
+
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+
+const int N = 20;
+
+bool st[N];
+int num[N];
+int n;
+
+void dfs(int u)
+{
+	if(u > n)
+	{
+		for(int i = 1; i <= n; i++)
+			cout << num[i] << ' ';
+		cout << endl;
+		return;
+	}
+	// 从小到大枚举 1 - n
+	// 保证答案顺序按字典序递增
+	for(int i = 1; i <= n; i++)
+	{
+		if(st[i] == false)
+		{
+			st[i] = true;
+			num[u] = i;
+			dfs(u + 1);
+			st[i] = false;
+		}
+	}
+}
+
+int main()
+{
+	cin >> n;
+	dfs(1);
+	return 0;
+}
+```
+
+## 递归实现组合型枚举
+
+从 $1∼n$ 这 $n$ 个整数中随机选出 $m$ 个，输出所有可能的选择方案。
+
+### 输入格式
+
+两个整数 $n,m$ ,在同一行用空格隔开。
+
+### 输出格式
+
+按照从小到大的顺序输出所有方案，每行 $1$ 个。
+
+首先，同一行内的数升序排列，相邻两个数用一个空格隔开。
+
+其次，对于两个不同的行，对应下标的数一一比较，字典序较小的排在前面（例如 `1 3 5 7` 排在 `1 3 6 8` 前面）。
+
+### 数据范围
+
+$n>0$
+$0≤m≤n$ ,
+$n+(n−m)≤25$
+
+### AC代码
+
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+
+const int N = 50;
+//bool st[N];
+/*
+	因为题目要求所有数递增
+	所以不需要用 st 标记数的占用情况
+	后边的数肯定是没被用过的
+*/
+int num[N];
+
+int n, m;
+// start 表示从 start 这个数开始枚举
+void dfs(int u, int start)
+{
+	//  剪枝优化：当位数不够 m 时提前返回
+	if(u - 1 + n - start + 1 < m) return;
+	
+	if(u > m)
+	{
+		for(int i = 1; i <= m; i++)
+			cout << num[i] << ' ';
+		cout << endl;
+		return;
+	}
+	
+	for(int i = start; i <= n; i++)
+	{
+		num[u] = i;
+		// 下一位：u + 1
+		// 下一开始数：i + 1 当前数加 1 保证递增
+		dfs(u + 1, i + 1);
+		num[u] = 0;
+	}
+}
+
+int main()
+{
+	cin >> n >> m;
+	
+	dfs(1, 1);
+	
+	return 0;
+}
+```
+
+#### 剪枝优化
+
+在DFS中如果能有判断让DFS提前退出就能优化时间，他叫剪枝。此题中可以算出来，当start到n的个数+已经选择的个数<m个的时候就已经必然无解了就退出。`u-1+n-start+1<m` 。这样的一个优化算法，经过实验得出，能优化一半的时间。
+
+## 带分数
+
+#### 问题描述
+
+$100$ 可以表示为带分数的形式：$100=3$+$\frac{69258}{714}$
+
+还可以表示为：$100=82$+$3546$ / $197$
+
+注意特征：带分数中，数字 $1∼9$ 分别出现且只出现一次（不包含 $0$）。
+
+类似这样的带分数，$100$ 有 $11$ 种表示法。
+
+#### 解题思路
+
+1. 枚举  1~9 全排列
+2. 用两个隔板把全排列成三部分a,b,c。
+3. 把a,b,c区间数组分别转化成数。
+4. 最后试算是否满足公式，满足加一。
+5. 输出结果。
+
+#### AC代码
+
+```c++
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = 20;
+
+int n, cnt, num[N];
+bool st[N];
+
+int get(int l, int r)
+{
+	int res = 0;
+	for(int i = l; i <= r; i++)
+		res = res * 10 + num[i];
+	return res;
+}
+
+void dfs(int u)
+{
+	if(u > 9)
+	{
+		for(int i = 1; i <= 7; i++)
+		{
+			for(int j = i + 1; j <= 8; j++)
+			{
+				int a, b, c;
+				a = get(1, i);
+				b= get(i + 1, j);
+				c = get(j + 1, 9);
+				
+				if(n * c == a * c + b)
+					cnt ++;
+			}
+		}
+		return;
+	}
+	
+	for(int i = 1; i <= 9; i++)
+	{
+		if(!st[i])
+		{
+			num[u] = i;
+			st[i] = true;
+			dfs(u + 1);
+			st[i] = false;
+		}
+	}
+ }
+ 
+int main()
+{
+	cin >> n;
+	
+	dfs(1);
+	
+	cout << cnt;
+	return 0;
+```
+
+## 正则问题
+
+### 算法标签
+
+- 递归
+- DFS
+- 二叉树
+
+### 解题思路
+
+- 把正则表达式转化为递归搜索树（二叉）
+
+### 实现代码
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+int p;
+string str;
+
+int dfs()
+{
+    int res = 0;
+    while(p < str.size())
+    {
+        // 遇到一个左括号 开始递归计算括号里
+        if(str[p] == '(')
+        {
+            p++; // 跳过左括号
+            res += dfs();
+            p++; // 跳过右括号
+        }
+        else if(str[p] == ')')
+        {
+            break; // 遇到右括号 这层递归结束 
+        }
+        else if(str[p] == '|')
+        {
+            p++; // 跳过 '|'
+            // '|' 左边是当前的 res
+            // '|' 右边是下一层递归的值
+            res = max(res, dfs());
+        }
+        else
+        {
+            // 遇到 'x' 个数自增
+            p++;
+            res++;
+        }
+    }
+    // 遇到右括号或走到尽头返回此层递归
+    return res;
+}
+int main()
+{
+    cin >> str;
+    
+    cout << dfs();
+
+    return 0;
+}
+```
 
 ## 数字排列
 
@@ -137,8 +523,6 @@ int main()
     return 0;
 }
 ```
-
-
 
 ## $n$ - 皇后问题
 

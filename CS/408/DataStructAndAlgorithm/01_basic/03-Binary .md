@@ -260,3 +260,260 @@ int main()
 }
 ```
 
+## 机器人跳跃问题
+
+### 问题描述
+
+机器人正在玩一个古老的基于 DOS 的游戏。
+
+游戏中有 $N+1$ 座建筑——从 $0$ 到 $N$ 编号，从左到右排列。
+
+编号为 $0$ 的建筑高度为 $0$ 个单位，编号为 $i$ 的建筑高度为 $H(i)$ 个单位。
+
+起初，机器人在编号为 $0$ 的建筑处。
+
+每一步，它跳到下一个（右边）建筑。
+
+假设机器人在第 $k$个建筑，且它现在的能量值是 $E$，下一步它将跳到第 $k+1$ 个建筑。
+
+如果 $H(k+1)>E$，那么机器人就失去 $H(k+1)−E$ 的能量值，否则它将得到 $E−H(k+1)$ 的能量值。
+
+游戏目标是到达第 $N$ 个建筑，在这个过程中能量值不能为负数个单位。
+
+现在的问题是机器人至少以多少能量值开始游戏，才可以保证成功完成游戏？
+
+### 解题思路
+
+对于初始的 $E$ 满足二段单调性，如果一个 $E$ 满足了在所有跳跃的点的能量都不为 $0$ ，那么大于等于 $E$ 的都能满足，所以我们只需要二分 $E$ ，检查是否能满足非 $0$ 就可以找到最小的 $E$。
+
+根据题意和公式化简可以得出，无论当前能量比下一个建筑的高度多还是少，其能量变化都为 $2*E - h(k+1)$
+
+### AC代码
+
+```c++
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+int n,h[N];
+bool cheak(int e)
+{
+    for(int i=1;i<=n;i++)
+    {
+        e=2*e-h[i];
+        if(e<0) return false;
+        if(e>=1e5) return true;//如果e的值大于等于高度的最大值根据上面公式可以得出必然e在今后不会为负数
+    }
+    return true;
+}
+int main()
+{
+    cin>>n;
+    
+    for(int i=1;i<=n;i++) cin>h[i];
+    
+    int l=0,r=1e5;
+    while(l<r)
+    {
+        int mid=l+r>>1;
+        if(cheak(mid)) r=mid;
+        else l=mid+1;
+    }
+    
+    cout<<l;
+    return 0;}
+```
+
+
+
+## 四平方和
+
+### 题目描述
+
+四平方和定理，又称为拉格朗日定理：
+
+每个正整数都可以表示为至多 $4$ 个正整数的平方和。
+
+如果把 $0$ 包括进去，就正好可以表示为 $4$ 个数的平方和。
+
+比如：
+
+$5=0^2+0^2+1^2+2^2$
+$7=1^2+1^2+1^2+2^2$
+
+对于一个给定的正整数，可能存在多种平方和的表示法。
+
+要求你对 $4$ 个数排序：
+
+$0≤a≤b≤c≤d$
+
+并对所有的可能表示法按 $a,b,c,d$ 为联合主键升序排列，最后输出第一个表示法。
+
+数据范围
+
+$0<N<5∗10^6$
+
+### 如何替代三重循环暴力枚举？
+
+把三重循环转化为两个双重循环，分别枚举$c,d$ 和$a,b$，即可降低时间复杂度。
+
+### 如何得到字典序最小的解
+
+因为a和b都是从最小开始枚举的，所以在有解的情况下a和b一定是最小的。所以我们只需确定c和d同时是最小的。为了找到c和d同时是最小的解，我们利用一个结构体来存储c^2^+d^2^,c,d。枚举完c和d后按照c^2^+d^2^,c,d优先级的递增的顺序进行结构体排序。再枚举a和b，利用二分找到四平方和的解，找到的就是最小的解。
+
+### AC代码
+
+```c++
+#include<bits/stdc++.h>
+using namespace std;
+const int N=3e6+10;
+int n,m;
+struct Stu
+{
+    int e,c,d;
+}s[N];
+
+bool cmp(const Stu &x,const Stu &y)
+{
+    if(x.e != y.e) return x.e<y.e;
+    if(x.c != y.c) return x.c<y.c;
+    return x.d<y.d;
+}
+
+
+int main()
+{
+    cin>>n;
+    
+    for(int c=0;c*c<=n;c++)
+    {
+       for(int d=c;c*c+d*d<=n;d++)
+        {
+            s[m++]={c*c+d*d,c,d};
+        }
+    }
+    
+    sort(s,s+m,cmp);
+    
+   for(int a=0;a*a<=n;a++)
+       for(int b=a;b*b+a*a<=n;b++)
+       {
+           int t=n-a*a-b*b;
+           int l=0,r=m;
+           while(l<r)
+           {
+               int mid=l+r>>1;
+               if(s[mid].e>=t) r=mid;
+               else l=mid+1;
+           }
+           if(s[l].e==t)
+           {
+               cout<<a<<' '<<b<<' '<<s[l].c<<' '<<s[l].d;
+               return 0;
+           }
+       }
+    return 0;
+}
+```
+
+```c++
+#include<bits/stdc++.h>
+using namespace std;
+typedef pair<int,int> PII;
+const int N=2500010;
+int n,m;
+unordered_map<int,PII> S;
+
+int main()
+{
+    for(int c=0;c*c<=n;c++)
+    {
+        for(int d=c;d*d+c*c<=n;d++)
+        {
+            int t=c*c+d*d;
+            if(S.count(t)==0)
+            {
+                S[t]={c,d};//把c*c+d*d作为key值 利用哈希进行排序存储 
+                //因为c和d是从小到大枚举的 所以第一个满足c*c+d*d的字典序就是最小的
+            }
+        }
+    }
+
+    for(int a=0;a*a<=n;a++)
+    {
+        for(int b=a;a*a+b*b<=n;b++)
+        {
+            int t=n-a*a-b*b;
+            if(S.count(t))
+            {
+                cout<<a<<' '<<b<<' '<<S[t].first<<' '<<S[t].second;
+                return 0;
+            }
+        }
+    }
+    return 0;
+}
+```
+
+## 分巧克力
+
+儿童节那天有 $K$ 位小朋友到小明家做客。
+
+小明拿出了珍藏的巧克力招待小朋友们。
+
+小明一共有 $N$ 块巧克力，其中第 $i$ 块是 $Hi×Wi$ 的方格组成的长方形。
+
+为了公平起见，小明需要从这 $N$ 块巧克力中切出 $K$ 块巧克力分给小朋友们。
+
+切出的巧克力需要满足：
+
+1. 形状是正方形，边长是整数
+2. 大小相同
+
+例如一块 $6×5$ 的巧克力可以切出 $6$ 块 $2×2$ 的巧克力或者 $2$ 块 $3×3$ 的巧克力。
+
+当然小朋友们都希望得到的巧克力尽可能大，你能帮小明计算出最大的边长是多少么？
+
+### 解题思路
+
+<img src="https://cdn.jsdelivr.net/gh/chousinbin/Image/202210221136022.png" style="zoom:50%;" />
+
+由于边长和块数成反比例关系，块数越多边长最小，所以我们利用这个性质，用二分找到大于等于所求块数对应的边长，就是满足题意的最大边长。
+
+```c++
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N=1e5+10;
+int n,k;
+int w[N],h[N];
+bool check(int x)
+{
+    int res=0;
+    for(int i=0;i<n;i++)
+    {
+        res=res+(w[i]/x)*(h[i]/x);
+    }
+    if(res<k) return false;
+    else return true;
+}
+int main()
+{
+    cin>>n>>k;
+    
+    for(int i=0;i<n;i++)
+    {
+        cin>>h[i]>>w[i];
+    }
+    
+    int l=1,r=1e5;
+    while(l<r)
+    {
+        int mid=l+r+1>>1;
+        if(check(mid)) l=mid;//个数多的时候边长是小的 求边长是最大的 所以l=mid
+        else r=mid-1;
+    }
+    
+    cout<<l;
+    return 0;
+}
+```
