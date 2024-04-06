@@ -324,6 +324,54 @@ int main()
 	return 0;
 ```
 
+## 求连通块数
+
+### 算法标签
+
+- DFS
+- Flood Fill
+
+### 算法模板
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = 1010;
+char g[N][N];
+const int dx[] = {-1, 0, 1, 0}, dy[] = {0, -1, 0, 1};
+int n, m;
+
+void dfs(int a, int b)
+{
+    g[a][b] = '.';
+    
+    for(int i = 0; i < 4; i++)
+    {
+        int x = a + dx[i], y = b + dy[i];
+        if(x >= 0 && x < n && y >= 0 && y < m && g[x][y] == 'B')
+            dfs(x, y);
+	}
+}
+
+int main()
+{
+    cin >> n >> m;
+    for(int i = 0; i < n; i++) scanf("%s", g[i]);
+    
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < m; j++)
+            if(g[i][j] == 'B')
+            {
+                cnt++;
+                dfs(i, j);
+			}
+    
+    cout << cnt;
+    return 0;
+}
+```
+
 ## 正则问题
 
 ### 算法标签
@@ -597,5 +645,35 @@ int main()
     
     return 0;
 }
+```
+
+## 大臣的旅费
+
+### 题目描述
+
+
+
+### 算法标签
+
+- 树的直径；
+- DFS;
+- 
+
+### 解题思路
+
+> 同时，如果不重复经过大城市，从首都到达每个大城市的方案都是唯一的。
+
+以上说明是一棵树，要求树的最大路径，称为**树的直径**。
+
+第 $x$ 到 $x+ 1$这段路花费 $x + 10$ 路费，那么 $1$ 到 $x$ 总路费等于：
+
+$f(x)=1 + 10 + 2 + 10+...+x + 10 = 10(1+2+3+...+x) = 10 \frac{(1+x)x}{2}$
+
+1. 任取一点 $x$, 找到距离 $x$ 最远的点 $y$ ;
+2. 重复步骤 1，找到距离 $y$ 最远的点 $z$ , $y$ 与 $z$ 之间的距离就是树的直径。
+
+### 实现代码
+
+```cpp
 ```
 
