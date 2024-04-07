@@ -517,3 +517,70 @@ int main()
     return 0;
 }
 ```
+
+## 盖楼
+
+### 算法标签
+
+- 二分
+- 容斥原理
+- 最小公倍数
+
+### 实现思路
+
+现在有 5 个集合，分别为
+
+- $U$: 所有楼层的集合，大小为 $H$；
+- $A$: 所有 $x$ 的倍数的集合，大小为 $a$；
+- $B$: 所有 $y$ 的倍数的集合，大小为 $b$；
+- $C$: 所有 $x$ 与 $y$ 公倍数的集合，大小为 $c$；
+- $P$: 既不是 $x$ 的倍数，又不是 $y$ 的倍数，$P=U-A\ \cup \ B = H - a - b + c$ 
+
+注：集合 $A$ 和 $B$ 都是包含 $C$ 的，$P$ 集合是万能的。
+
+- 只能分给贝茜的个数 = $b-c$
+- 只能分给贝蒂的个数 = $a - c$
+- 万能的个数 = $H - a - b + c$
+
+综上：能满足分配的个数分别为，$H - a - b + c >= N -(b - c) + M - (a - c)$ 
+
+### 实现代码
+
+```cpp
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+typedef long long LL;
+int n, m, x, y;
+
+bool check(LL h)
+{
+    LL a = h / x;
+    LL b = h / y;
+    LL c = h / (x * y);
+    // 还需要的应该保证 >= 0
+    LL xx = max(0ll, n - (b - c));
+    LL yy = max(0ll, m - (a - c));
+    LL p = h - a - b + c;
+
+    return p >= xx + yy;
+}
+
+int main()
+{
+    cin >> n >> m >> x >> y;
+
+    int l = 1, r = 6e9;
+    while (l < r)
+    {
+        LL mid = (LL)l + r >> 1;
+        if (check(mid)) r = mid;
+        else l = mid + 1;
+    }
+
+    cout << r;
+    return 0;
+}
+```
+
