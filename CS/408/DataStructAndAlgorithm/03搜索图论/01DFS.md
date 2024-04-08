@@ -651,13 +651,10 @@ int main()
 
 ### 题目描述
 
-
-
 ### 算法标签
 
 - 树的直径
 - DFS
-- 
 
 ### 解题思路
 
@@ -667,7 +664,7 @@ int main()
 
 第 $x$ 到 $x+ 1$这段路花费 $x + 10$ 路费，那么 $1$ 到 $x$ 总路费等于：
 
-$f(x)=1 + 10 + 2 + 10+...+x + 10 = 10(1+2+3+...+x) = 10 \frac{(1+x)x}{2}$
+$f(x)=1 + 10 + 2 + 10+...+x + 10 = 10(1+2+3+...+x) = 10x + \frac{(1+x)x}{2}$
 
 1. 任取一点 $x$, 找到距离 $x$ 最远的点 $y$ ;
 2. 重复步骤 1，找到距离 $y$ 最远的点 $z$ , $y$ 与 $z$ 之间的距离就是树的直径。
@@ -675,22 +672,166 @@ $f(x)=1 + 10 + 2 + 10+...+x + 10 = 10(1+2+3+...+x) = 10 \frac{(1+x)x}{2}$
 ### 实现代码
 
 ```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = 1e5 + 10, M = 2 * N;
+typedef long long LL;
+
+int h[N], e[M], ne[M], w[M], idx;
+int n;
+int max_d = -1; // 存储最远距离
+int max_point; // 存储第一个最远结点
+
+void add(int a, int b, int x)
+{
+    e[idx] = b;
+    ne[idx] = h[a];
+    w[idx] = x;
+    h[a] = idx++;
+}
+
+// u 起始结点
+// father 起始结点的父结点
+// distance 从起始结点到现在结点的距离
+void dfs(int u, int father, int distance)
+{
+    // 遍历子结点
+    for(int i = h[u]; i != -1; i = ne[i])
+    {
+        // 不能经过重复城市，所以不能越过父结点，只能向前走
+        if(father == e[i]) continue;
+        // 更新最远距离
+        if(distance + w[i] > max_d)
+        {
+            max_d = distance + w[i];
+            max_point = e[i]; // 存储最远点
+        }
+        // 向下遍历
+        dfs(e[i], u, distance + w[i]);
+    }
+}
+
+int main()
+{
+    memset(h, -1, sizeof h);
+    
+    cin >> n;
+    for(int i = 0; i < n - 1; i++)
+    {
+        int a, b, c;
+        cin >> a >> b >> c;
+        add(a, b, c), add(b, a, c);
+    }
+    
+    // 从首都开始找一个最远的端点
+    dfs(1, -1, 0);
+    
+    // 从第一个最远的点开始找第二个端点
+    dfs(max_point, -1, 0);
+        
+    cout << max_d * 10 + (max_d + (LL)max_d * max_d) / 2;
+    return 0;
+}
 ```
 
 ## 扫雷
+
+> 待解决
 
 ### 算法标签
 
 - 图的遍历
 - DFS / BFS
-- 哈希表
+- ***哈希表***
+
+## 迷宫
+
+### 算法标签
+
+- DFS / BFS
 
 ### 实现思路
 
-
+用 BFS 做，可以求得两点之间最短路径；用 DFS 做，只能看两点是否联通，不能保证搜到的路径最短；
 
 ### 实现代码
 
 ```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = 110;
+
+char g[N][N];
+bool st[N][N]; // 判重数组
+int n;
+int ax, ay, bx, by;
+
+const int dx[] = {-1, 0, 1, 0}, dy[] = {0, 1, 0, -1};
+
+bool dfs(int a, int b)
+{
+    /*
+        1. 判定下个是否是墙壁
+        2. 判定起点是否是墙壁
+    */
+    if(g[a][b] == '#') return false;
+    if(a == bx && b == by) return true;
+    
+    // 标记走过的路，防止绕圈
+    st[a][b] = true;
+    
+    for(int i = 0; i < 4; i++)
+    {
+        int x = a + dx[i], y = b + dy[i];
+        
+        if(st[x][y]) continue;
+        if(x < 0 || x >= n || y < 0 || y >= n) continue;
+        
+        if(dfs(x, y)) return true;
+    }
+    // 向四周找了一圈没找到返回 false
+    return false;
+}
+
+int main()
+{
+    int k;
+    cin >> k;
+    
+    while(k--)
+    {
+        memset(st, false, sizeof st);
+        
+        cin >> n;
+        for(int i = 0; i < n; i++) scanf("%s", g[i]);
+        
+        
+        cin >> ax >> ay >> bx >> by;
+        
+        if(dfs(ax, ay)) cout << "YES" << endl;
+        else cout << "NO" << endl;
+    }
+    return 0;
+}
 ```
 
+## 木棒
+
+> 待解决
+
+### 算法标签
+
+- DFS
+- 回溯
+- 剪枝优化
+
+### 解题思路
+
+1. 从小到大枚举最终答案的长度 $len$，依次拼接长度为 $len$ 的木棍；
+2. 优化搜索顺序：优先选择长的木棒，从大到小枚举，使得搜索深度变小，非法情况提前退出；
+3. 排除冗余方案：每一根木棍的内部的木棍编号递增，防止相同组合的木棒多排列；
+4. 失败后，跳过与当前木棒相同长度的木棒；
+5. 第一个未使用过的木棒作为新木棍的第一根，直接回溯；
+6. 若当前木棒作为某个木棍最后一个木棒，并且长度无解，放到别处也一定无解，需要回溯。
