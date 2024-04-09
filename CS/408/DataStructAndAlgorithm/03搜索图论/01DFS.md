@@ -602,45 +602,59 @@ n−皇后问题是指将 $n$ 个皇后放在 $n×n$ 的国际象棋棋盘上，
 
 $1≤n≤9$
 
+### 实现代码
+
 ```c++
 #include<bits/stdc++.h>
 using namespace std;
-const int N=20;
-int n;
-char g[N][N];//棋盘
-bool col[N],dg[N],udg[N];//竖、正斜、反斜状态
 
+const int N = 20;
+int n;
+char g[N][N];
+
+bool col[N]; // 标记 i 列中的皇后
+bool dg[N]; // 标记 (x, y) 正斜皇后情况，y = -x + i => i = x + y 
+bool udg[N]; // 标记 (x, y) 反斜皇后情况，y = x + i => i = y - x + n 防止 i 为负
+
+// u 为行号
 void dfs(int u)
 {
-    if(u==n)
+    if(u >= n)
     {
-        for(int i=0;i<n;i++) cout<<g[i]<<endl;
-        cout<<endl;
-        
+        for(int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < n; j++)
+            {
+                cout << g[i][j];
+            }
+            cout << endl;
+        }
+        cout << endl;
         return;
     }
-    //枚举列
-    for(int i=0;i<n;i++)
+    
+    for(int j = 0; j < n; j++)
     {
-        if(!col[i] && !dg[u+i] && !udg[n-u+i])//竖、正斜、反斜都不能有皇后
+        // 判断 (u, j) 的列、正斜、反斜的皇后情况
+        if(!col[j] && !dg[j + u] && !udg[j - u + n])
         {
-            g[u][i]='Q';//确定皇后
-            col[i]=dg[u+i]=udg[n-u+i]=true;//标记
-            dfs(u+1);//递归进入下一行
-            col[i]=dg[u+i]=udg[n-u+i]=false;//恢复
-            g[u][i]='.';
+            col[j] = dg[j + u] = udg[j - u + n] = true;
+            g[u][j] = 'Q';
+            dfs(u + 1);
+            col[j] = dg[j + u] = udg[j - u + n] = false;
+            g[u][j] = '.';
         }
     }
 }
-
 int main()
 {
-    cin>>n;
+    cin >> n;
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < n; j++)
+            g[i][j] = '.';
     
-    for(int i=0;i<n;i++)
-        for(int j=0;j<n;j++)
-            g[i][j]='.';
-    
+    memset(g, '.', sizeof g);
+    // DFS 行
     dfs(0);
     
     return 0;
@@ -835,3 +849,75 @@ int main()
 4. 失败后，跳过与当前木棒相同长度的木棒；
 5. 第一个未使用过的木棒作为新木棍的第一根，直接回溯；
 6. 若当前木棒作为某个木棍最后一个木棒，并且长度无解，放到别处也一定无解，需要回溯。
+
+## 飞机降落
+
+### 算法标签
+
+- DFS
+- 回溯
+- 贪心
+
+### 实现思路
+
+DFS 枚举每种降落顺序，在枚举过程中加上判断条件，能降落继续向深层递归，不能换下一架飞机，全不能返回 `False `。类似全排列。
+
+### 实现代码
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = 20;
+int n;
+
+struct Stu{
+    int t, d, l;
+}a[N];
+
+bool st[N]; // 标记第 i 架是否已经降落
+
+// u: 已经降落飞机的数量
+// last_final_time: 上架飞机的完成降落时间
+bool dfs(int u, int last_final_time)
+{
+    if(u > n) return true;
+    
+    // 枚举飞机
+    for(int i = 0; i < n; i++)
+    {
+        int t = a[i].t, d = a[i].d, l = a[i].l;
+        
+        if(st[i]) continue;
+        // 坚持不到上一架落地
+        if(t + d < last_final_time) continue;
+        
+        st[i] = true;
+        // 能落地的两种情况：
+        // 1. 这架飞机在上一架落地后到达：到达时间即为这架开始降落时间
+        // 2. 这架飞机在上一架落地前到家：上架落地时间为这架开始降落时间
+        if(dfs(u + 1, max(t, last_final_time) + l)) return true;
+        st[i] = false;
+    }
+    return false;
+}
+
+int main()
+{
+    int T;
+    cin >> T;
+    while(T--)
+    {
+        memset(st, false, sizeof st);
+        
+        cin >> n;
+        for(int i = 0; i < n; i++)
+            cin >> a[i].t >> a[i].d >> a[i].l;
+        
+        if(dfs(1, 0)) cout << "YES" << endl;
+        else cout << "NO" << endl;
+    }
+    return 0;
+}
+```
+
