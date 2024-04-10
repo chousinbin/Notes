@@ -1,20 +1,3 @@
-# 算法设计与实现
-
-> 作业：10 * 3
->
-> 上机：20 * 2
->
-> 测试：30
-
-
-
-## STL
-
-### 迭代器
-
-- 反向迭代器递增从结尾向左走
-
-```cpp
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -26,5 +9,3 @@ int main()
 	for(rit = v.rbegin(); rit != v.rend(); rit++)
     cout << *rit << ' ';
 }
-```
-
