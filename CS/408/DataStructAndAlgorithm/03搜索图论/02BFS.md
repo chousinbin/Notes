@@ -283,3 +283,94 @@ int main()
 }
 ```
 
+## 扫雷
+
+### 算法标签
+
+- Blood Fill
+
+### 实现思路
+
+点击值为 0 的单元格，会递归打开所有相邻单元格，所以先求出 0 的连通块的个数。
+
+再算未被打开的值为 1 - 8 的单元格个数。
+
+### 实现代码
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = 310;
+
+char g[N][N];
+int w[N][N];
+int n;
+
+void dfs(int x, int y)
+{
+    int t = w[x][y];
+    w[x][y] = -1;
+    // 如果空位置周围是一个 1 - 8 停止递归
+    if(t) return;
+    
+    for(int i = x - 1; i <= x + 1; i++)
+        for(int j = y - 1; j <= y + 1; j++)
+            // 递归 0 或 1 - 8 的单元格
+            if(i >= 0 && i < n && j >= 0 && j < n && w[i][j] != -1)
+                dfs(i, j);
+}
+
+int main()
+{
+    int T;
+    cin >> T;
+    
+    for(int cases = 1; cases <= T; cases++)
+    {
+        cin >> n;
+        for(int i = 0; i < n; i++) cin >> g[i];
+        
+        // 统计每个单元格的值
+        for(int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < n; j++)
+            {
+                if(g[i][j] == '*') w[i][j] = -1;
+                else
+                {
+                    w[i][j] = 0;
+                    for(int x = i - 1; x <= i + 1; x++)
+                        for(int y = j - 1; y <= j + 1; y++)
+                            if(x >= 0 && x < n && y >= 0 && y < n && g[x][y] == '*')
+                                w[i][j]++;
+                }
+            }
+        }
+        
+        // 统计 0 连通块的数量
+        int cnt = 0;
+        for(int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < n; j++)
+            {
+                if(w[i][j] == 0)
+                {
+                    dfs(i, j);
+                    cnt++;
+                }
+            }
+        }
+        
+        // 统计其余点 1 - 8 的个数
+        for(int i = 0; i < n; i++)
+            for(int j = 0; j < n; j++)
+                if(w[i][j] != -1)
+                    cnt++;
+                    
+        cout << "Case #" << cases << ": " << cnt << endl;
+    }
+    return 0;
+}
+```
+
