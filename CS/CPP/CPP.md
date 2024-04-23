@@ -5,14 +5,17 @@
 > 测验：12
 >
 > 大作业：6
+>
+> 期末：
+>
+> - 读程序写结果：类、拷贝构造函数、继承
+> - 编程题：函数、重载、杨辉三角
 
 ## 2
 
 #### identifiers
 
 can be letters, digits and underscores, can start with letters or underscores
-
-
 
 #### sizeof
 
@@ -30,16 +33,12 @@ int main()
 
 
 
-
-
 #### static 变量初始化
 
 ```cpp
 // 静态变量初始化的位置在类的结尾
 int Circle :: numberofObject = 0;
 ```
-
-
 
 #### const 函数
 
@@ -60,6 +59,8 @@ const int N = 1e5 + 10;
 # 运算符重载
 
 > 16 - 18 分
+>
+> 不考读程序写结果
 
 1. 复数相加
 2. 点相加
@@ -94,41 +95,142 @@ class MyPoint
 		int x, y;
 	
 	public:
-		MyPoint(int x=0, int y = 0)
+		MyPoint(int x = 0, int y = 0)
 		{
-			this->x=x;
-			this->y=y;
+			this->x = x;
+			this->y = y;
 		}
 		
 		MyPoint operator+ (MyPoint &b)
 		{
 			MyPoint tmp;
-			tmp.x=x+b.x;
-			tmp.y=y+b.y;
+			tmp.x = x + b.x;
+			tmp.y = y + b.y;
 			return tmp;	
 		}
-    
+		// 全局函数，不属于类，可以访问私有属性 
 		friend MyPoint operator- (MyPoint &a, MyPoint &b);
-};
+		friend bool operator>= (MyPoint &a, MyPoint &b);
+		friend void operator*= (MyPoint &a, MyPoint &b);
+		
+		int getX()
+		{
+			return x;
+		}
+		
+		int getY()
+		{
+			return y;
+		}
+		// 参数列表带 int 默认后增，反之前增
+		const MyPoint operator++(int)
+		{
+			cout << "后增 post - increment" << endl;
+			MyPoint old(x, y);
+			x++;
+			y++;
+			return old;
+		}
+		// 返回引用避免再次调用拷贝构造函数
+		const MyPoint& operator++()
+		{
+			cout << "前增 pre - increment" << endl;
+			++x;
+			++y;
+			return *this;
+		}
 
+		friend const MyPoint & operator--(MyPoint &a);
+		friend const MyPoint operator--(MyPoint &a, int);
+
+		// 输出符号必须作为友元函数
+		friend ostream& operator<<(ostream &, MyPoint &);
+		friend istream& operator>>(istream &, MyPoint &);
+	
+};
+// 两点的分量直接相减 
 MyPoint operator- (MyPoint &a, MyPoint &b)
 {
 	MyPoint tmp;
-	tmp.x= a.x-b.x;
-	tmp.y= a.y-b.y;
+	tmp.x = a.x - b.x;
+	tmp.y = a.y - b.y;
 	return tmp;	
+}
+// 两点的 x 相比较 
+bool operator>= (MyPoint &a, MyPoint &b)
+{
+	return a.x >= b.x;
+}
+// 两点分量直接相乘 
+void operator*= (MyPoint &a, MyPoint &b)
+{
+	a.x *= b.x;
+	b.y *= b.y;
+//	return a;
+}
+
+const MyPoint& operator--(MyPoint &a)
+{
+	cout << "pre - decrement" << endl;
+	--a.x;
+	--a.y;
+	return a;
+}
+
+const MyPoint operator--(MyPoint &a, int)
+{
+	cout << "post - decrement" << endl;
+	MyPoint old(a.x, a.y);
+	a.x--;
+	a.y--;
+	return old;
+}
+
+ostream& operator<<(ostream &out, MyPoint &obj)
+{
+	out << obj.x << ' ' << obj.y;
+	return out;
+}
+
+istream& operator>>(istream &in, MyPoint &obj)
+{
+	in >> obj.x >> obj.y;
+	return in;
 }
 
 int main()
 {
-	MyPoint a(5, 5);
-	MyPoint b(3, 8);
+	MyPoint a(1, 2);
+	MyPoint b(3, 4);
 	
 	MyPoint c = a + b;
+	cout << c.getX() << ' ' << c.getY() << endl;
 	
 	MyPoint d = a - b;
+	cout << d.getX() << ' ' << d.getY() << endl;
+	
+	cout << (a >= b) << endl;
+	
+	a *= b;
+	cout << a.getX() << endl;
+	// 前增与后增
+	cout << a.getX() << ' ' << a.getY() << endl;
+	++a;
+	a++;
+	cout << a.getX() << ' ' << a.getY() << endl;
+	// 前减与后减
+	cout << a.getX() << ' ' << a.getY() << endl;
+	--a;
+	a--;
+	cout << a;
+
+	// 验证输入输出
+	MyPoint p4;
+	cin >> p4;
+	cout << p4 << endl;
 
 	return 0;
 }
+
 ```
 
