@@ -26,7 +26,7 @@ Tux企鹅
 
 #### Linux作者
 
-Linux Torvalds，Git作者、Linux作者、世界著名黑客。
+Linus Torvalds，Git作者、Linux作者、世界著名黑客。
 
 #### Linux主要发行版
 
@@ -49,8 +49,6 @@ Linux Torvalds，Git作者、Linux作者、世界著名黑客。
 在20世纪70年代从贝尔实验室联合麻省理工和通用公司计划设计一个多用户分时系统，项目名称为multics，但是因为种种原因导致此项目被搁置。1969，Kenneth tompson，用B语言在multics基础上设计出来了第一代的Unix。1974年，Kenneth Thompson和Dennis Ritchie合写Unix。
 
 IBM、SUN、HP三家公司设计了Unix的发行版本，Richard Stallman发现在当时发行版本的Unix只能在高性能的服务器主机上运行，普通PC无法运行。他发起了GNU计划（开源精神），目的是让更多的人能够使用Unix系统。
-
-
 
 ## 2.Linux安装
 
@@ -83,8 +81,6 @@ VMware[下载地址](https://download3.vmware.com/software/wkst/file/VMware-work
 安装vmtools，实现主机与虚拟机的文件进行互通。需要内置`gcc`。
 
 1. 从虚拟机菜单右击安装vm-tools
-
-   
 
 2. 把桌面VMware Tools里面的`.gz`压缩包复制到根目录的`opt`文件夹下
 
@@ -226,7 +222,7 @@ rpm -qa | grep kernel
 
 ![image-20220716182158303](https://cdn.jsdelivr.net/gh/chousinbin/Image/image-20220716182158303.png)
 
-#### 删除就内核的RPM包
+#### 删除旧内核的RPM包
 
 ```
 yum remove kernel-
