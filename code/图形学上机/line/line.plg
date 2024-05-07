@@ -1,0 +1,43 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: line - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\Users\ChouS\AppData\Local\Temp\RSP457C.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fp"Debug/line.pch" /Yu"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"D:\资料文件\大学资料\作业\06-大三下\08计算机图形学\上机\line\lineView.cpp"
+]
+Creating command line "cl.exe @C:\Users\ChouS\AppData\Local\Temp\RSP457C.tmp" 
+Creating temporary file "C:\Users\ChouS\AppData\Local\Temp\RSP457D.tmp" with contents
+[
+/nologo /subsystem:windows /incremental:yes /pdb:"Debug/line.pdb" /debug /machine:I386 /out:"Debug/line.exe" /pdbtype:sept 
+".\Debug\line.obj"
+".\Debug\lineDoc.obj"
+".\Debug\lineView.obj"
+".\Debug\MainFrm.obj"
+".\Debug\StdAfx.obj"
+".\Debug\line.res"
+]
+Creating command line "link.exe @C:\Users\ChouS\AppData\Local\Temp\RSP457D.tmp"
+<h3>Output Window</h3>
+Compiling...
+lineView.cpp
+D:\资料文件\大学资料\作业\06-大三下\08计算机图形学\上机\line\lineView.cpp(218) : warning C4554: '>>' : check operator precedence for possible error; use parentheses to clarify precedence
+D:\资料文件\大学资料\作业\06-大三下\08计算机图形学\上机\line\lineView.cpp(205) : warning C4101: 'k' : unreferenced local variable
+D:\资料文件\大学资料\作业\06-大三下\08计算机图形学\上机\line\lineView.cpp(324) : warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+D:\资料文件\大学资料\作业\06-大三下\08计算机图形学\上机\line\lineView.cpp(324) : warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+D:\资料文件\大学资料\作业\06-大三下\08计算机图形学\上机\line\lineView.cpp(352) : warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+D:\资料文件\大学资料\作业\06-大三下\08计算机图形学\上机\line\lineView.cpp(352) : warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+Linking...
+
+
+
+<h3>Results</h3>
+line.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>
