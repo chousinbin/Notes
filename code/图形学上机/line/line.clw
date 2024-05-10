@@ -38,7 +38,7 @@ ImplementationFile=lineView.cpp
 Filter=C
 BaseClass=CView
 VirtualFilter=VWC
-LastObject=ID_zhongxinxuanzhuan
+LastObject=ID_duicheny
 
 
 [CLS:CMainFrame]
@@ -100,7 +100,9 @@ Command26=ID_suofang
 Command27=ID_fuhesanjiao
 Command28=ID_dingdianxuanzhuan
 Command29=ID_zhongxinxuanzhuan
-CommandCount=29
+Command30=ID_duichenyuan
+Command31=ID_duicheny
+CommandCount=31
 
 [ACL:IDR_MAINFRAME]
 Type=1

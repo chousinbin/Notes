@@ -162,6 +162,11 @@ BEGIN
         MENUITEM "顶点旋转",                    ID_dingdianxuanzhuan
         MENUITEM "重心旋转",                    ID_zhongxinxuanzhuan
     END
+    POPUP "对称变换"
+    BEGIN
+        MENUITEM "三角原图",                    ID_duichenyuan
+        MENUITEM "y=x+b对称",                   ID_duicheny
+    END
 END
 
 

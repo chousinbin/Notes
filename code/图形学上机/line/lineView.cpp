@@ -1,6 +1,5 @@
 // lineView.cpp : implementation of the CLineView class
 //
-
 #include "stdafx.h"
 #include "line.h"
 
@@ -35,6 +34,8 @@ BEGIN_MESSAGE_MAP(CLineView, CView)
 	ON_COMMAND(ID_fuhesanjiao, Onfuhesanjiao)
 	ON_COMMAND(ID_dingdianxuanzhuan, Ondingdianxuanzhuan)
 	ON_COMMAND(ID_zhongxinxuanzhuan, Onzhongxinxuanzhuan)
+	ON_COMMAND(ID_duichenyuan, Onduichenyuan)
+	ON_COMMAND(ID_duicheny, Onduicheny)
 	//}}AFX_MSG_MAP
 	// Standard printing commands
 	ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
@@ -425,4 +426,62 @@ void CLineView::Onzhongxinxuanzhuan()
 
 	pDC->TextOut((int)x3,(int)y3,"201周新斌 - 重心缩放");
 
+}
+
+void CLineView::Onduichenyuan() 
+{
+	// TODO: Add your command handler code here
+
+	CDC*pDC=GetDC();
+
+	pDC->MoveTo(50,300);
+	pDC->LineTo(100,400);
+	pDC->LineTo(150,300);
+	pDC->LineTo(50,300);
+
+	//pDC->TextOut(200,300,"201周新斌 - 三角原图");
+
+	ReleaseDC(pDC);
+}
+
+void CLineView::Onduicheny() 
+{
+	// TODO: Add your command handler code here
+	
+	// 关于 y = x + 50 对称
+	double b = 50;
+
+	// 画y = x + 50 线
+	CDC* pDC2 = GetDC();
+	pDC2->MoveTo(0, 50);
+	pDC2->LineTo(1000, 1050);
+	pDC2->TextOut(300, 350,"201周新斌 - y = x + 50");
+
+	// 初始化原始三角形数据
+	double x[] = {50, 100, 150};
+	double y[] = {300, 400, 300};
+	
+
+	for(int i = 0; i < 3; i++)
+	{
+		// 平移
+		y[i] -= b;
+		// 关于 y = x 轴对称
+		double tmp = x[i];
+		x[i] = y[i];
+		y[i] = tmp;
+		// 逆平移
+		y[i] += b;
+	}
+
+	// 画图
+	CDC*pDC=GetDC();
+	pDC->MoveTo((int)x[2], (int)y[2]);
+	for(int j = 0; j < 3; j++)
+		pDC->LineTo((int)x[j], (int)y[j]);
+
+	pDC->TextOut((int)x[1],(int)y[1],"201周新斌 - 对称变换");
+
+	ReleaseDC(pDC);
+	ReleaseDC(pDC2);
 }
