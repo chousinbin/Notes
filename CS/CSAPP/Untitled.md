@@ -7,10 +7,6 @@
 3. $1MB=1024KB$
 4. $1GB=1024MB$
 
-
-
-
-
 ### 前言
 
 The book was created by the course.每章阅读三遍然后做课后习题。

@@ -1,94 +1,380 @@
-# 双指针
+# BFS
 
+对于走迷宫问题，虽然可能有不同的走法，但是每走一步都进行一次判断是否到达终点，一旦有一个到达了终点，那么最先到达的就一定是路径最小的，这时我们直接返回距离（是最短的）。
 
+## 走迷宫
 
-## 日志统计
+### 实现代码
 
-小明维护着一个程序员论坛。现在他收集了一份”点赞”日志，日志共有 $N$ 行。
-
-其中每一行的格式是：
-
-```
-ts id  
-```
-
-表示在 $ts$ 时刻编号 $id$ 的帖子收到一个”赞”。
-
-现在小明想统计有哪些帖子曾经是”热帖”。
-
-如果一个帖子曾在任意一个长度为 $D$ 的时间段内收到不少于 $K$ 个赞，小明就认为这个帖子曾是”热帖”。
-
-具体来说，如果存在某个时刻 TT 满足该帖在 $[T,T+D)$ 这段时间内(注意是左闭右开区间)收到不少于 $K$ 个赞，该帖就曾是”热帖”。
-
-给定日志，请你帮助小明统计出所有曾是”热帖”的帖子编号。
-
-#### 输入格式
-
-第一行包含三个整数 $N,D,K$。
-
-以下 $N$ 行每行一条日志，包含两个整数 $ts$ 和 $id$。
-
-#### 输出格式
-
-按从小到大的顺序输出热帖 $id$。
-
-每个 $id$ 占一行。
-
-#### 数据范围
-
-$1≤K≤N≤10^5$
-$0≤ts,id≤10^5$
-$1≤D≤10000$
-
-### AC代码
-
-```c++
+```cpp
 #include<bits/stdc++.h>
 using namespace std;
-typedef pair<int,int> PII;
-const int N=100010;
-int n,d,k;
-PII logs[N];  //存储日志信息 时间和id
-int cnt[N];  //记录当前时间段id的出现次数
-bool st[N];  //记录某个i是否曾是热帖
+
+#define x first
+#define y second
+
+const int N = 110;
+
+int g[N][N];
+int d[N][N];
+int n, m;
+
+typedef pair<int, int> PII;
+const int dx[] = {-1, 0, 1, 0}, dy[] = {0, 1, 0, -1};
+
+int bfs()
+{
+    memset(d, -1, sizeof d);
+    
+    queue<PII> q;
+    q.push({0, 0});
+    d[0][0] = 0;
+    
+    while(q.size())
+    {
+        auto t = q.front();
+        q.pop();
+        
+        for(int i = 0; i < 4; i++)
+        {
+            int a = t.x + dx[i], b = t.y + dy[i];
+            if(a >= 0 && a < n && b >= 0 && b < m && g[a][b] == 0 && d[a][b] == -1)
+            {
+                d[a][b] = d[t.x][t.y] + 1;
+                q.push({a, b});
+            }
+        }
+    }
+    return d[n - 1][m - 1];
+}
+
 int main()
 {
-    cin>>n>>d>>k;
-    for(int i=0;i<n;i++) scanf("%d%d",&logs[i].first,&logs[i].second);
-    
-    sort(logs,logs+n);  //按照时间顺序排序二元组
-    
-    for(int i=0,j=0;i<n;i++)  //i为右端点, j为左端点
-    {
-        int id=logs[i].second;
-        cnt[id]++;
-        
-        while(logs[i].first - logs[j].first >= d)  //当长度为d的窗口左边越界
-        {
-            cnt[logs[j].second]--;  //越界的j对应的id的热度减一
-            j++;  //向右走一步
-        }
-        
-        if(cnt[id] >= k) st[id]=true;  //因为i是从始到终的 所以i对应的id都能被遍历 所以每次只需判断i(右端点)次数
-    }
-    
-    for(int i=0;i<100000;i++)
-        if(st[i])
-            printf("%d\n",i);
+    cin >> n >> m;
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < m; j++)
+            cin >> g[i][j];
+            
+    cout << bfs();
     
     return 0;
 }
 ```
 
+## 全球变暖
+
+### 算法标签
+
+- BFS
+- Flood Fill
+- 连通块的个数
+
+### 题目描述
+
+你有一张某海域 $N×N$ 像素的照片，”.”表示海洋、”#”表示陆地，如下所示：
+
+```
+.......
+.##....
+.##....
+....##.
+..####.
+...###.
+.......
+```
+
+其中”上下左右”四个方向上连在一起的一片陆地组成一座岛屿，例如上图就有 $2$ 座岛屿。
+
+由于全球变暖导致了海面上升，科学家预测未来几十年，岛屿边缘一个像素的范围会被海水淹没。
+
+具体来说如果一块陆地像素与海洋相邻(上下左右四个相邻像素中有海洋)，它就会被淹没。
+
+例如上图中的海域未来会变成如下样子：
+
+```
+.......
+.......
+.......
+.......
+....#..
+.......
+.......
+```
+
+请你计算：依照科学家的预测，照片中有多少岛屿会被完全淹没。
+
+#### 输入格式
+
+第一行包含一个整数 $N$。
+
+以下 $N$ 行 $N$ 列，包含一个由字符”#”和”.”构成的 $N×N$ 字符矩阵，代表一张海域照片，”#”表示陆地，”.”表示海洋。
+
+照片保证第 $1$ 行、第 $1$ 列、第 $N$ 行、第 $N$ 列的像素都是海洋。
+
+#### 输出格式
+
+一个整数表示答案。
+
+#### 数据范围
+
+$1≤N≤1000$
+
+### 解题思路
+
+- Flood Fill 就是在求连通块的个数（BFS / DFS）的基础上，统计联通块中，陆地的个数和边界元素的个数；
+- 每统计完一个连通块，比较点的个数和边界点的个数，若不同，则此岛屿不会被淹没。
+
+### 实现代码
+
+```c++
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = 1010;
+typedef pair<int, int> PII;
+const int dx[] = {-1, 0, 1, 0}, dy[] = {0, 1, 0, -1};
+#define x first
+#define y second
+
+char g[N][N];
+bool st[N][N];
+int n;
+
+void bfs(int a, int b, int &total, int &bound)
+{
+    // 第一个点必然是陆地边界元素
+    st[a][b] = true;
+    total++, bound++;
+    
+    queue<PII> q;
+    q.push({a, b});
+    
+    while(q.size())
+    {
+        auto t = q.front();
+        q.pop();
+        
+        // 枚举当前元素的四周陆地元素
+        for(int i = 0; i < 4; i++)
+        {
+            int x = t.x + dx[i], y = t.y + dy[i];
+            if(x < 0 || x >= n || y < 0 || y >= n) continue;
+            if(st[x][y]) continue;
+            if(g[x][y] == '.') continue;
+            // 标记和统计未被标记的元素
+            st[x][y] = true;
+            total++;
+            // 判断当前元素是否为边界元素
+            for(int j = 0; j < 4; j++)
+            {
+                int xx = x + dx[j], yy = y + dy[j];
+                if(g[xx][yy] == '.')
+                {
+                    bound++;
+                    break;
+                }
+            }
+            // 加入到队列中
+            q.push({x, y});
+        }
+    }
+}
+
+int main()
+{
+    cin >> n;
+    for(int i = 0; i < n; i++) cin >> g[i];
+    
+    
+    int res = 0;
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            if(g[i][j] == '#' && !st[i][j])
+            {
+                int total = 0, bound = 0;
+                bfs(i, j, total, bound);
+                if(total == bound) res++;
+            }
+        }
+    }
+    
+    cout << res;
+    return 0;
+}
+```
+
+## 母亲的牛奶
+
+### 解题思路
 
 
 
+### 实现代码
 
-# BFS
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-对于走迷宫问题，虽然可能有不同的走法，但是每走一步都进行一次判断是否到达终点，一旦有一个到达了终点，那么最先到达的就一定是路径最小的，这时我们直接返回距离（是最短的）。
+const int N = 21, M = N * N * N;
 
+int A, B, C;
 
+struct Stu
+{
+    int a, b, c;
+}q[M];
+
+bool st[N][N][N];
+
+void bfs()
+{
+    // 记录三个杯子容量
+    int W[3] = {A, B, C};
+    
+    int hh = 0, tt = 0;
+    q[0] = {0, 0, C};
+    st[0][0][C] = true;
+    
+    while(hh <= tt)
+    {
+        auto t = q[hh++];
+        
+        // 枚举所有倒法
+        // 从 i 往 j 倒
+        for(int i = 0; i < 3; i++)
+        {
+            for(int j = 0; j < 3; j++)
+            {
+                if(i != j)
+                {
+                    // 提取原来的状态
+                    int w[3] = {t.a, t.b, t.c};
+                    // 倒满对方或全部倒出
+                    int r = min(w[i], W[j] - w[j]);
+                    w[i] -= r, w[j] += r;
+                    // 判断并标记新状态
+                    int a = w[0], b = w[1], c = w[2];
+                    if(!st[a][b][c])
+                    {
+                        st[a][b][c] = true;
+                        q[++tt] = {a, b, c};
+                    }
+                }
+            }
+        }
+    }
+}
+
+int main()
+{
+    cin >> A >> B >> C;
+    
+    bfs();
+    
+    for(int c = 0; c <= C; c++)
+    {
+        for(int b = 0; b <= B; b++)
+        {
+            if(st[0][b][c]) cout << c << ' ';
+        }
+    }
+    
+    return 0;
+}
+```
+
+## 扫雷
+
+### 算法标签
+
+- Blood Fill
+
+### 实现思路
+
+点击值为 0 的单元格，会递归打开所有相邻单元格，所以先求出 0 的连通块的个数。
+
+再算未被打开的值为 1 - 8 的单元格个数。
+
+### 实现代码
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = 310;
+
+char g[N][N];
+int w[N][N];
+int n;
+
+void dfs(int x, int y)
+{
+    int t = w[x][y];
+    w[x][y] = -1;
+    // 如果空位置周围是一个 1 - 8 停止递归
+    if(t) return;
+    
+    for(int i = x - 1; i <= x + 1; i++)
+        for(int j = y - 1; j <= y + 1; j++)
+            // 递归 0 或 1 - 8 的单元格
+            if(i >= 0 && i < n && j >= 0 && j < n && w[i][j] != -1)
+                dfs(i, j);
+}
+
+int main()
+{
+    int T;
+    cin >> T;
+    
+    for(int cases = 1; cases <= T; cases++)
+    {
+        cin >> n;
+        for(int i = 0; i < n; i++) cin >> g[i];
+        
+        // 统计每个单元格的值
+        for(int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < n; j++)
+            {
+                if(g[i][j] == '*') w[i][j] = -1;
+                else
+                {
+                    w[i][j] = 0;
+                    for(int x = i - 1; x <= i + 1; x++)
+                        for(int y = j - 1; y <= j + 1; y++)
+                            if(x >= 0 && x < n && y >= 0 && y < n && g[x][y] == '*')
+                                w[i][j]++;
+                }
+            }
+        }
+        
+        // 统计 0 连通块的数量
+        int cnt = 0;
+        for(int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < n; j++)
+            {
+                if(w[i][j] == 0)
+                {
+                    dfs(i, j);
+                    cnt++;
+                }
+            }
+        }
+        
+        // 统计其余点 1 - 8 的个数
+        for(int i = 0; i < n; i++)
+            for(int j = 0; j < n; j++)
+                if(w[i][j] != -1)
+                    cnt++;
+                    
+        cout << "Case #" << cases << ": " << cnt << endl;
+    }
+    return 0;
+}
+```
 
 ## 献给阿尔及农的花束
 
@@ -608,105 +894,4 @@ int main()
 ```
 
 
-
-
-
-# 图论
-
-## 大臣的旅费（树的直径）
-
-很久以前，T王国空前繁荣。
-
-为了更好地管理国家，王国修建了大量的快速路，用于连接首都和王国内的各大城市。
-
-为节省经费，T国的大臣们经过思考，制定了一套优秀的修建方案，使得任何一个大城市都能从首都直接或者通过其他大城市间接到达。
-
-同时，如果不重复经过大城市，从首都到达每个大城市的方案都是唯一的。
-
-J是T国重要大臣，他巡查于各大城市之间，体察民情。
-
-所以，从一个城市马不停蹄地到另一个城市成了J最常做的事情。
-
-他有一个钱袋，用于存放往来城市间的路费。
-
-聪明的J发现，如果不在某个城市停下来修整，在连续行进过程中，他所花的路费与他已走过的距离有关，在走第 $x$ 千米到第 $x+1$ 千米这 $1$ 千米中（ $x$ 是整数），他花费的路费是 $x+10$ 这么多。也就是说走 $1$ 千米花费 $11$ ，走 $2$ 千米要花费 $23$ 。
-
-J大臣想知道：他从某一个城市出发，中间不休息，到达另一个城市，所有可能花费的路费中**最多**是多少呢？
-
-#### 输入格式
-
-输入的第一行包含一个整数 $n$，表示包括首都在内的T王国的城市数。
-
-城市从 $1$ 开始依次编号，$1$ 号城市为首都。
-
-接下来 $n−1$ 行，描述T国的高速路（T国的高速路一定是 $n−1$ 条）。
-
-每行三个整数 $Pi,Qi,Di$，表示城市 $Pi$ 和城市 $Qi$ 之间有一条**双向**高速路，长度为 $Di$ 千米。
-
-#### 输出格式
-
-输出一个整数，表示大臣 $J$ 最多花费的路费是多少。
-
-#### 数据范围
-
-$1≤n≤10^5$,
-$1≤Pi,Qi≤n$,
-$1≤Di≤1000$
-
-#### 解题思路
-
-树的直径：一个树中两个相距最远的结点的距离。
-
-1. 先任取一点 $x$ ，找到距离 $x$ 最远的点 $y$ ，此时 $y$ 就是两个相距最远的点的其中一个。
-2. 再找到距离 $y$ 最远的 $z$ ，此时 $y$ 到 $z$ 的距离就是最远距离。
-
-```c++
-#include<bits/stdc++.h>
-using namespace std;
-const int N=1e5+10,M=2e5+10;
-int h[N],e[M],ne[M],w[M],idx;
-int dist[N],n;
-
-void add(int a,int b,int c)
-{
-    e[idx]=b,w[idx]=c,ne[idx]=h[a],h[a]=idx++;
-}
-
-void dfs(int u,int fa,int dis)  //u为当前结点 fa为u的父结点的值 dis表示当前结点的距离
-{
-    dist[u]=dis;
-    for(int i=h[u];i!=-1;i=ne[i])
-    {
-        if(e[i]!=fa)  //e[i]为下一个结点 e[i]不是之前走过的 
-        {
-            dfs(e[i],u,dis+w[i]);
-        }
-    }
-}  //完成之后 得到 dist[N] 各个结点到u结点的距离
-
-int main()
-{
-    cin>>n;
-    memset(h,-1,sizeof h);
-
-    for(int i=0;i<n-1;i++)
-    {
-        int a,b,c;
-        scanf("%d%d%d",&a,&b,&c);
-        add(a,b,c),add(b,a,c);  //双向
-    }
-
-    dfs(1,-1,0);  //1为任意取的一个结点 初始化到自己距离为0
-    int u=1;
-    for(int i=2;i<=n;i++)
-        if(dist[i]>dist[u]) u=i;  //更新最远结点的城市id
-
-    dfs(u,-1,0);
-    for(int i=1;i<=n;i++)
-        if(dist[i]>dist[u]) u=i;  //此时dist[u]等于树的直径
-
-    cout<<(long long)dist[u]*10+(long long)dist[u]*(dist[u]+1)/2;  //公式不理解!!
-    return 0;
-}
-```
 
