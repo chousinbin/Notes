@@ -63,6 +63,7 @@ protected:
 	afx_msg void Onzhongxinxuanzhuan();
 	afx_msg void Onduichenyuan();
 	afx_msg void Onduicheny();
+	afx_msg void Oncohen();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

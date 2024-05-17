@@ -36,6 +36,7 @@ BEGIN_MESSAGE_MAP(CLineView, CView)
 	ON_COMMAND(ID_zhongxinxuanzhuan, Onzhongxinxuanzhuan)
 	ON_COMMAND(ID_duichenyuan, Onduichenyuan)
 	ON_COMMAND(ID_duicheny, Onduicheny)
+	ON_COMMAND(ID_cohen, Oncohen)
 	//}}AFX_MSG_MAP
 	// Standard printing commands
 	ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
@@ -485,3 +486,140 @@ void CLineView::Onduicheny()
 	ReleaseDC(pDC);
 	ReleaseDC(pDC2);
 }
+
+inline int round (const float a) { return int(a + 0.5); } // 取整
+
+void DDAline(int x0, int y0, int xEnd, int yEnd, CDC* pDC) // DDA 画线，用于裁剪算法中线输出
+{
+    int dx = xEnd - x0, dy = yEnd - y0, steps, k;
+    float xIncrement, yIncrement, x = x0, y = y0;
+
+    if (fabs(dx) > fabs(dy))
+        steps = fabs(dx);
+    else
+        steps = fabs(dy);
+
+    xIncrement = float(dx) / float(steps);
+    yIncrement = float(dy) / float(steps);
+    pDC->SetPixel(round(x), round(y), RGB(255, 0, 0));
+
+    for (k = 0; k < steps; k++) {
+        x += xIncrement;
+        y += yIncrement;
+        pDC->SetPixel(round(x), round(y), RGB(255, 0, 0));
+    }
+}
+
+// *************************************************
+// 裁减函数 以下是先线裁剪算法
+
+class wcPt2D {
+public:
+    int x, y;
+}; // 定义两全局变量
+
+const int winLeftBitCode = 1;    // (1 相当二进制 001) 常量定义
+const int winRightBitCode = 2;   // (2 相当二进制 010)
+const int winBottomBitCode = 4;  // (4 相当二进制 0100)
+const int winTopBitCode = 8;     // (8 相当二进制 1000)
+
+inline int inside(int code) { return int(!code); } // 两区域码为假，在裁剪窗内部
+inline int reject(int code1, int code2) // 与运算为真，线在裁剪窗外部
+{ return int (code1 & code2); } // 与运算
+inline int accept(int code1, int code2) // 或运算为假，在裁剪窗内部
+{ return int (!(code1 | code2)); } // 或运算
+
+int encode(wcPt2D pt, wcPt2D winMin, wcPt2D winMax) // 确定端点区域码
+{
+    int code = 0;
+    if (pt.x < winMin.x)
+        code = code | winLeftBitCode;
+    if (pt.x > winMax.x)
+        code = code | winRightBitCode; // 或运算，能使某位有一，就使四位相应位变一。
+    if (pt.y < winMin.y)
+        code = code | winBottomBitCode;
+    if (pt.y > winMax.y)
+        code = code | winTopBitCode;
+    return(code);
+}
+
+void swapPts(wcPt2D *p1, wcPt2D *p2)
+{
+    wcPt2D tmp;
+    tmp = *p1;
+    *p1 = *p2;
+    *p2 = tmp;
+}
+
+void swapCodes(int *c1, int *c2)
+{
+    int tmp;
+    tmp = *c1;
+    *c1 = *c2;
+    *c2 = tmp;
+}
+
+void CLineView::Oncohen() // 裁剪菜单函数
+{
+    // TODO: Add your command handler code here
+    CDC* pDC = GetDC();
+	pDC->TextOut(280, 100, "软工212-01-周新斌");
+    int code1, code2;
+    int done = false, plotLine = false;
+    float m;
+    wcPt2D p1, p2, winMin, winMax;
+    p1.x = 80, p1.y = 100;
+    p2.x = 300, p2.y = 450; // 用于裁剪的线段端点坐标
+
+    winMin.x = 80, winMin.y = 100; // 裁剪窗口坐标
+    winMax.x = 280, winMax.y = 320;
+
+    DDAline(winMin.x, winMin.y, winMax.x, winMin.y, pDC); // 画裁剪窗口
+    DDAline(winMax.x, winMin.y, winMax.x, winMax.y, pDC);
+    DDAline(winMax.x, winMax.y, winMin.x, winMax.y, pDC);
+    DDAline(winMin.x, winMax.y, winMin.x, winMin.y, pDC);
+    // DDAline(round(p1.x), round(p1.y), round(p2.x), round(p2.y), pDC);
+
+    while (!done) {
+        code1 = encode(p1, winMin, winMax); // 确定 p1 区域码
+        code2 = encode(p2, winMin, winMax); // 确定 p2 区域码
+
+        if (accept(code1, code2)) { // 判断是否完全在窗口内，是返回两参量
+            done = true;
+            plotLine = true;
+        }
+        else if (reject(code1, code2)) // 判断是否完全在窗口外
+            done = true;
+        else { // 不能判断完全在内或外的情况
+            if (inside(code1)) { // 如果 p1 在裁剪窗口内，交换
+                swapPts(&p1, &p2);
+                swapCodes(&code1, &code2);
+            }
+            if (p2.x != p1.x)
+                m = (p2.y - p1.y) / (p2.x - p1.x); // 算出线的斜率
+
+            if (code1 & winLeftBitCode) { // 如果与左边界与运算为真，求交点
+                p1.y += (winMin.x - p1.x) * m;
+                p1.x = winMin.x;
+            }
+            else if (code1 & winRightBitCode) { // 与右边界与运算为真，求交点
+                p1.y += (winMax.x - p1.x) * m;
+                p1.x = winMax.x;
+            }
+            else if (code1 & winBottomBitCode) { // 与下边界与运算为真，求交点
+                if (p2.x != p1.x)
+                    p1.x += (winMin.y - p1.y) / m;
+                p1.y = winMin.y;
+            }
+            else if (code1 & winTopBitCode) { // 与上边界与运算为真，求交点
+                if (p2.x != p1.x)
+                    p1.x += (winMax.y - p1.y) / m;
+                p1.y = winMax.y;
+            }
+        }
+    }
+
+        if (plotLine) // 最后画出裁剪后窗口内的线段
+        DDAline(p1.x, p1.y, p2.x, p2.y, pDC);
+}
+

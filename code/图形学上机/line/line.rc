@@ -167,6 +167,10 @@ BEGIN
         MENUITEM "Èý½ÇÔ­Í¼",                    ID_duichenyuan
         MENUITEM "y=x+b¶Ô³Æ",                   ID_duicheny
     END
+    POPUP "²Ã¼ô"
+    BEGIN
+        MENUITEM "Cohen²Ã¼ô",                   ID_cohen
+    END
 END
 
 
