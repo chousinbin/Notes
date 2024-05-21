@@ -8,8 +8,8 @@
 >
 > 期末：
 >
-> - 读程序写结果：类、拷贝构造函数、继承
-> - 编程题：函数、重载、杨辉三角
+> - 读程序写结果：类、拷贝构造函数、继承、多态、虚函数
+> - 编程题：函数、运算符重载、~~杨辉三角~~
 
 ## 2
 
@@ -243,10 +243,75 @@ int main()
 
 ### 虚函数
 
-不能是静态函数
+- 不能是静态函数
+- 虚函数的重写在子类中可以省略 virtual
+- 虚函数不一定从基类开始虚函数，可以从某个子类开始虚函数
+- 虚函数只能在 public 与 protected 的类中使用
 
 ```cpp
 virtual void fun();
+```
+
+
+
+# 模板
+
+模板是代码复用的工具
+
+## 函数模板
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+template<typename T>
+T fun(T x, T y)
+{
+	return x > y ? x : y;    
+}
+
+int main()
+{
+    cout << fun(1, 2);
+    cout << fun(1.1, 2.22);
+    
+    return 0;
+}
+```
+
+## 类模板
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+template<class T>
+class sample{
+	T n;
+	public:
+		sample(){}
+		sample(T i) { n = i;}
+		sample<T> operator+(sample<T> &);
+		void dis() { cout << n << endl; }
+};
+
+template<class T>
+sample<T> sample<T>::operator+(sample<T> &s)
+{
+	sample<T> temp;
+	temp.n = n + s.n;
+	return temp;
+}
+
+int main()
+{
+	sample<int> s1(10), s2(20), s3;
+	sample<double> s4;
+	s3 = s1 + s2;
+	s3.dis();
+	
+	return 0;
+}
 ```
 
 
