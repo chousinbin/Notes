@@ -1,7 +1,5 @@
 # Vscode C++
 
-
-
 ## 修改.exe生成位置
 
 ### 文件建立
@@ -94,8 +92,6 @@ int main()
 ```c++
 "cwd": "C:\\Program Files\\mingw64\\bin"
 ```
-
-
 
 #### launch.json
 
