@@ -14,13 +14,14 @@ int dijkstra()
 
     for(int i = 0; i < n; i++)
     {
+        // 取出最小元素
         int t = -1;
         for(int j = 1; j <= n; j++)
             if(!st[j] && (t == -1 || d[j] < d[t]))
                 t = j;
-
+        // 标记最小元素
         st[t] = true;
-
+        // 用最小元素更新其他点
         for(int j = 1; j <= n; j++)
             d[j] = min(d[j], d[t] + g[t][j]);
     }
