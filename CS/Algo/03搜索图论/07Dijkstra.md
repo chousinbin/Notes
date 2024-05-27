@@ -44,9 +44,7 @@ int dijkstra()
         for(int j = 1; j <= n; j++)
             d[j] = min(d[j], d[t] + g[t][j]);
     }
-	// int 类型四个字节，需要用 4 个字节的 16 进制数
-    if(d[n] == 0x3f3f3f3f) return -1;
-    else return d[n];
+    return dist[n];
 }
 int main()
 {
@@ -64,8 +62,9 @@ int main()
         g[a][b] = min(g[a][b], c);
     }
 
-    int t = dijkstra();
-    cout << t;
+    int res = dijkstra();
+    if(res == 0x3f3f3f3f) cout << -1;
+    else cout << res;
 
     return 0;
 }
@@ -131,8 +130,7 @@ int dijkstra()
         }
     }
 
-    if(d[n] == 0x3f3f3f3f) return -1;
-    else return d[n];
+    return d[n];
 }
 
 int main()
@@ -146,8 +144,11 @@ int main()
         cin >> a >> b >> c;
         add(a, b, c);
     }
-
-    cout << dijkstra();
+	
+    int res = dijkstra();
+   	if(res == 0x3f3f3f3f) cout << -1;
+    else cout << res;
+    
     return 0;
 }
 ```

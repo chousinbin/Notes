@@ -53,8 +53,7 @@ int dijkstra()
         }
     }
 
-    if(d[n] == 0x3f3f3f3f) return -1;
-    else return d[n];
+    return d[n];
 }
 
 int main()
@@ -69,6 +68,9 @@ int main()
         add(a, b, c);
     }
 
-    cout << dijkstra();
+    int res = dijkstra();
+    if(res == 0x3f3f3f3f) cout << -1;
+    else cout << res;
+    
     return 0;
 }

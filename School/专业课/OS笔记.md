@@ -20,8 +20,6 @@
 
 2. a program's scheduler: deciding the order of many process
 
-
-
 ## 01x02 OS historical
 
 ### First generation (1946 - 1955)
@@ -57,8 +55,6 @@ the key is time, have deadline
 
 1. Network OS
 2. Distributed OS 分布式
-
-
 
 ## 01x03 Hardware reviews
 
@@ -205,8 +201,6 @@ RS-232
 
 RS-485
 
-
-
 ## 01x04 System Call
 
 ### concept
@@ -236,10 +230,6 @@ soft, from inner
 
 软中断/内中断, 中断源来自CPU内部, PRG -> HW
 
-
-
-
-
 ## OS Structure
 
 #### macro-kernel : 宏内核
@@ -263,16 +253,12 @@ soft, from inner
 
 Win/Mac
 
-
-
 ## OS Function
 
 1. process management
 2. memory management
 3. device management
 4. File management
-
-
 
 # 02x00 Processes & threads
 
@@ -291,8 +277,6 @@ A process is an executing program
 | consist of program, data and process state information | a set of instructions                                        |
 | one process can call multi-programs                    | one program can execute much times, which one is a new process |
 | process have parallel and asynchrony 并行和异步        | not have                                                     |
-
-
 
 ## 02x02 Process Describe
 
@@ -320,8 +304,6 @@ unable to run until some external event happens
 
 当内存不足以加载一个优先级高的进程时, 把一些Blocked的进程打包到虚拟内存(硬盘里)的过程叫做Suspending
 
-
-
 ### PCB: Static
 
 #### PCB
@@ -348,8 +330,6 @@ Index table
 
 组织起来顺序表, 链表, 双向表
 
-
-
 ## 02x03 Process Control
 
 ### Four principal events cause processes to be created
@@ -372,8 +352,6 @@ Index table
 
 4. Killed by another process (involuntary).
 
-
-
 ## 02x04 Thread Conception
 
 ### reason
@@ -392,13 +370,11 @@ Processes are used to group resources together
 Threads are the entries scheduled for execution on the CPU.
 The threads share an address space,open files,and other resources.
 
-
-
 ## 02x05 Thread Describe
 
 线程保证进程的并发, 让进程的并发更加并发从而保持进程被执行
 
-Dynamic : state - Diagramo
+Dynamic : state - Diagram
 
 Static : TCB (Thread control Block) 线程控制块(Register / pointer) cpu寄存器的值, 栈的指针
 
@@ -407,8 +383,6 @@ TCB 数量级比PCB小 , 占用资源少, 切换代价小
 ### Image
 
 ![IMG_0315](https://cdn.jsdelivr.net/gh/chousinbin/Image/202304271136361.JPG)
-
-
 
 ## 02x06 Thread Level
 
@@ -421,12 +395,6 @@ OS, 不能看到PCB, 不能调用PCB
 ### Kernel - level (Windows)
 
 OS, 能看到TCB和PCB, 能调用TCB和PCB
-
-
-
-
-
-
 
 ## 02x07 IPC
 
@@ -453,15 +421,11 @@ a situation if access critical resource , find result depend on who run next (ex
 3. No process running outside it's critical region may block other process
 4. No process should have to wait forever to enter its critical region
 
-
-
 ## 02x08 Semaphores
 
 ![image-20230708170700747](https://cdn.jsdelivr.net/gh/chousinbin/Image/202307081707019.png)
 
 等待队列指针的值为负数, 代表有几个进程正在等待该资源
-
-
 
 ## 02x09 P-V 原语
 
@@ -505,8 +469,6 @@ Release Resource
 
 ![image-20230511105002771](https://cdn.jsdelivr.net/gh/chousinbin/Image/202305111050048.png)
 
-
-
 ## 02x10 Classical IPC
 
 ### Producer - Consumer
@@ -522,8 +484,6 @@ Release Resource
 ![image-20230708190638786](https://cdn.jsdelivr.net/gh/chousinbin/Image/202307081906994.png)
 
 ![image-20230708190622672](https://cdn.jsdelivr.net/gh/chousinbin/Image/202307081906894.png)
-
-
 
 ## 02x11 Scheduling
 
@@ -541,29 +501,21 @@ a part of OS, such as a part of code / program
 
 the algorithm it uses
 
-
-
 ### Scheduling Ways
 
 1. preemptive 抢占
 2. non- preemptive 非抢占
-
-
 
 ### Process Behavior
 
 1. CPU - bound process(CPU密集型), short I/O burst
 2. I/O -bound process(I/O密集型), short CPU burst
 
-
-
 ### 3-level Scheduling
 
 1. Admission scheduler
 2. CPU scheduler
 3. Memory scheduler
-
-
 
 ### When to scheduling
 
@@ -572,23 +524,17 @@ the algorithm it uses
 3. process blocked
 4. get I/O / interrupte
 
-
-
 ### Function
 
 1. save status of last process
 2. select one to run next
 3. swap context
 
-
-
 ### Categories of scheduling
 
 1. batch system 批处理
 2. interactive 交互式
 3. real time 实时
-
-
 
 ### Scheduling Goal
 
@@ -615,16 +561,12 @@ the algorithm it uses
 1. Deadline[生死线]: 硬实施
 2. predictable: 软实施, 可预测
 
-
-
 ### Schedling in batch System
 
 1. FCFS (first co first service) 先进先服务
 2. SJF (shortest job first)
 3. SRN(shortest remain next)最短剩余优先
 4. HRN(High Response Next) 高响应比的优先 $R = \frac{T_{turnround}}{T_{exec}} = 1 + \frac{T_{wait}}{T_{exec}}$
-
-
 
 ### Scheduling in interactive System 
 
@@ -662,8 +604,6 @@ the algorithm it uses
 
 在操作系统中要减少进程的切换,所以wdg老师个人认为4567算法难以实施不好用.
 
-
-
 ### Scheduling in Runtime System 
 
 $\sum_{1}^{m} \frac{C_i}{P_i} <= 1$称为schedulable
@@ -676,15 +616,11 @@ m事件的个数, C为cost, P为peried
 | Period        | 100  | 200  | 500  |
 | 0.85 <= 1安全 | 0.5  | 0.15 | 0.2  |
 
-
-
 ## 02x12 Thread Scheduling
 
 ![image-20230708201555085](https://cdn.jsdelivr.net/gh/chousinbin/Image/202307082015339.png)
 
 ![image-20230708201706903](https://cdn.jsdelivr.net/gh/chousinbin/Image/202307082017162.png)
-
-
 
 ## 02x13 Deadlock
 
@@ -701,8 +637,6 @@ Deadlock is a set of process if each process in the set is wait for an event tha
 
 request (use semaphore in wrong order) -> use -> release
 
-
-
 ### Condition
 
 以下四个条件缺一不可
@@ -712,13 +646,9 @@ request (use semaphore in wrong order) -> use -> release
 3. hold & wait(process持有一部分资源 等待一部分资源)
 4. Circular wait(process)
 
-
-
 ### Solution 
 
 ![image-20230710152850720](https://cdn.jsdelivr.net/gh/chousinbin/Image/202307101528995.png)
-
-
 
 ### Deadlock Prevention
 
@@ -729,8 +659,6 @@ request (use semaphore in wrong order) -> use -> release
 3. Attacking non - preemptive : take resources away
 
 4. Attacking circular waiting : order resources numerically
-
-
 
 ### Deadlock Avoidance
 
@@ -751,8 +679,6 @@ request (use semaphore in wrong order) -> use -> release
 
 $E_j = \sum_{1}^{n} C_{ij} + A_j$
 
-
-
 ### Deadlock Detected & Recover 
 
 #### Deadlock Detection with One Resource of Each Type
@@ -771,8 +697,6 @@ $E_j = \sum_{1}^{n} C_{ij} + A_j$
 
 #### Deadlock Detection with Multiple Resources of Each Type
 
-
-
 #### recover
 
 (1) preemptive 抢只能是释放部分资源
@@ -780,8 +704,6 @@ $E_j = \sum_{1}^{n} C_{ij} + A_j$
 (2) killing process
 
 (3) Rollback [check point]
-
-
 
 # 03x00 Memory Management
 
@@ -816,8 +738,6 @@ Memory space : in memory
 2. Base / limit register
 
    规定程序地址范围
-
-
 
 ## 03x02 Partition Management
 
@@ -886,8 +806,6 @@ Memory space : in memory
 
 ![image-20230711103905914](https://cdn.jsdelivr.net/gh/chousinbin/Image/202307111039160.png)
 
- 
-
 ## 03x04 Memory Enlarge
 
 解决当应用程序所占存储空间大于物理内存容量的时候, 保证计算机还能运行该大空间程序
@@ -904,11 +822,7 @@ Memory space : in memory
 
 ![image-20230711105242081](https://cdn.jsdelivr.net/gh/chousinbin/Image/202307111052295.png)
 
-
-
 ## Demand Paging Management 请求页式
-
-
 
 ## Replacement Algorithm
 
@@ -924,8 +838,6 @@ Memory space : in memory
 |      | X    | X    | X    | X    | √    | √    | X    | √    | √    | X    | X    | √    |
 
 A=12, 缺页F = 7 , 置换R = 4
-
-
 
 ### NRU(Not Recently Used)
 
@@ -1004,8 +916,6 @@ CPU communicate with control register and buffer need addressing technology
 
 ![image-20230711144921434](https://cdn.jsdelivr.net/gh/chousinbin/Image/202307111449634.png)
 
-
-
 ## 04x02 I/O control
 
 ### Programed I/O
@@ -1027,8 +937,6 @@ character - channel
 Selected - channel
 
 Array - channel
-
-
 
 ## 04x03 I/O software
 
@@ -1057,8 +965,6 @@ Array - channel
 #### share & dedicate_device
 
 deadlock program
-
-
 
 ### I/O software layer
 
@@ -1122,8 +1028,6 @@ driver control device, running in kernel
 
 #### Elevator : 向上或向下循环
 
-
-
 # 05x00 Files Management
 
 ## 05x01 Files
@@ -1182,7 +1086,6 @@ files consist of date and attributes
 
 11. rename
 
-    
 
 ## 05x02 Directory
 
@@ -1204,8 +1107,6 @@ files consist of date and attributes
 
 相对当前目录
 
-
-
 ## 05x03 File System implement
 
 ### file system layout
@@ -1226,8 +1127,6 @@ the end of the MBR is the partition table, which give the start and end address 
 
 ![image-20230711181052068](https://cdn.jsdelivr.net/gh/chousinbin/Image/202307111810411.png)
 
-
-
 ## 05x04 Disk Space Management
 
 ### keeping track of free blocks
@@ -1238,8 +1137,6 @@ the end of the MBR is the partition table, which give the start and end address 
 
 ![image-20230711182206692](https://cdn.jsdelivr.net/gh/chousinbin/Image/202307111822964.png)
 
-
-
 物理转储和逻辑转储是两种数据备份和存储的方法，通常用于计算机系统或数据库管理中。
 
 物理转储（Physical Dump）是将整个计算机系统或数据库的物理状态以二进制形式复制到外部存储介质中的过程。它包括操作系统、应用程序、配置设置、数据文件等所有相关信息的完全复制。物理转储通常是通过创建一个映像或镜像文件来实现的，这个文件可以被还原到原始系统中以恢复数据。
@@ -1249,30 +1146,6 @@ the end of the MBR is the partition table, which give the start and end address 
 物理转储和逻辑转储各有其优点和用途。物理转储适用于需要完全还原整个系统状态的情况，例如在灾难恢复（如硬件故障）或系统迁移时。逻辑转储则更适合于仅需要备份和恢复特定的应用程序或数据库的情况，例如进行数据迁移、测试和开发环境的创建等。
 
 需要注意的是，物理转储和逻辑转储都属于数据备份的手段，而不是数据迁移或同步的解决方案。在实际应用中，根据具体需求和情境，选择合适的备份策略和工具非常重要。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # 科普
 
