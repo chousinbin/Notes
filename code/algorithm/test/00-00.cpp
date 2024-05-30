@@ -4,12 +4,12 @@ using namespace std;
 const int N = 1e5 + 10;
 void array_reference(int a[], int n)
 {
-    cout << "Ô­Êı×é£º";
+    cout << "Ô­ï¿½ï¿½ï¿½é£º";
     for(int i = 0; i < n; i++)
     {
         cout << a[i] << ' ';
     }
-    cout << endl << "ĞŞ¸ÄÖ®ºóµÄÊı×é£º";
+    cout << endl << "ï¿½Ş¸ï¿½Ö®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é£º";
     a[0] = 0;
     for(int i = 0; i < n; i++)
     {
@@ -41,33 +41,33 @@ void swap_pointer(int *p1, int *p2)
 
 int main()
 {
-    // ÑéÖ¤Êı×éÊÇ´«µİÒıÓÃ
-    cout << "ÑéÖ¤Êı×éÊÇ´«µİÒıÓÃ" << endl;
+    // ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    cout << "ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << endl;
     int n = 3;
     int a[n] = {1, 2, 3};
     array_reference(a, n);
     
-    // ÑéÖ¤ swap ´«Öµ
+    // ï¿½ï¿½Ö¤ swap ï¿½ï¿½Öµ
     int x = 9, y = 22;
-    cout << "ÑéÖ¤ swap ´«Öµ" << endl;
-    cout << "Ô­Öµ£º" << x << ' ' << y << endl;
+    cout << "ï¿½ï¿½Ö¤ swap ï¿½ï¿½Öµ" << endl;
+    cout << "Ô­Öµï¿½ï¿½" << x << ' ' << y << endl;
     swap_value(x, y);
-    cout << "´«Öµ½»»»Ö®ºó£º" << x << ' ' << y << endl;
+    cout << "ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½Ö®ï¿½ï¿½" << x << ' ' << y << endl;
     
-    // ÑéÖ¤ swap ´«ÒıÓÃ
-    cout << "ÑéÖ¤ swap ´«ÒıÓÃ" << endl;
-    cout << "Ô­Öµ£º" << x << ' ' << y << endl;
+    // ï¿½ï¿½Ö¤ swap ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    cout << "ï¿½ï¿½Ö¤ swap ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << endl;
+    cout << "Ô­Öµï¿½ï¿½" << x << ' ' << y << endl;
     swap_reference(x, y);
-    cout << "´«ÒıÓÃ½»»»Ö®ºó£º" << x << ' ' << y << endl;
+    cout << "ï¿½ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½ï¿½Ö®ï¿½ï¿½" << x << ' ' << y << endl;
     
-    // ÑéÖ¤ swap ´«Ö¸Õë
+    // ï¿½ï¿½Ö¤ swap ï¿½ï¿½Ö¸ï¿½ï¿½
     int *p1, *p2;
     *p1 = 1;
     *p2 = 2;
-    cout << "ÑéÖ¤ swap ´«Ö¸Õë" << endl;
-    cout << "Ô­Öµ£º" << *p1 << ' ' << *p2 << endl;
+    cout << "ï¿½ï¿½Ö¤ swap ï¿½ï¿½Ö¸ï¿½ï¿½" << endl;
+    cout << "Ô­Öµï¿½ï¿½" << *p1 << ' ' << *p2 << endl;
     swap_pointer(p1, p2);
-    cout << "´«Ö¸Õë½»»»Ö®ºó£º" << *p1 << ' ' << *p2 << endl;
+    cout << "ï¿½ï¿½Ö¸ï¿½ë½»ï¿½ï¿½Ö®ï¿½ï¿½" << *p1 << ' ' << *p2 << endl;
 
     return 0;
 }
