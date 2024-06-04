@@ -14,6 +14,7 @@ void printArray(int list[], int SIZE)
 	for(int i = 0; i < SIZE; i++)
 		cout << list[i] << ' ';
 }
+
 int main()
 {
 	const int SIZE = 6;
@@ -23,6 +24,7 @@ int main()
 	reverse(list, newList, SIZE);
 	
 	printArray(list, SIZE);
+	
 	cout << endl;
 	
 	printArray(newList, SIZE);

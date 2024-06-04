@@ -8,9 +8,13 @@ void displaySortedNumbers(int num1, int num2, int num3)
 	if(num2 > num3) swap(num2, num3);
 	cout << num1 << ' ' << num2 << ' ' << num3 << endl;
 }
+
 int main()
 {
-	displaySortedNumbers(1, 3, 2);
-	displaySortedNumbers(3, 1, 2);
-	displaySortedNumbers(3, 2, 1);
+	int num1, num2, num3;
+	cin >> num1 >> num2 >> num3;
+
+	displaySortedNumbers(num1, num2, num3);
+	
+	return 0;
 }

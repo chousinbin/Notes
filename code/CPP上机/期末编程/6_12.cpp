@@ -1,19 +1,20 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-void display(int x)
+double display(int x)
 {
 	double sum = 0;
 	for(int i = 1; i <= x; i++)
 		sum += i * 1.0 / (i + 1);
-	// printf("%d\t%.4f\n", x, sum);
-	cout << x << '\t' << sum << endl;
+	return sum;
 }
 
 int main()
 {
-	int n = 20;
+	cout << "i\tm(i)"<< endl; 
+	
 	for(int i = 1; i <= 20; i++)
-		display(i);
+		cout << i << "\t" << display(i) << endl;
+		
 	return 0;
 } 

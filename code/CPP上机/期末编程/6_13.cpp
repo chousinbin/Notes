@@ -3,7 +3,6 @@ using namespace std;
 
 double m(int x)
 {
-	int end = 2 * x - 1;
 	double sum = 0;
 	
 	for(int i = 1; i <= x; i ++)
@@ -11,14 +10,17 @@ double m(int x)
 		
 	return 4 * sum;
 } 
+
 int main()
 {
+	cout << "i\tm(i)" << endl;
+	
 	int n = 9;
 	for(int i = 0; i <= n; i++)
 	{
 		int x = i * 100 + 1;
-		double ret = m(x);
-		printf("%d\t%.4f\n", x, ret);
+		cout << x << "\t" << m(x) << endl;
 	}
+	
 	return 0;
 }
