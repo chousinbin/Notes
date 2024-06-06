@@ -88,13 +88,25 @@ cout << a;
 
 ## 04 函数
 
+#### 默认参数
+
+默认参数，但必须从右向左提供默认参数
+
+```
+void fun(int x = 0, int) // 错误
+void fun(int x = 0, int t = 0) 
+void fun(int x, int t = 0)
+void fun(int x, int, int, int t = 0)
+void fun(int x, int, int, int)
+```
+
 - 定义和调用
 - 重载
 - 传值
 - 传引用
 - 传指针
 
-```
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -136,7 +148,9 @@ int main()
 
 ## 05 类
 
-- 构造
+成员属性可以有默认值
+
+- 构造顺序：基类、成员函数、自己的构造函数
 - 析构
 - 常量函数
 - 静态函数
