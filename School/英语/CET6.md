@@ -83,11 +83,23 @@ the society has developed to a great extent.
 
 ### 中间
 
+```
+First and foremost, there is no doubt that ______. 
+Based on big data, a majority of successful social elites admitted that they ______. 
 
+Moreover, it is obvious that ______. 
+where there is/are ______, there is/are ______.
+
+Last but not least, no one can deny that ______.
+Although ______, ______.
+```
 
 ### 结尾
 
-
+```
+In a world, the whole society should pay close attention to the program of ______.
+Only in this way can have a bright and promising future.
+```
 
 ## 04x00 translation
 
