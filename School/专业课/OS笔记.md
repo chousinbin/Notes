@@ -141,7 +141,7 @@ super scalar : 超标量, 操作系统分配CPU的各个核心分工合理地完
 
 6. CDROM/Type
 
-也可以把全部内存放在CPU里, 但是价格昂贵, 有散热问题, 目前内存体系分配临街点就是为了追求PC性价比, 让更多的人能使用PC.
+也可以把全部内存放在CPU里, 但是价格昂贵, 有散热问题, 目前内存体系分配临界点就是为了追求PC性价比, 让更多的人能使用PC.
 
 ### IO
 
@@ -1169,7 +1169,7 @@ the end of the MBR is the partition table, which give the start and end address 
 
 ### 国产OS
 
-1. 深度Deepin
+1. 深度 Deepin
 2. 统信uOS
 3. 优麒麟Ubuntukylin
 4. 红旗Linux

@@ -61,6 +61,33 @@ int main()
 }
 ```
 
+### 打印路径
+
+开一个prev[N]数组，存放当前点的前一个点的坐标
+
+```cpp
+//输出路径
+
+    int x = n - 1, y = m - 1;
+
+    while(x || y)
+    {
+        cout << x << ' ' << y << endl;
+
+        pair t = prev[x][y];
+
+        x = t.first, y = t.second;
+    }
+```
+
+## 八数码
+
+### 实现代码
+
+```cpp
+
+```
+
 ## 全球变暖
 
 ### 算法标签

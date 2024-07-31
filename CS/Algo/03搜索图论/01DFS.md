@@ -632,7 +632,7 @@ void dfs(int u)
         cout << endl;
         return;
     }
-    
+    // 遍历 u 行 j 列
     for(int j = 0; j < n; j++)
     {
         // 判断 (u, j) 的列、正斜、反斜的皇后情况
