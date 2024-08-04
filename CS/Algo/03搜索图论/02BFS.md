@@ -82,10 +82,83 @@ int main()
 
 ## 八数码
 
+### 实现思路
+
+- 二维图形转化为一维字符串
+- `x` 的一维坐标转换为二维坐标
+- 枚举当前状态 `x` 与四个方向交换
+
 ### 实现代码
 
 ```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
+int dx[] = {0, 1, 0, -1}, dy[] = {1, 0, -1, 0};
+
+int bfs(string start)
+{
+    // 终点状态
+    string end = "12345678x";
+    
+    queue<string> q; // 状态队列
+    unordered_map<string, int> d; // 状态步数
+    
+    q.push(start);
+    d[start] = 0;
+    
+    while(q.size())
+    {
+        auto t = q.front();
+        q.pop();
+        
+        // 当前达到目标状态
+        if(t == end) return d[t];
+        
+        // 当前移动次数
+        int distance = d[t];
+        
+        // 一维坐标
+        int k = t.find('x');
+        // 二维坐标
+        int x = k / 3, y = k % 3;
+        
+        for(int i = 0; i < 4; i++)
+        {
+            // 新的二维坐标
+            int a = x + dx[i], b = y + dy[i];
+            if(a >= 0 && a < 3 && b >= 0 && b < 3)
+            {
+                // 移动 x
+                swap(t[a * 3 + b], t[k]);
+                // 如果移动完是新的状态
+                if(d.count(t) == 0)
+                {
+                    d[t] = distance + 1;
+                    q.push(t); // 新的状态加入队列
+                }
+                // 恢复
+                swap(t[a * 3 + b], t[k]);
+            }
+        }
+    }
+    return -1;
+}
+
+int main()
+{
+    string start;
+    for(int i = 0; i < 9; i++)
+    {
+        char c;
+        cin >> c;
+        start += c;
+    }
+    
+    cout << bfs(start);
+    
+    return 0;
+}
 ```
 
 ## 全球变暖
