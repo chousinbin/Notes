@@ -309,8 +309,6 @@ int main()
 
 ### 解题思路
 
-
-
 ### 实现代码
 
 ```cpp
@@ -572,8 +570,6 @@ int main()
 }
 ```
 
-
-
 ## 交换瓶子
 
 有 $N$ 个瓶子，编号 $1∼N$，放在架子上。
@@ -715,8 +711,6 @@ int main()
 }
 ```
 
-
-
 ## 红与黑 （FloodFill算法）
 
 有一间长方形的房子，地上铺了红色、黑色两种颜色的正方形瓷砖。
@@ -847,8 +841,6 @@ int main()
 }
 ````
 
-
-
 ## 完全二叉树的权值
 
 #### 知识点
@@ -886,8 +878,6 @@ int main()
     return 0;
 }
 ```
-
-
 
 ## 地牢大师
 
@@ -991,6 +981,53 @@ int main()
     }
     return 0;
 }
+```
+
+## 腐烂的橘子
+
+```cpp
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int dx[4] = {1, 0, -1, 0}, dy[4] = {0, 1, 0, -1};
+        int m = grid.size(), n = grid[0].size();
+        int res = 0, cnt_fresh = 0;
+        queue<pair<int, int>> q;
+
+        for (int i = 0; i < m; i++)
+            for (int j = 0; j < n; j++)
+                if (grid[i][j] == 2)
+                    q.push({i, j});
+                else if (grid[i][j] == 1)
+                    cnt_fresh++;
+
+        while (q.size()) {
+            // 没有新鲜橘子就退出 BFS，防止多计数
+            if (cnt_fresh == 0) 
+                break;
+            // 每层的节点数
+            int len = q.size();
+            // 分钟 + 1
+            res++;
+
+            for(int i = 0; i < len; i++) {
+                auto t = q.front();
+                q.pop();
+                for (int j = 0; j < 4; j++) {
+                    int x = t.first + dx[j];
+                    int y = t.second + dy[j];
+                    if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] == 1) {
+                        q.push({x, y});
+                        grid[x][y] = 2;
+                        cnt_fresh--;
+                    }
+                }
+            }
+        }
+
+        return cnt_fresh ? -1 : res;
+    }
+};
 ```
 
 
