@@ -20,19 +20,19 @@
 
 共有 $N$ 个操作，输入的字符串总长度不超过 $10$^5^，字符串仅包含小写英文字母。
 
-### 输入格式
+#### 输入格式
 
 第一行包含整数 $N$，表示操作数。
 
 接下来 $N$ 行，每行包含一个操作指令，指令为 `I x` 或 `Q x` 中的一种。
 
-### 输出格式
+#### 输出格式
 
 对于每个询问指令 `Q x`，都要输出一个整数作为结果，表示 $x$ 在集合中出现的次数。
 
 每个结果占一行。
 
-### 数据范围
+#### 数据范围
 
 $1≤N≤2∗10$^4^
 
@@ -46,53 +46,62 @@ $1≤N≤2∗10$^4^
 
 效率问题：通过公用前缀来降低查询时间的开销以提高效率。
 
-### 代码
+### 解题代码
 
 ```c++
 #include<bits/stdc++.h>
 using namespace std;
-cont int N=1e5+10;
 
-int son[N][26],cnt[N],idx;
-// son 存储子结点的id i是此节点的id j是某个字母
-// cnt 存储以某节点结尾的字符串个数
-// idx 用作id
+const int N = 1e5 + 10;
 
-void insert(string s)
+int son[N][26]; // 前缀树
+int idx; // 前缀树结点的唯一标识
+int cnt[N]; // 统计字符串的个数
+
+void insert(string str)
 {
-    int p=0;
-    for(int i=0;i<s.size();i++)
+    int p = 0; // 作为结点指针
+    for(int i = 0; i < str.size(); i++)
     {
-        int u=s[i]-'a';//将字母转化为数字
-          if(!son[p][u]) son[p][u]= ++idx; //该结点不存在，创建节点
-        p=son[p][u];//p指针指向下一个节点
+        // 取出字母
+        int u = str[i] - 'a';
+        // 如果树中不存在这个字母，创建这个字母
+        if(!son[p][u]) son[p][u] = ++idx;
+        // 更新当前尾结点的指针
+        p = son[p][u];
     }
-    cnt[p]++;//记录以此节点结束的字符串的个数
+    // 尾指针作为前缀树中字符串的唯一标识
+    cnt[p]++;
 }
 
-int query(string s)
+int query(string str)
 {
-    int p=0;
-    for(int i=0;i<s.size();i++)
+    int p = 0;
+    for(int i = 0; i < str.size(); i++)
     {
-        int u=s[i]-'a';
-        if(!son[p][u]) return 0;//该节点不存在字符串不存在
-        p=son[p][u];
+        int u = str[i] - 'a';
+        // 树中没有字母串的任一字母，所以没有字符串
+        if(!son[p][u]) return 0;
+        p = son[p][u];
     }
-    return cnt[p];//返回字符串出现的次数
+    // 该字符串的个数
+    return cnt[p];
 }
 
 int main()
 {
     int n;
-    cin>>n;
+    cin >> n;
+    
     while(n--)
     {
-        string a,b;
-        cin>>a>>b;
-        if(a=="I") insert(b);
-        else cout<<query(b)<<endl;
+        string op, str;
+        cin >> op >> str;
+        
+        if(op == "I") insert(str);
+        else cout << query(str) << endl;
     }
+    
     return 0;
 }
 ```
@@ -197,8 +206,6 @@ public:
  * bool param_3 = obj->startsWith(prefix);
  */
 ```
-
-
 
 ## 最大异或对？
 
