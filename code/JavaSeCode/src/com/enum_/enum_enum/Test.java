@@ -17,7 +17,12 @@ public class Test {
 }
 
 enum Season {
-    SPRING("春天", "温暖"), SUMMER("夏天", "炎热"), AUTUMN("秋天", "凉爽"), WINTER("冬天", "寒冷"), a(), b;
+    SPRING("春天", "温暖"),
+    SUMMER("夏天", "炎热"),
+    AUTUMN("秋天", "凉爽"),
+    WINTER("冬天", "寒冷"),
+    a(),
+    b;
 
     private String name;
     private String desc;

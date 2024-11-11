@@ -462,8 +462,8 @@ public class Inputt {
 
 ### 三元运算符
 
-```
-条件表达式?表达式1:表达式2
+``` 
+条件表达式 ? 表达式1 : 表达式2
 ```
 
 如果条件表达式为真，则结果返回表达式1，否则返回表达式2
@@ -482,6 +482,21 @@ public class TernaryPoerator {
         int max = (n1 > n2 ? n1 : n2) > n3 ? (n1 > n2 ? n1 : n2) : n3;
     }
 }
+```
+
+注意：三元运算符要看成一个整体
+
+```java
+Object obj1 = true ? new Integer(1) : new Double(2.0); // obj1 == 1.0
+```
+
+```java
+Object obj2;
+
+if(true) obj2 = new Integer(1);
+else obj2 = new Double(2.0);
+
+// obj1 = 1
 ```
 
 ### 运算符优先级
@@ -2911,11 +2926,9 @@ class GirlFriend2 {
 | 线程安全问题 | 不存在                                               | 存在线程安全问题               |
 | 资源浪费     | 类对象没有使用, 但创建了对象, 占用内存空间, 浪费对象 | 需要使用对象时时才创建, 不浪费 |
 
-
-
 ## final
 
-final关键词, 可以修饰:类, 属性, 方法和局部变量, 不能修饰构造方法;
+final关键词, 可以修饰：类, 属性, 方法和局部变量, 不能修饰构造方法;
 
 ### 常见final类
 
@@ -2968,9 +2981,7 @@ final修饰的属性叫常量,  一般以XX_XX格式命名, 可以使类的某�
 
 ### final与static搭配
 
-final往往与static搭配使用, 效率更高, 底层编译器做了优化, 不会导致类加载
-
-
+final往往与static搭配使用, 效率更高, 底层编译器做了优化, 不会导致**类加载**（初始化）。因为 static 变量属于类本身而不是类的实例，在加载类是就为静态变量分配内存。final 意味着是常量，他的值在编译期间被确定。
 
 ## abstract
 
@@ -3586,8 +3597,6 @@ public class Other {
 }
 ```
 
-
-
 # 枚举和注解
 
 ## 枚举类
@@ -3596,20 +3605,16 @@ public class Other {
 
 #### 定义
 
-枚举类(enumeration, 简称enum), 枚举是一组常量的集合; 枚举类可以理解为是一种特殊的类, 里面只包含一组有限的特定的对象;
-
-
+枚举类(enumeration, 简称 enum), 枚举是一组常量的集合; 枚举类可以理解为是一种特殊的类, 里面只包含一组有限的特定的对象。
 
 ### 自定义类实现枚举
 
 #### 步骤
 
-1. 将构造器私有化(防止实例化对象)
-2. 删除`setXxx()`方法(防止对象的属性被修改)
-3. 在Season内部直接创建固定的对象, 对象名采用全部大写(符合常量命名规范)
-4. 通过final修饰优化对象, 调用对象时类不会加载
-
-
+1. 将构造器私有化（防止实例化对象）；
+2. 删除 `setXxx()` 方法（防止对象的属性被修改）；
+3. 在枚举类内部直接创建固定的对象，对象名采用全部大写（常量命名规范）；
+4. 通过 static final 修饰优化对象，调用对象时防止类加载，优化性能。
 
 ```java
 package com.enum_.diy_enum;
@@ -3665,17 +3670,15 @@ class Season {
 }
 ```
 
-
-
-### enum关键字实现枚举
+### enum 关键字实现枚举
 
 #### 步骤
 
-1. 使用关键字 `enum` 替代 `Class`
-2. **首行**使用 `对象常量名(参数列表)` 替代自定义类实现枚举中的创建对象方式
+1. 使用关键字 `enum` 替代 `Class`；
+2. **首行**（定义对象在属性声明之前）使用 `对象常量名(参数列表)` 替代自定义类实现枚举中的创建对象方式
    (如果使用无参构造器, 创建枚举对象, 则实参列表和小括号都可以省略)
-3. 如有多个常量对象, 使用逗号间隔, 重复步骤2;
-4. 私有化构造器
+3. 如有多个常量对象, 使用逗号间隔, 重复步骤 2；
+4. 私有化构造器。
 
 #### 细节
 
@@ -3753,9 +3756,7 @@ enum Season {
 
 ```
 
-
-
-### Enum成员方法
+### Enum 成员方法
 
 #### name()
 
@@ -3837,9 +3838,9 @@ enum Season {
 }
 ```
 
-### enum实现接口
+### enum 实现接口
 
-enum实现的枚举类可以实现接口
+枚举类和普通类一样可以实现接口。枚举类隐式继承 `Enum` 类，所以不能继承其他类。
 
 #### 演示代码
 
@@ -3864,8 +3865,6 @@ enum Music implements IP{
 }
 ```
 
-
-
 ## 注解
 
 ### 概括
@@ -3877,8 +3876,6 @@ enum Music implements IP{
 #### 作用
 
 在JavaSe中, 注解的使用目的比较简单, 例如标记过时的功能, 忽略警告等. 在JavaEE中注解占据了重要角色, 例如用来配置应用程序的任何切面, 代替JavaEE旧版中所遗留的繁冗代码和XML配置等;
-
-
 
 ### @Override
 
@@ -3896,8 +3893,6 @@ enum Music implements IP{
 public @interface Override {
 }
 ```
-
-
 
 ### @Deprecated
 
@@ -3970,8 +3965,6 @@ public @interface SuppressWarnings {
 }
 ```
 
-
-
 ### 元注解
 
 JDK的元注解用于修饰其他的注解
@@ -4000,8 +3993,6 @@ public @interface Retention {
 }
 ```
 
-
-
 #### Target
 
 用于修饰一个 Annotation 定义, 指定被修饰的注解可以修饰哪些程序元素. @Target也包含一个名为value的成员变量
@@ -4021,8 +4012,6 @@ public @interface Target {
 }
 ```
 
-
-
 #### Documented
 
 用于指定被该元注解修饰的注解类将被JavaDoc工具提取成文档, 即在生成文档时, 可以看到该注解;
@@ -4035,19 +4024,13 @@ public @interface Documented {
 }
 ```
 
-
-
 #### Inherited
 
 被@Inherited修饰的注解将具有继承性, 即如果某个类使用了被@Inherited修饰的注解, 则子类将自动被那个注解修饰;
 
-
-
 # 异常
 
 > 当程序逐行执行到有错误的代码行的时候, 程序会抛出相应类型的异常, 当抛出异常后, 程序结束, 不再执行后面的代码; 所以只要出现一个非致命错误, 就导致整个系统结束运行, 异常处理机制应运而生; 如果程序员觉得某些代码行的代码有可能出现异常, 可以使用异常处理机制来解决, 从而保证程序的健壮性容错性;
-
-
 
 ## 基本概念
 
@@ -4063,8 +4046,6 @@ Java语言中,  将程序执行中发生的不正常情况称为异常. 语法�
 ### 异常体系图
 
 ![](https://cdn.jsdelivr.net/gh/chousinbin/Image/202303241111492.png)
-
-
 
 ## 运行时异常
 
@@ -4090,8 +4071,6 @@ Exception in thread "main" java.lang.NullPointerException
 	at com.exception_.NullPointer.main(NullPointer.java:4)
 ```
 
-
-
 ### ArithmeticException
 
 当出现异常的运算条件时, 抛出算数异常
@@ -4111,8 +4090,6 @@ Exception in thread "main" java.lang.ArithmeticException: / by zero
 	at com.exception_.ArithmeticException.main(ArithmeticException.java:6)
 ```
 
-
-
 ### ArrayIndexOutOfBounds
 
 用非法索引访问数组时抛出的数组下标越界异常
@@ -4130,8 +4107,6 @@ public class ArrayIndexOutOfBounds {
 Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: 4
 	at com.exception_.ArrayIndexOutOfBounds.main(ArrayIndexOutOfBounds.java:5)
 ```
-
-
 
 ### ClassCastException
 
@@ -4153,8 +4128,6 @@ class C extends A {}
 Exception in thread "main" java.lang.ClassCastException: com.exception_.B cannot be cast to com.exception_.C
 	at com.exception_.ClassCast.main(ClassCast.java:5)
 ```
-
-
 
 ### NumberFormatException
 
@@ -4178,8 +4151,6 @@ Exception in thread "main" java.lang.NumberFormatException: For input string: "z
 	at com.exception_.NumberFormatException.main(NumberFormatException.java:7)
 ```
 
-
-
 ## 编译时异常
 
 ### 定义
@@ -4196,8 +4167,6 @@ Exception in thread "main" java.lang.NumberFormatException: For input string: "z
 | ClassNotFoundException    | 加载类, 而该类不存在时, 发生异常   |
 | EOFException              | 操作文件, 到文件末尾, 发生异常     |
 | IllegalArguementException | 参数异常                           |
-
-
 
 ## 异常处理
 
@@ -4244,8 +4213,6 @@ public class TryFinally {
 }
 ```
 
-
-
 ### throws
 
 如果一个方法中的语句执行时可能生成某种异常, 但是不能确定如何处理这些异常, 则此方法应显示地声明抛出异常, 表明该方法将不对这些异常进行处理, 而由该方法的调用者负责处理.
@@ -4260,8 +4227,6 @@ public class TryFinally {
 
 1. 子类重写父类的方法时, 对抛出异常的规定:子类重写的方法, 所抛出的异常类型要么和父类抛出的类型一致, 要么为父类抛出异常的类型的子类型.
 2. 在throws过程中, 如果有方法try-catch处理异常, 就可以不必throws 
-
-
 
 ## 自定义异常
 
@@ -4301,12 +4266,459 @@ Exception in thread "main" com.exception_.AgeException: 输入应在18-120之间
 	at com.exception_.CustomException.main(CustomException.java:6)
 ```
 
-
-
 ## throw与throws区别
 
 | 类型   | 意义                   | 位置       | 后面跟的东西 |
 | ------ | ---------------------- | ---------- | ------------ |
 | throws | 异常处理的一种方式     | 方法声明处 | 异常类型     |
 | throw  | 手动生成异常类型关键字 | 方法体中   | 异常对象     |
+
+# 常用类
+
+## Wrapper 类
+
+- 包装类：针对 8 种基本数据类型相应的引用类型
+- 包装类使得基本数据类型具有类的特点，可以调用类中的方法
+
+| 基本数据类型 | 包装类    |
+| ------------ | --------- |
+| boolean      | Boolean   |
+| char         | Character |
+| byte         | Byte      |
+| short        | Short     |
+| int          | Integer   |
+| long         | Long      |
+| float        | Float     |
+| double       | Double    |
+
+Byte, Short, Integer, Long, Float, Double 六个类继承于 Number 类。
+
+### 类关系
+
+```mermaid
+classDiagram
+direction BT
+
+class Serializable
+class Comparable
+class Number
+class Object
+
+class Byte
+class Short
+class Integer
+class Long
+class Float
+class Double
+
+Number --|> Object
+
+Byte --|> Number
+Byte ..|> Serializable
+Byte ..|> Comparable
+
+Short --|> Number
+Short ..|> Serializable
+Short ..|> Comparable
+
+Integer --|> Number
+Integer ..|> Serializable
+Integer ..|> Comparable
+
+Long --|> Number
+Long ..|> Serializable
+Long ..|> Comparable
+
+Float --|> Number
+Float ..|> Serializable
+Float ..|> Comparable
+
+Double --|> Number
+Double ..|> Serializable
+Double ..|> Comparable
+
+```
+
+```mermaid
+classDiagram
+direction BT
+
+class Serializable
+class Comparable
+class Object
+
+class Boolean
+class Character
+
+Boolean --|> Object
+Boolean ..|> Serializable
+Boolean ..|> Comparable
+
+Character --|> Object
+Character ..|> Serializable
+Character ..|> Comparable
+
+
+```
+
+### 包装类与基本数据类型的转换
+
+JDK5 之前需要手动装箱与拆箱。
+
+- 装箱：基本数据类型 --> 包装类
+- 拆箱：包装类 --> 基本数据类型
+
+#### 手动装箱与拆箱
+
+```java
+int n1 = 100;
+// 手动装箱
+Integer integer01 = new Integer(n1);
+Integer integer02 = Integer.valueOf(n1);
+
+// 手动拆箱
+int n2 = integer02.intValue();
+```
+
+- `new Integer()`  每次都会创建新的对象，无论数值是否存在，增加内存使用。
+
+- `Integer.valueOf()`  在-128 ~ 127 内使用缓存池，避免重复创建（只对缓存池内的对象生效），性能优。
+
+  ```java
+  public static Integer valueOf(int i) {
+          if (i >= IntegerCache.low && i <= IntegerCache.high)
+              return IntegerCache.cache[i + (-IntegerCache.low)];
+          return new Integer(i);
+      }
+  ```
+
+#### 自动装箱与拆箱
+
+```java
+int n1 = 100;
+// 自动装箱：底层使用 Integer.valueOf(n1)
+Integer integer02 = n1;
+
+// 自动拆箱：底层使用 integer03.intValue()
+int n3 = integer02;
+```
+
+### 包装类与 String 类型的转换
+
+```java
+Integer i = 2002;
+// f1
+String s1 = i + "";
+// f2
+String s2 = i.toString();
+// f3
+String s3 = String.valueOf(i);
+
+
+Integer i1 = Integer.parseInt(s1); // 调用自动装箱
+
+Integer i2 = new Integer(s1);
+```
+
+### 基本数据类型与包装数据类型并存
+
+只要有基本数据类型就按照基本数据类型
+
+```java
+Integer i1 = 1;
+int i2 = 1;
+System.put.println(i1 == i2); // true
+```
+
+## String 类
+
+```mermaid
+classDiagram
+direction BT
+
+class String
+class Serializable
+class Comparable
+class CharSequence
+class Object
+
+String --|> Object
+String ..|> Serializable
+String ..|> Comparable
+String ..|> CharSequence
+```
+
+
+
+### String 特性
+
+- 字符使用 Unicode 字符编码，一个字符占两个字节；
+- String 是 final 类，不能被继承；
+- String 的 private final char value[] 属性用于存放字符串内容，**内容不可修改**（重新赋值生成新的对象）；
+- 实现 Serializable 接口，String 类可以串行化（即可存储在文件，又可在**网络上传输**）；
+- 实现 Comparable 接口，String 对象可以相互比较；
+- 字符串常量相加，结果对象存放在常量池。两个字符串变量相加，结果对象存放在堆。
+
+### 常用构造器
+
+```java
+String();
+String(String original);
+String(char[] a);
+String(char a, int startIndex, int count);
+String(byte[] b);
+```
+
+### 创建方式
+
+#### 方式 1
+
+```java
+String s1 = "zxb";
+```
+
+先检查常量池是否存在此字符常量，如果有，直接指向。否则，先在常量池创建再指向。这种情况下的 String 对象指向的是常量池的地址空间。
+
+#### 方式 2
+
+```java
+String s2 = new String("zxb");
+```
+
+每次都在堆中强制创建一个新的 `String` 对象，字符串引用常量池中相同的字符串，如果池中没有，则新建。
+
+### 常用方法
+
+#### String intern(void)
+
+当调用 intern() 方法时，如果常量池中已经包含一个等于此 String 对象的字符串，则**返回常量池的字符串对象**。否则，先在常量池创建一个相同的字符串对象，再返回这个常量池对象。
+
+```java
+String s1 = "zxb";
+String s2 = new String("zxb");
+
+System.out.println(s1 == s1.intern()); // true
+System.out.println(s2 == s2.intern()); // false
+```
+
+#### boolean equals(String)
+
+判断两个字符串内容是否相等（区分大小写）。
+
+#### boolean equalsIgnoreCase(String)
+
+判断两个字符串内容是否相等（忽略大小写）。
+
+#### int length(void)
+
+返回字符串的长度。
+
+#### int indexOf(char)
+
+返回字符在字符串中第一次出现的索引（从 0 开始）。如果没有，返回 `-1`。
+
+#### int lastIndexOf(char)
+
+返回字符在字符串中最后一次出现的索引（从 0 开始）。如果没有，返回 `-1`。
+
+#### String substring(int begin, int end)
+
+返回截取后的子串，begin 至 end - 1。
+
+#### Char charAt(int)
+
+返回指定索引位置对应的字符，不能使用数组的方式调用 String 字符串的字符。
+
+#### String trim(void)
+
+去除字符串首尾的空格。
+
+#### String toUpperCase(void)
+
+返回大写化的字符串。
+
+#### String toLowerCase(void)
+
+返回小写化的字符串。
+
+#### String contact(String)
+
+返回拼接后的字符串。
+
+#### String replace(String s1. String s2)
+
+将所有的 s1 替换成 s2，并返回替换后的字符串。
+
+#### String[] split(String)
+
+分割字符串，结果返回字符串数组。
+
+#### char[] toCharArray(void)
+
+将字符串转换为字符数组，返回字符数组。
+
+#### int compareTo(String)
+
+按照字典序比较字符串大小。
+
+#### String format(String, String...)
+
+用占位符格式化字符串，类似 C 语言的 `scanf()`。
+
+```java
+String name = "zxb";
+int age = 22;
+double score = 99.5;
+
+String res = String.format("我的姓名是 %s，" +
+        "我的成绩是 %.2f," +
+        "我的年龄是 %d", name, score, age);
+
+System.out.println(res);
+```
+
+---
+
+更多的方法请查阅 Java 手册。
+
+## StringBuffer 类
+
+```mermaid
+classDiagram
+direction BT
+
+class StringBuffer
+class Object
+class AbstractStringBuilder
+class Serializable
+class CharSequence 
+class Appendable
+
+AbstractStringBuilder --|> Object
+StringBuffer --|> AbstractStringBuilder
+AbstractStringBuilder ..|> Appendable
+AbstractStringBuilder ..|> CharSequence 
+StringBuffer ..|> Serializable 
+```
+
+
+
+- StringBuffer 是可变的字符序列，是一个容器，是对 String 类的增强。
+- StringBuffer 父类 AbstractStringBuilder 属性有 `char[] value` ，不是 `final` 的，字符串存放在堆中。
+- StringBuffer 类是一个 final 类，不能被继承。
+
+### String VS StringBuffer
+
+|            | String                                           | StringBuffer                                     |
+| ---------- | ------------------------------------------------ | ------------------------------------------------ |
+| 保存的内容 | 字符串常量                                       | 字符串变量                                       |
+| 可修改性   | 值不可修改，每次更新创建新的对象，并更新引用地址 | 可以修改，不用创建新的对象，不用每次更新引用地址 |
+| 效率       | 占用额外内存空间，效率低                         | 效率高                                           |
+| 位置       | 存储在常量池                                     | 存储在堆                                         |
+| 复用率     | 高                                               | 低                                               |
+
+**结论**：在对字符串进行大量修改的场景下，Stirng 类会占用内存，导致效率降低，可根据线程模式选择 StringBuffer 或 StringBuilder。
+
+### 构造方法
+
+#### StringBuffer(void)
+
+构造一个空的 StringBuffer 对象，初始容量为 16 个字符。
+
+#### StringBuffer(int)
+
+构造一个空的 StringBuffer 对象，并且指定初始容量。
+
+#### StringBuffer(String)
+
+构造一个 StringBuffer 对象，内容初始化为字符串的内容。容量大小 = 字符串长度 + 16。
+
+#### StringBuffer(Sequence seq)
+
+...
+
+### StringBuffer2String
+
+```java
+StringBuffer sb1 = new StringBuffer("zxb");
+// f1 toString()
+String s1 = sb1.toString();
+// f2 构造器
+String s1 = new String(sb1);
+```
+
+### String2StringBuffer
+
+```java
+String s2 = "zxb";
+// f1
+StringBuffer sb2 = new StringBuffer(s2);
+// f2
+StringBuffer sb3 = new StringBuffer();
+sb3 = sb3.append(s2);
+```
+
+### 常用方法
+
+#### StringBuffer append(String)
+
+在 SB 对象后追加字符串，返回拼接之后的 SB 对象。
+
+#### StringBuffer delete(int, int)
+
+删除 begin 至 end - 1 索引位置的子串，返回新的 SB 对象。
+
+#### StringBuffer replace(int, int, String)
+
+使用字符串参数替换 begin 至 end - 1 索引位置的子串，返回新的 SB 对象。
+
+#### StringBuffer insert(int, String)
+
+在参数索引之前插入参数字符串。
+
+#### int indexOf(String)
+
+返回子串第一次出现的位置的索引。
+
+#### int length(void)
+
+返回 SB 对象字符串的长度。
+
+## StringBuilder 类
+
+```mermaid
+classDiagram
+direction BT
+
+class StringBuilder
+class Object
+class AbstractStringBuilder
+class Serializable
+class CharSequence 
+class Appendable
+
+AbstractStringBuilder --|> Object
+StringBuilder --|> AbstractStringBuilder
+AbstractStringBuilder ..|> Appendable
+AbstractStringBuilder ..|> CharSequence 
+StringBuilder ..|> Serializable 
+```
+
+
+
+- 是一个可变动的字符序列，提供与 StringBuffer 兼容的 API，但不保证同步；
+- 被设计用作 StringBuffer 的建议替换，用在字符串缓冲区被**单线程使用**；
+- 如果可能优先采用 StringBuilder，因为比 StringBuffer 要快；
+- 主要操作是 append 与 insert 方法，可以重载这些方法，以接受任意类型的数据。
+
+### StringBuffer VS StringBuilder
+
+|              | StringBuffer | StringBuilder            |
+| ------------ | ------------ | ------------------------ |
+| 线程场景     | 多线程       | 单线程                   |
+| 线程安全性   | 线程安全     | 非线程安全，未做互斥处理 |
+| 对象字符串   | 可变字符序列 | 可变字符序列             |
+| 对象字符位置 | 堆           | 堆                       |
+| 继承性       | final        | final                    |
+| 效率         | 较高         | 最高                     |
 
