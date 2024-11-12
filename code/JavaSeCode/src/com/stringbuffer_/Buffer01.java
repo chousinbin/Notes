@@ -8,6 +8,6 @@ package com.stringbuffer_;
  */
 public class Buffer01 {
     public static void main(String[] args) {
-        StringBuffer
+        //StringBuffer
     }
 }

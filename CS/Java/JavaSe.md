@@ -4454,10 +4454,18 @@ String ..|> CharSequence
 
 - 字符使用 Unicode 字符编码，一个字符占两个字节；
 - String 是 final 类，不能被继承；
-- String 的 private final char value[] 属性用于存放字符串内容，**内容不可修改**（重新赋值生成新的对象）；
+- String 的 private final char value[] 属性用于存放字符串内容，**~~数组元素可修改~~，数组引用不可修改**（重新赋值生成新的对象）；
 - 实现 Serializable 接口，String 类可以串行化（即可存储在文件，又可在**网络上传输**）；
 - 实现 Comparable 接口，String 对象可以相互比较；
-- 字符串常量相加，结果对象存放在常量池。两个字符串变量相加，结果对象存放在堆。
+
+### value 数组元素的可更改 与 String 对象的不可变性是否相悖？
+
+答案：不相悖！
+
+1. 不要被数组元素的可更改误会。首先，虽说数组元素可以更改，但 String 类的 value 数组是私有属性的，外部无法访问，无法直接修改。其次，String 没有提供任何一个成员方法以修改 value 数组的元素值。
+2. Stirng 类的 value 数组使用 final 修饰的真正作用是保证数组引用不可变。
+
+所以，通过私有化 value 数组防止修改数组元素与 final 限制 value 数组的应用被修改，实现 String 对象的不可变性。
 
 ### 常用构造器
 
@@ -4580,6 +4588,55 @@ System.out.println(res);
 ---
 
 更多的方法请查阅 Java 手册。
+
+### 字符串拼接 $\bigstar$
+
+字符串拼接的底层实现是借助 StringBuilder 对象一个一个 append 需要拼接的内容，最后将拼接的结果以 Stirng 对象的形式存储在**堆**中。
+
+字符串常量相加，结果对象存放在常量池。两个字符串变量相加，结果对象存放在堆。
+
+```java
+String "zxb"
+/ *
+	t1 这行代码会先创建一个 StringBuilder
+    调用 append 拼接字符串
+    把结果 Stirng 对象存储在堆中
+*/
+String t1 = "hello" + s1;
+String s2 = "hellozxb";
+```
+
+### Stirng 的 JVM 内存结构
+
+```java
+package com.string_;
+
+/**
+ * @Project: JavaSeCode
+ * @Author: SinbinZhou
+ * @Date: 2024/11/12 21:04
+ * @Description: 读程序说出结果，理解内存结构图 ！！！
+ */
+public class Test05 {
+    String str = new String("hsp");
+    final char[] ch = { 'j', 'a', 'v', 'a' };
+
+    public void change(String str, char ch[]) {
+        str = "java";
+        ch[0] = 'h';
+    }
+
+    public static void main(String[] args) {
+        Test05 ex = new Test05();
+        ex.change(ex.str, ex.ch);
+        System.out.print(ex.str + " and ");
+        System.out.println(ex.ch);
+    }
+}
+
+```
+
+补充图片...
 
 ## StringBuffer 类
 
@@ -4721,4 +4778,620 @@ StringBuilder ..|> Serializable
 | 对象字符位置 | 堆           | 堆                       |
 | 继承性       | final        | final                    |
 | 效率         | 较高         | 最高                     |
+
+## Math 类
+
+提供数学相关的方法，都是静态方法。
+
+### 常用方法
+
+#### int abs(int)
+
+绝对值
+
+#### double sqrt(double)
+
+开平方
+
+#### double pow(double, double)
+
+幂函数
+
+#### double ceil(double)
+
+向上取整
+
+#### double floor(double)
+
+向下取整
+
+#### long round(double)
+
+四舍五入
+
+#### double random(void)
+
+返回 $ [0, 1)$ 之间的随机小数
+
+```java
+// 求出 [a, b] 之间的随机整数
+int res = (int)(a + Math.random() * (b - a) + 1);
+```
+
+## Arrays 类
+
+`Arrays` 类是 Java 标准库中非常实用的一个工具类。它的静态方法可以极大简化对数组的操作，提高代码的可读性和效率。
+
+### String toString(Object[])
+
+将数组转换成字符串
+
+```java
+int[] a = {1, 2, 3};
+
+System.out.println(Arrays.toString(a));
+
+// [1, 2, 3]
+```
+
+### void sort(Object[])
+
+默认升序排序
+
+```java
+public static void main(String[] args) {
+    Integer[] a = {1, 3, 2, 5, 4};
+
+    System.out.println(Arrays.toString(a));
+
+    Arrays.sort(a);
+
+    System.out.println(Arrays.toString(a));
+
+    // 降序
+    Arrays.sort(a, new Comparator() {
+        @Override
+        public int compare(Object o1, Object o2) {
+            return (int)o2 - (int)o1;
+        }
+    });
+
+    System.out.println(Arrays.toString(a));
+}
+```
+
+#### 使用接口 + 自定义排序
+
+```java
+package com.arrays_;
+
+import java.util.Arrays;
+import java.util.Comparator;
+
+/**
+ * @Project: JavaSeCode
+ * @Author: SinbinZhou
+ * @Date: 2024/11/12 12:01
+ * @Description: 用接口实现自定义排序
+ */
+public class DiySortAndComparator {
+    public static void main(String[] args) {
+        int[] a = {3, 1, 2, 5, 4};
+
+        bubbleSort(a, new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                int i1 = (Integer)o1;
+                int i2 = (Integer)o2;
+//                return i1 - i2;
+                return i2 - i1;
+            }
+        });
+
+        System.out.println(Arrays.toString(a));
+    }
+
+    public static void bubbleSort(int[] a, Comparator c) {
+        int temp = 0;
+        for (int i = 0; i < a.length - 1; i++) {
+            for (int j = i + 1; j < a.length; j++) {
+                if (c.compare(a[i], a[j]) > 0) {
+                    temp = a[i];
+                    a[i] = a[j];
+                    a[j] = temp;
+                }
+            }
+        }
+    }
+}
+```
+
+#### 使用接口
+
+```java
+package com.arrays_;
+
+import java.util.Arrays;
+import java.util.Comparator;
+
+/**
+ * @Project: JavaSeCode
+ * @Author: SinbinZhou
+ * @Date: 2024/11/12 13:23
+ * @Description: 对 Book 类内的 4 个对象按照价格进行排序
+ */
+public class Test02 {
+    public static void main(String[] args) {
+        Book[] books = new Book[4];
+        books[0] = new Book("红楼梦", 100);
+        books[1] = new Book("金瓶梅", 90);
+        books[2] = new Book("青年文摘", 5);
+        books[3] = new Book("Java从入门到放弃",300);
+
+        Arrays.sort(books, new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                Book b1 = (Book) o1;
+                Book b2 = (Book) o2;
+
+                double res = b2.getPrice() - b1.getPrice();
+                // 适应返回类型
+                if (res > 0) return 1;
+                else if (res < 0) return -1;
+                else return 0;
+            }
+        });
+
+        System.out.println(Arrays.toString(books));
+    }
+}
+
+class Book {
+    String name;
+    double price;
+
+    Book(){}
+    Book(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "name='" + name + '\'' +
+                ", price=" + price +
+                '}';
+    }
+}
+```
+
+### int binarySearch(Object[])
+
+二分查找，返回索引下标，不存在返回 `-(low + 1)`。前提数组有序。
+
+### Object[] copyOf(Object[], int)
+
+拷贝指定个数（从索引 0 开始计数）的数组元素到新的数组。当个数大于原数组长度时，在后面填充 `null`。底层调用的是` System.arraycopy()` 。
+
+### void fill(Object[], Object)
+
+把数组所有元素替换成指定参数。
+
+### boolean equals(Object[], Object[])
+
+比较数组。
+
+### List\<T> asList(\<T>)
+
+将数组转换为 List，实际是数组的视图，不可对列表进行删除和插入，只能修改值。修改值之后同步修改原数组。 
+
+```java
+public class AsList {
+    public static void main(String[] args) {
+        Integer[] a = {1, 2, 3, 4, 5};
+        List al = Arrays.asList(a);
+        al.set(0, 99);
+        System.out.println(Arrays.toString(a)); // [99, 2, 3, 4, 5]
+    }
+}
+```
+
+## System 类
+
+### long currentTimeMillis(void)
+
+用于获取自 1970 年 1 月 1 日（Unix 纪元）以来的毫秒数。常用于测量程序的运行时间或作为时间戳。
+
+### void exit(int)
+
+终止当前运行的 Java 虚拟机（JVM），并带一个状态码。通常 `0` 表示正常退出，非零值表示异常退出。
+
+### void gc(void)
+
+建议 JVM 进行垃圾回收，但不保证立即执行。垃圾回收会尝试清理无用的对象，释放内存。
+
+### void arraycopy(Object, int, Object, int, int)
+
+```
+* @param      src      the source array.
+* @param      srcPos   starting position in the source array.
+* @param      dest     the destination array.
+* @param      destPos  starting position in the destination data.
+* @param      length   the number of array elements to be copied.
+```
+
+高效地复制数组内容，从源数组复制到目标数组。比手动遍历复制更快，是系统级的操作。 
+
+## 大数类
+
+当某个场景的数据大小溢出 `long` 或 `double` 时可以使用 `BigInteger` 或 `BigDicimal`。
+
+### BigInteger
+
+#### 构造方法
+
+```java
+void BigInteger(String)
+```
+
+#### 成员方法
+
+| 方法名      | 作用 | 返回类型   | 参数类型   |
+| ----------- | ---- | ---------- | ---------- |
+| add()       | 加   | BigInteger | BigInteger |
+| substract() | 减   | BigInteger | BigInteger |
+| multiply()  | 乘   | BigInteger | BigInteger |
+| divide()    | 除   | BigInteger | BigInteger |
+
+当 `BigInteger` 与一个基本数据类型进行混合运算时，需要先把基本数据类型转换为 `BigInteger`。
+
+### BigDicimal
+
+构造方法和成员方法基本与 `BigInteger` 一致。需要注意除法可能除不尽，导致抛出异常。
+
+除不尽解决方法：在除法方法内加上精度参数。
+
+```java
+BigDecimal bigDecimal01 = new BigDecimal("123123123123123123123123.11");
+BigDecimal bigDecimal02 = new BigDecimal("3");
+BigDecimal res = bigDecimal01.divide(bigDecimal02, BigDecimal.ROUND_CEILING);
+System.out.println(res);
+```
+
+## 日期类
+
+> java.util.date
+
+```mermaid
+classDiagram
+direction BT
+
+class Date
+class Cloneable
+class Comparable
+class Serializable
+class Object
+
+Date ..|> Cloneable
+Date ..|> Comparable
+Date ..|> Serializable
+Date --|> Object
+```
+
+### Date (Version 1)
+
+#### 构造方法
+
+```java
+// 无参构造方法默认为系统当前时间
+Date date = new Date();
+System.out.println(date);
+// Tue Nov 12 14:53:00 CST 2024
+```
+
+#### 格式化
+
+SimpleDateFormat 类可以对 Date 转换成指定格式的 String。
+
+```java
+Date date = new Date();
+System.out.println(date);
+
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 hh:mm:ss E");
+String res = sdf.format(date);
+System.out.println(res); // 2024年11月12日 02:57:34 星期二
+```
+
+SimpleDateFormat 类可以对 String 转换成指定格式的 Date。
+
+```java
+String s = "2024年11月12日 02:57:34 星期二";
+
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 hh:mm:ss E");
+Date d2 = sdf.parse(s);
+System.out.println(d2); // Tue Nov 12 02:57:34 CST 2024
+```
+
+#### 时间戳 与 Date
+
+```java
+public class Instant_ {
+    public static void main(String[] args) {
+        // 获取时间戳
+        Instant instant = Instant.now();
+        System.out.println(instant);
+        // 时间戳 2 Date
+        Date date = Date.from(instant);
+        System.out.println(date);
+        // Date 2 时间戳
+        Instant instant1 = date.toInstant();
+        System.out.println(instant1);
+    }
+}
+```
+
+### Calendar (Version 2)
+
+```mermaid
+classDiagram
+direction BT
+
+class calendar
+class Cloneable
+class Comparable
+class Serializable
+class Object
+
+calendar ..|> Cloneable
+calendar ..|> Comparable
+calendar ..|> Serializable
+calendar --|> Object
+```
+
+- calendar 是一个抽象类。构造方法私有，通过getInstance() 获取对象实例；
+- 没有对应的格式化类，需要程序员自己组合输出格式；
+
+```java
+public class Calendar_ {
+    public static void main(String[] args) {
+        Calendar c = Calendar.getInstance();
+
+        System.out.println(c);
+
+        System.out.println(c.get(Calendar.DATE));
+        System.out.println(c.get(Calendar.YEAR) + 1); // 月默认从 0 开始
+        System.out.println(c.get(Calendar.MONTH));
+        System.out.println(c.get(Calendar.DAY_OF_MONTH));
+        System.out.println(c.get(Calendar.HOUR));
+        System.out.println(c.get(Calendar.MINUTE));
+        System.out.println(c.get(Calendar.SECOND));
+    }
+}
+
+```
+
+### LocalDateTime (Version 3)
+
+#### 前两代缺点
+
+- 偏移性：Date 年份从1970 年开始，而 Calendar 月份是从 0 开始；
+- 格式化：Date 能格式化，Calendar 不能格式化；
+- 安全性：两个都不是线程安全的，且都不能处理闰秒（每隔 2 天，多 1 秒）；
+- 可变性：日期和时间应该是不可变的；
+
+从 Java8 开始引入了第三代日期类，提供三个类：
+
+1. LocalDate 包含年月日
+2. LocalTime 包含时分秒
+3. LocalDateTime 包含日期和时间
+
+#### 获取日期时间
+
+返回当前日期时间。
+
+```java
+public class Version3 {
+    public static void main(String[] args) {
+        LocalDateTime ldt = LocalDateTime.now();
+        System.out.println(ldt);
+
+        System.out.println(ldt.getYear());
+        System.out.println(ldt.getMonthValue());
+        System.out.println(ldt.getDayOfMonth());
+        System.out.println(ldt.getHour());
+        System.out.println(ldt.getMinute());
+        System.out.println(ldt.getSecond());
+        System.out.println(ldt.getNano());
+        System.out.println(ldt.getDayOfWeek());
+    }
+}
+```
+
+#### 格式化
+
+使用 DateTimeFormatter 类进行格式化。占位符参阅官方手册。
+
+```java
+DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH小时mm分钟ss秒");
+String res = dtf.format(ldt);
+System.out.println(res);
+```
+
+#### 更多方法
+
+- 判断闰年；
+- plus 加值；
+
+更多的阅读源码或手册...
+
+# 集合
+
+> 集合：多种数据放在一起。
+
+## 数组过度到集合
+
+### 数组缺点
+
+1. 长度事先指定，后期不能更改；
+2. 保存的元素必须为同一类型；
+3. 数组元素的增加和删除比较麻烦。
+
+### 集合优点
+
+1. **动态保存**任意多个对象；
+2. 提供一系列操作对象的方法。
+
+## 集合框架体系
+
+```mermaid
+classDiagram
+direction TB
+    Collection <|-- List
+    Collection <|-- Queue
+    Collection <|-- Set
+    Collection <|-- Deque
+    List <|-- ArrayList
+    List <|-- LinkedList
+    List <|-- Vector
+    Vector <|-- Stack
+    Queue <|-- PriorityQueue
+    Queue <|-- LinkedList
+    Deque <|-- ArrayDeque
+    Deque <|-- LinkedList
+    Set <|-- HashSet
+    Set <|-- SortedSet
+    Set <|-- EnumSet
+    Set <|-- LinkedHashSet
+    SortedSet <|-- TreeSet
+    
+    class Collection {
+        <<interface>>
+    }
+    
+    class List {
+        <<interface>>
+    }
+
+    class Queue {
+        <<interface>>
+    }
+
+    class Set {
+        <<interface>>
+    }
+
+    class Deque {
+        <<interface>>
+    }
+
+    class ArrayList {
+    }
+
+    class LinkedList {
+    }
+
+    class Vector {
+    }
+
+    class Stack {
+    }
+
+    class PriorityQueue {
+    }
+
+    class ArrayDeque {
+    }
+
+    class HashSet {
+    }
+
+    class SortedSet {
+        <<interface>>
+    }
+
+    class EnumSet {
+    }
+
+    class LinkedHashSet {
+    }
+
+    class TreeSet {
+    }
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
