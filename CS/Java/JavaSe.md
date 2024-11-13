@@ -5337,9 +5337,87 @@ direction TB
 
 ```
 
+## Iterator 接口
+
+集合的迭代器，Collection 实现了 Iterator 迭代器接口。Iterator 接口提供方法，供遍历集合使用。
+
+### 常用方法
+
+迭代器初始指向集合首元素的之前，所以第一个 next() 是集合的第 1 个元素。
+
+| 方法名  | 返回类型 | 参数类型 | 作用                                         |
+| ------- | -------- | -------- | -------------------------------------------- |
+| hasNext | boolean  | void     | 判断迭代器下一位置是否还有元素               |
+| next    | \<E>     | void     | 1. 将迭代器后移<br />2. 返回移动后位置的元素 |
+
+注意：在调用 next 之前，先调用 hasNext 判断是否有元素，防止抛出异常。
+
+## Collection 接口
+
+### 常用方法
+
+| 方法名      | 返回类型     | 参数类型   | 作用                                   |
+| ----------- | ------------ | ---------- | -------------------------------------- |
+| size        | int          | void       | 返回集合中元素个数                     |
+| isEmpty     | boolean      | void       | 返回集合是否为空                       |
+| contains    | boolean      | Object     | 判断制定元素是否存在                   |
+| add         | boolean      | Object     | 添加单个元素                           |
+| remove      | boolean      | Object     | 删除指定某个元素（如有多个，只删一次） |
+| clear       | void         | void       | 清空集合元素                           |
+| addAll      | boolean      | Collection | 添加多个元素                           |
+| containsAll | boolean      | Collection | 判断是否包含多个元素                   |
+| removeAll   | boolean      | Collection | 删除多个元素                           |
+| iterator    | Iterator\<E> | void       | 返回一个迭代器                         |
+
+### 遍历方法
+
+#### Iterator 迭代器
+
+```java
+public class Collection02 {
+    @SuppressWarnings({"all"})
+    public static void main(String[] args) {
+        ArrayList arrayList = new ArrayList();
+        arrayList.add("zxb");
+        arrayList.add(22);
+        arrayList.add(true);
+
+        Iterator iterator = arrayList.iterator();
+        // 迭代器 while 遍历快捷关键词 itit
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+
+        // 迭代器遍历完不会归零，再次遍历需要重新申请迭代器对象
+        iterator = arrayList.iterator();
+        while (iterator.hasNext()) {
+            Object next =  iterator.next();
+            System.out.println(next);
+        }
+    }
+}
+```
+
+#### 增强 for 循环
+
+增强 for 循环是简化版的 Iterator，底层调用 Iterator ，适用于遍历集合或数组。
+
+```java
+ArrayList arrayList = new ArrayList();
+arrayList.add("zxb");
+arrayList.add(22);
+arrayList.add(true);
+
+for (Object obj : arrayList) {
+    System.out.println(obj);
+}
+```
 
 
 
+
+
+#### 
 
 
 
