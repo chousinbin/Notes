@@ -5263,23 +5263,26 @@ System.out.println(res);
 ```mermaid
 classDiagram
 direction TB
-    Collection <|-- List
-    Collection <|-- Queue
-    Collection <|-- Set
-    Collection <|-- Deque
-    List <|-- ArrayList
-    List <|-- LinkedList
-    List <|-- Vector
+	Iterator <|.. Collection
+	
+    Collection <|.. List
+    Collection <|.. Set
+
+    List <|.. ArrayList
+    List <|.. LinkedList
+    List <|.. Vector
+    
     Vector <|-- Stack
-    Queue <|-- PriorityQueue
-    Queue <|-- LinkedList
-    Deque <|-- ArrayDeque
-    Deque <|-- LinkedList
+    
     Set <|-- HashSet
     Set <|-- SortedSet
     Set <|-- EnumSet
     Set <|-- LinkedHashSet
     SortedSet <|-- TreeSet
+    
+    class Iterator {
+    	<<interface>>
+    }
     
     class Collection {
         <<interface>>
@@ -5289,15 +5292,7 @@ direction TB
         <<interface>>
     }
 
-    class Queue {
-        <<interface>>
-    }
-
     class Set {
-        <<interface>>
-    }
-
-    class Deque {
         <<interface>>
     }
 
@@ -5311,12 +5306,6 @@ direction TB
     }
 
     class Stack {
-    }
-
-    class PriorityQueue {
-    }
-
-    class ArrayDeque {
     }
 
     class HashSet {
@@ -5369,7 +5358,7 @@ direction TB
 | removeAll   | boolean      | Collection | 删除多个元素                           |
 | iterator    | Iterator\<E> | void       | 返回一个迭代器                         |
 
-### 遍历方法
+### 遍历方式
 
 #### Iterator 迭代器
 
@@ -5413,43 +5402,176 @@ for (Object obj : arrayList) {
 }
 ```
 
+## List 接口
 
+### 特点
 
+- 元素有序：指添加和取出的顺序一致；
+- 元素可重复；
+- 元素可索引：每个元素都有对应的顺序索引（从 0 开始），**底层是数组**；
+- List 容器中的元素都对应一个整数型序号记录所在容器的位置，可以根据序号存取容器中的元素；
 
+### 常用方法
 
-#### 
+| 方法名      | 返回类型 | 参数类型        | 作用                                             |
+| ----------- | -------- | --------------- | ------------------------------------------------ |
+| add         | void     | int, Object     | 在索引位置开始插入                               |
+| add         | void     | Object          | 在最后插入                                       |
+| addAll      | void     | int, Collection | 在索引位置开始插入集合                           |
+| addAll      | void     | Collection      | 在最后插入集合                                   |
+| get         | Object   | int             | 返回指定索引位置的元素                           |
+| indexOf     | int      | Object          | 返回指定元素在集合中的首位置                     |
+| lastIndexOf | int      | Object          | 返回指定元素在集合中的尾位置                     |
+| remove      | boolean  | int             | 返回指定索引位置的元素，返回被删除的元素         |
+| set         | \<E>     | int, Object     | 将指定索引位置的元素替换成新的，返回被替换的元素 |
+| subList     | List     | int, int        | 返回指定索引区间 $[l, r)$ 的子集合               |
 
+### 遍历方式
 
+1. Iterator 迭代器；
+2. 增强版 for 循环；
+3. 普通版 for 循环 + get() 方法。
 
+### 排序
 
+```java
+public static void sort(List list) {
+    for (int i = 0; i < list.size() - 1; i ++) {
+        for (int j = i + 1; j < list.size(); j ++) {
+            Book book1 = (Book)list.get(i);
+            Book book2 = (Book)list.get(j);
 
+            if (book1.getPrice() > book2.getPrice()) {
+                list.set(i, book2);
+                list.set(j, book1);
+            }
+        }
+    }
+}
+```
 
+## ArrayList 类
 
+###  特性
 
+- 元素可以是任何数据类型，包括空值，可以重复元素；
+- ArrayList 底层实现是对象数组；
+- ArrayList $\approx$ Vector，除了 ArrayList 是线程不安全的（效率较高），不适合多线程场景。
 
+### 底层机制
 
+- 底层实现是 Object 类型的数组 `elementData`，被 transient 修饰，表示该属性不会被**序列化**；
 
+### 扩容机制
 
+- 使用无参构造器创建对象时，初始容量为 0，**初次添加元素时扩容为 10**；
+- 使用有参构造器创建对象时，初始容量为参数值；
+- 无论如何构造，每当容量达到上限后扩容为原来的 1.5 倍（除了无参构造的对象首次扩容） 。
 
+```java
+private void grow(int minCapacity) {
+    // overflow-conscious code
+    int oldCapacity = elementData.length;
+    int newCapacity = oldCapacity + (oldCapacity >> 1);
+    if (newCapacity - minCapacity < 0)
+        newCapacity = minCapacity;
+    if (newCapacity - MAX_ARRAY_SIZE > 0)
+        newCapacity = hugeCapacity(minCapacity);
+    // minCapacity is usually close to size, so this is a win:
+    elementData = Arrays.copyOf(elementData, newCapacity);
+}
+```
 
+## Vector 类
 
+### 特性
 
+1. 底层是对象数组；
+2. 线程安全：Vector 类的方法带有 `synchronized` ，是线程同步的，适合**多线程**；
+3. 因为同步机制的原因，导致 Vector 比 ArrayList 效率稍低。
 
+### 扩容机制
 
+- 如果构造是无参的，初始容量为10，每当容量达到上限后扩容为原来的 2 倍；
+- 如果构造是有参的，初始容量为参数值，每当容量达到上限后扩容为原来的 2 倍。
 
+```java
+private void grow(int minCapacity) {
+    // overflow-conscious code
+    int oldCapacity = elementData.length;
+    int newCapacity = oldCapacity + ((capacityIncrement > 0) ?
+                                     capacityIncrement : oldCapacity);
+    if (newCapacity - minCapacity < 0)
+        newCapacity = minCapacity;
+    if (newCapacity - MAX_ARRAY_SIZE > 0)
+        newCapacity = hugeCapacity(minCapacity);
+    elementData = Arrays.copyOf(elementData, newCapacity);
+}
+```
 
+## LinkedList 类
 
+### 特性
 
+- LinkedList 底层实现了双向链表和双端队列；
+- 可以添加任意元素，包括重复和 null；
+- 线程不安全，没有同步处理。
 
+### 底层机制
 
+- 底层维护的是一个双向链表，适合**添加和删除**密集型操作，不需要考虑扩容问题，效率较高；
+- LinkedList 维护两个属性 first 和 last，分别指向双向链表的头尾结点；
+- 每个结点又是一个内部类 Node 的对象，其中包含 prev, next, item 三个属性。
 
+### 字段
 
+| 字段名 | 属性 |
+| ------ | ---- |
+| size   | int  |
+| first  | Node |
+| end    | Node |
 
+### 常用方法
 
+| 方法名 | 返回类型 | 参数类型    | 作用                       |
+| ------ | -------- | ----------- | -------------------------- |
+| add    | boolean  | E           | 尾插法添加元素             |
+| remove | Object   | int         | 删除指定索引的元素         |
+| remove | Object   | Object      | 删除指定对象的元素         |
+| remove | Object   | void        | 删除头结点                 |
+| set    | void     | int, Object | 修改指定索引位置的元素的值 |
+| get    | Object   | int         | 返回指定索引位置的值       |
 
+### 遍历方式
 
+实现了 List 接口，可以使用三种方式遍历。
 
+### ArrayList VS LinkedList
 
+|            | 底层结构 | 增删效率 | 改查效率 |
+| ---------- | -------- | -------- | -------- |
+| ArrayList  | 可变数组 | 较低     | 较高     |
+| LinkedList | 双向链表 | 较高     | 较低     |
+
+## Set 接口
+
+### 特性
+
+- 无序，添加与取出的顺序不一致，但取出顺序总是一致，没有索引；
+- 不允许重复元素。
+
+### 遍历方法
+
+1. 迭代器；
+2. 增强版 for 循环。
+
+### 常用方法
+
+| 方法名   | 返回类型 | 参数类型 | 作用             |
+| -------- | -------- | -------- | ---------------- |
+| add      | boolean  | E        | 添加元素         |
+| remove   | boolean  | Object   | 删除元素         |
+| contains | boolean  | Object   | 查询元素是否存在 |
 
 
 
