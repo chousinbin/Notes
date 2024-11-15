@@ -5573,19 +5573,44 @@ private void grow(int minCapacity) {
 | remove   | boolean  | Object   | 删除元素         |
 | contains | boolean  | Object   | 查询元素是否存在 |
 
+## HashSet
 
+### 特性
 
+- 不能重复对象 或 元素；
+- 可以有 null 值；
+- 无序；
 
+### 底层机制
 
+- 底层由 HashMap 实现；
+- HashMap 底层是数组 + 链表 + 红黑树；数组和链表组成邻接表；
+- 通过调用 hash() 方法计算元素的哈希值得到所在数组的索引值；
+  - 如果索引位置无结点，直接添加当前元素；
+  - 如果索引位置有结点，调用 equals() 判断是否有重复元素。
+    - 如果有重复元素，放弃添加；
+    - 如果无重复元素，加到末尾。
+- 在 Java8 中，当一条链表长度 $\geq$ 8 ，并且 table 数组的大小 $\geq$ 64 时，就会进化为红黑树；
+- 当链表长度到达阈值，数组未达到时，会先按 2 倍扩容数组；
 
+```java
+public class hashSet_ {
+    public static void main(String[] args) {
+        HashSet objects = new HashSet();
 
+        objects.add(null);
+        objects.add(null);
+        objects.add(new Dog("tom"));
+        objects.add(new Dog("tom"));
 
-
-
-
-
-
-
+        System.out.println(objects); // [null, Dog{name='tom'}, Dog{name='tom'}]
+        
+        objects.add(new String("zxb"));
+        objects.add(new String("zxb"));
+        System.out.println(objects); // [null, Dog{name='tom'}, Dog{name='tom'}, zxb]
+    }
+}
+```
 
 
 
