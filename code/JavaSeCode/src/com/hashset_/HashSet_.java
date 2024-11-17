@@ -18,6 +18,12 @@ public class HashSet_ {
         objects.add(new Dog("tom"));
         System.out.println(objects);
 
+        /*
+            根据源码判重的条件
+            if (p.hash == hash &&
+                ((k = p.key) == key || (key != null && key.equals(k))))
+            虽然是两个不同的 String 对象，但是内容相同，所以不会重复添加
+         */
         objects.add(new String("zxb"));
         objects.add(new String("zxb"));
         System.out.println(objects);
@@ -35,5 +41,10 @@ class Dog {
         return "Dog{" +
                 "name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }

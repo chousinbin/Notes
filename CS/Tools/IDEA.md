@@ -54,3 +54,8 @@ file -> setting -> editor -> live templates
 
 1. 修改设置 setting -> Build, Execution, Deployment -> Debugger -> Data Viewer -> Java
 2. 取消勾选 `Enable alternative view for Collections classes`
+
+### 调试代码变量区显示数组的 null
+
+1. 修改设置 setting -> Build, Execution, Deployment -> Debugger -> Data Viewer -> Java
+2. 取消勾选 `Hide null elements in arrays and collections`

@@ -5272,13 +5272,11 @@ direction TB
     List <|.. LinkedList
     List <|.. Vector
     
-    Vector <|-- Stack
-    
-    Set <|-- HashSet
-    Set <|-- SortedSet
-    Set <|-- EnumSet
-    Set <|-- LinkedHashSet
-    SortedSet <|-- TreeSet
+    Set <|.. HashSet
+    Set <|.. LinkedHashSet
+    Set <|.. TreeSet
+	
+	HashSet <|-- LinkedHashSet
     
     class Iterator {
     	<<interface>>
@@ -5295,34 +5293,17 @@ direction TB
     class Set {
         <<interface>>
     }
-
-    class ArrayList {
+    
+    class Map {
+    	<<interface>>
     }
-
-    class LinkedList {
-    }
-
-    class Vector {
-    }
-
-    class Stack {
-    }
-
-    class HashSet {
-    }
-
-    class SortedSet {
-        <<interface>>
-    }
-
-    class EnumSet {
-    }
-
-    class LinkedHashSet {
-    }
-
-    class TreeSet {
-    }
+    
+    Map <|.. HashTable
+    Map <|.. HashMap 
+    Map <|.. TreeMap
+    
+    HashTable <|-- Properties
+    HashMap <|-- LinkedHashMap
 
 ```
 
@@ -5573,7 +5554,7 @@ private void grow(int minCapacity) {
 | remove   | boolean  | Object   | 删除元素         |
 | contains | boolean  | Object   | 查询元素是否存在 |
 
-## HashSet
+## HashSet 类
 
 ### 特性
 
@@ -5587,11 +5568,12 @@ private void grow(int minCapacity) {
 - HashMap 底层是数组 + 链表 + 红黑树；数组和链表组成邻接表；
 - 通过调用 hash() 方法计算元素的哈希值得到所在数组的索引值；
   - 如果索引位置无结点，直接添加当前元素；
-  - 如果索引位置有结点，调用 equals() 判断是否有重复元素。
+  - 如果索引位置有结点，判断是否有重复元素（**判重标准**：对象相同或对象内容相同）。
     - 如果有重复元素，放弃添加；
     - 如果无重复元素，加到末尾。
-- 在 Java8 中，当一条链表长度 $\geq$ 8 ，并且 table 数组的大小 $\geq$ 64 时，就会进化为红黑树；
+- 在 Java8 中，当一条链表长度 $>$ 8 ，并且 table 数组的大小 $\geq$ 64 时，就会进化为红黑树；
 - 当链表长度到达阈值，数组未达到时，会先按 2 倍扩容数组；
+- table 初始容量为 16，阈值系数为 0.75，达到阈值执行 2 倍扩容；
 
 ```java
 public class hashSet_ {
@@ -5611,6 +5593,310 @@ public class hashSet_ {
     }
 }
 ```
+
+#### 创建 HashSet 对象过程
+
+创建 HashSet 对象实际上是在 HashSet 对象内创建一个 HashMap 对象。
+
+#### 首次添加元素过程
+
+1. HashSet 对象调用add() 方法，返回布尔值表示添加结果；
+
+   ```java
+   objects.add(null);
+   ```
+
+2. HashSet.add() 调用 map.put(E, PRESENT) 方法；
+
+   ```java
+   public boolean add(E e) {
+       return map.put(e, PRESENT)==null;
+   }
+   ```
+
+3. HashMap.put(K, V) 方法调用 HashMap.putVal() 方法；
+
+   ```java
+   public V put(K key, V value) {
+       return putVal(hash(key), key, value, false, true);
+   }
+   ```
+
+4. hash() 方法调用 hashCode() 方法，通过算法得到优化的哈希值；
+
+   ```java
+   static final int hash(Object key) {
+       int h;
+       return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+   }
+   ```
+
+5. HashMap.putValue() 执行元素添加逻辑；
+
+   ```java
+   final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+                      boolean evict) {
+       // 临时变量
+       Node<K,V>[] tab; Node<K,V> p; int n, i;
+       // 如果 数组为空 或 长度为 0，执行首次扩容
+       if ((tab = table) == null || (n = tab.length) == 0)
+           n = (tab = resize()).length;
+       // 如果索引位置没有对象，直接将元素的 Node 对象加入指定索引
+       if ((p = tab[i = (n - 1) & hash]) == null)
+           tab[i] = newNode(hash, key, value, null);
+       else {
+           Node<K,V> e; K k;
+           // 判重条件：首先，索引相同；其次，对象相同或调 equals() 内容相同。
+           // equals() 方法可以根据自己重写规则判定
+           if (p.hash == hash &&
+               ((k = p.key) == key || (key != null && key.equals(k))))
+               e = p;
+           // 判断索引首结点 p 是不是红黑树，如果是的话按照树比较
+           else if (p instanceof TreeNode)
+               e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
+           else { // 循环判断索引所在链表剩余结点
+               for (int binCount = 0; ; ++binCount) {
+                   if ((e = p.next) == null) {
+                       p.next = newNode(hash, key, value, null);
+                       // 添加后，判断链表长度大于 8，达到转化为红黑树
+                       if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                           treeifyBin(tab, hash);
+                       break;
+                   }
+                   if (e.hash == hash &&
+                       ((k = e.key) == key || (key != null && key.equals(k))))
+                       break;
+                   p = e;
+               }
+           }
+           // 索引所在链表存在相同元素的结点
+           if (e != null) { // existing mapping for key
+               V oldValue = e.value;
+               if (!onlyIfAbsent || oldValue == null)
+                   e.value = value;
+               afterNodeAccess(e);
+               // 返回重复元素的值
+               return oldValue;
+           }
+       }
+       ++modCount;
+       // 添加结点后，数组容量如果达到阈值，执行再次扩容（2 倍）
+       if (++size > threshold)
+           resize();
+       afterNodeInsertion(evict);
+       // 添加成功返回 null
+       return null;
+   }
+   ```
+
+#### 数组扩容机制
+
+- 首次扩容为 16，阈值系数为 0.75；
+- 所有链表的结点个数之和 $>$ 阈值，数组扩容为原来的 2 倍，不是数组占用数达到阈值才扩容；
+- 当单个链表元素大于 8 ，数组容量 < 64 时，除法数组扩容；
+
+```java
+final Node<K,V>[] resize() {
+   Node<K,V>[] oldTab = table;
+   int oldCap = (oldTab == null) ? 0 : oldTab.length;
+   int oldThr = threshold;
+   int newCap, newThr = 0;
+   if (oldCap > 0) {
+       if (oldCap >= MAXIMUM_CAPACITY) {
+           threshold = Integer.MAX_VALUE;
+           return oldTab;
+       }
+       else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY &&
+                oldCap >= DEFAULT_INITIAL_CAPACITY)
+           newThr = oldThr << 1; // double threshold
+   }
+   else if (oldThr > 0) // initial capacity was placed in threshold
+       newCap = oldThr;
+   else {               // zero initial threshold signifies using defaults
+       newCap = DEFAULT_INITIAL_CAPACITY; // 16
+       newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY); // * 0.75
+   }
+   if (newThr == 0) {
+       float ft = (float)newCap * loadFactor;
+       newThr = (newCap < MAXIMUM_CAPACITY && ft < (float)MAXIMUM_CAPACITY ?
+                 (int)ft : Integer.MAX_VALUE);
+   }
+   threshold = newThr;
+   @SuppressWarnings({"rawtypes","unchecked"})
+       Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];
+   table = newTab;
+   if (oldTab != null) {
+       for (int j = 0; j < oldCap; ++j) {
+           Node<K,V> e;
+           if ((e = oldTab[j]) != null) {
+               oldTab[j] = null;
+               if (e.next == null)
+                   newTab[e.hash & (newCap - 1)] = e;
+               else if (e instanceof TreeNode)
+                   ((TreeNode<K,V>)e).split(this, newTab, j, oldCap);
+               else { // preserve order
+                   Node<K,V> loHead = null, loTail = null;
+                   Node<K,V> hiHead = null, hiTail = null;
+                   Node<K,V> next;
+                   do {
+                       next = e.next;
+                       if ((e.hash & oldCap) == 0) {
+                           if (loTail == null)
+                               loHead = e;
+                           else
+                               loTail.next = e;
+                           loTail = e;
+                       }
+                       else {
+                           if (hiTail == null)
+                               hiHead = e;
+                           else
+                               hiTail.next = e;
+                           hiTail = e;
+                       }
+                   } while ((e = next) != null);
+                   if (loTail != null) {
+                       loTail.next = null;
+                       newTab[j] = loHead;
+                   }
+                   if (hiTail != null) {
+                       hiTail.next = null;
+                       newTab[j + oldCap] = hiHead;
+                   }
+               }
+           }
+       }
+   }
+   return newTab;
+}
+```
+
+## LinkedHashSet 类
+
+### 特性
+
+- LinkedHashSet 是 HashSet 的子类；
+- LinkedHashSet 底层是 LinkedHashMap 类，该类的底层实现是数组 + 双链表;
+- LinkedHashSet 不允许添加重复元素；
+- LinkedHashSet 元素有序。
+
+### 底层实现
+
+- LinkedHashSet 继承了 HashSet，底层实现是LinkedHashMap；
+- HashMap\$Node 的 table 数组存储的类型为 LinkedHashMap\$Entry
+- LinkedHashSet 的添加元素还是靠 HashMap 类的 putValue 实现，只不过多了调用 LinkedHashMap 的 afterNodeAccess 方法实现将所有结点按照添加顺序串联到双向链表中；
+- 双链表结点还是和 HashSet 一样根据 hashCode() 确定索引位置；
+- 还是根据 equals 判重。
+
+## Map 接口
+
+### 特性
+
+- Map 与 Collection 并列存在，用于保存具有映射关系的数据 <Object Key, Object Value>
+- 存取无序；
+- Key 不能重复，Value 可以重复；当添加的键值对的 Key重复时，更新 Value；
+- 键值对是唯一的，每个 Key 都有独一无二的 Value。
+
+## HashMap 类
+
+### 底层机制
+
+- HashMap 内有一个静态内部类 Node，包含 hash, key, value, next 属性；
+
+- 键值对放在 Node 对象内；
+
+- 为了方便遍历，HashMap 有一 个Map.Entry\<K, V\> 类型的集合 EntrySet；而 entrySet 集合对象实际存储的是 HaspMap\$Node 类型的对象，因为 HaspMap\$Node 实现了 Map.Entry 接口；
+
+- Entry 集合中的HashMap\$Node **引用**了 HashMap\$Node 对象（经过调试发现两者对象地址一样）。
+
+- 除此之外，类似的 HashMap 中还有内部类 KeySet 和 Values 集合，以分别方便遍历 Key 和 Value。
+
+  ![HashMap$Node (1)](https://cdn.jsdelivr.net/gh/chousinbin/Image/202411162142668.jpg)
+
+### 常用方法
+
+| 方法名      | 返回类型 | 参数类型 | 作用                  |
+| ----------- | -------- | -------- | --------------------- |
+| put         | boolean  | K, V     | 添加键值对            |
+| containsKey | boolean  | K        | 查找键是否存在        |
+| remove      | V        | K        | 根据 key 删除映射关系 |
+| get         | V        | K        | 根据 key 获取 value   |
+| size        | int      | void     | 返回键值对个数        |
+| isEmpty     | boolean  | void     | 判断是否为空          |
+| clear       | void     | void     | 清除所有键值对        |
+
+### 遍历方式
+
+#### KeySet 集合
+
+1. 用 keySet 取出所有 Key 然后用增强 for 循环 + get() 获取所有 Key 对应的 Value；
+2. 迭代器得到 Key，再用 get() 获取 Value；
+
+#### Values 集合
+
+1. 用 Values 取出所有 value 然后增强 for 循环输出；
+2. 用 Values 取出所有 value 然后迭代器；
+
+#### EntrySet 集合
+
+1. 用 EntrySet 取出所有键值对，用增强 for 循环；
+2. 用 EntrySet 取出所有键值对，用迭代器遍历。
+
+#### 演示代码
+
+```java
+public class Map03 {
+    public static void main(String[] args) {
+        HashMap hashMap = new HashMap();
+        hashMap.put(1, "zxb");
+        hashMap.put(2, "zxb");
+        hashMap.put(3, "zxb");
+        // fun 1
+        Set keySet = hashMap.keySet();
+        for (Object key : keySet) {
+            Object value = hashMap.get(key);
+            System.out.println(key + " " + value);
+        }
+        // fun 2
+        Iterator iterator1 = keySet.iterator();
+        while (iterator1.hasNext()) {
+            Object key =  iterator1.next();
+            System.out.println(key + " " + hashMap.get(key));
+        }
+        // fun 3
+        Collection values = hashMap.values();
+        for (Object value : values) {
+            System.out.println(value);
+        }
+        // fun 4
+        Iterator iterator2 = values.iterator();
+        while (iterator2.hasNext()) {
+            Object value =  iterator2.next();
+            System.out.println(value);
+        }
+        // fun 5
+        Set entrySet = hashMap.entrySet();
+        for (Object obj : entrySet) {
+            Map.Entry entry = (Map.Entry)obj;
+            System.out.println(entry.getKey() + " " + entry.getValue());
+        }
+        // fun 6
+        Iterator iterator3 = entrySet.iterator();
+        while (iterator3.hasNext()) {
+            Object obj =  iterator3.next();
+            System.out.println(obj.getClass());
+            Map.Entry entry = (Map.Entry)obj;
+            System.out.println(entry.getKey() + " " + entry.getValue());
+        }
+    }
+}
+```
+
+
+
+
+
+
 
 
 
