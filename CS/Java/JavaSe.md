@@ -5693,7 +5693,7 @@ public class hashSet_ {
 
 - 首次扩容为 16，阈值系数为 0.75；
 - 所有链表的结点个数之和 $>$ 阈值，数组扩容为原来的 2 倍，不是数组占用数达到阈值才扩容；
-- 当单个链表元素大于 8 ，数组容量 < 64 时，除法数组扩容；
+- 当单个链表元素大于 8 ，数组容量 < 64 时，触发数组扩容；
 
 ```java
 final Node<K,V>[] resize() {
@@ -5788,6 +5788,12 @@ final Node<K,V>[] resize() {
 - 双链表结点还是和 HashSet 一样根据 hashCode() 确定索引位置；
 - 还是根据 equals 判重。
 
+## TreeSet 类
+
+TreeSet 能实现排序。
+
+
+
 ## Map 接口
 
 ### 特性
@@ -5796,6 +5802,7 @@ final Node<K,V>[] resize() {
 - 存取无序；
 - Key 不能重复，Value 可以重复；当添加的键值对的 Key重复时，更新 Value；
 - 键值对是唯一的，每个 Key 都有独一无二的 Value。
+- 线程不安全，未做同步。
 
 ## HashMap 类
 
@@ -5807,11 +5814,11 @@ final Node<K,V>[] resize() {
 
 - 为了方便遍历，HashMap 有一 个Map.Entry\<K, V\> 类型的集合 EntrySet；而 entrySet 集合对象实际存储的是 HaspMap\$Node 类型的对象，因为 HaspMap\$Node 实现了 Map.Entry 接口；
 
-- Entry 集合中的HashMap\$Node **引用**了 HashMap\$Node 对象（经过调试发现两者对象地址一样）。
+- SetEntry 集合中的 HashMap\$Node **引用**了 HashMap\$Node 对象（经过调试发现两者对象地址一样）。
 
 - 除此之外，类似的 HashMap 中还有内部类 KeySet 和 Values 集合，以分别方便遍历 Key 和 Value。
 
-  ![HashMap$Node (1)](https://cdn.jsdelivr.net/gh/chousinbin/Image/202411162142668.jpg)
+![HashMap$Node.drawio](https://cdn.jsdelivr.net/gh/chousinbin/Image/202411182218771.png)
 
 ### 常用方法
 
@@ -5892,17 +5899,52 @@ public class Map03 {
 }
 ```
 
+### 扩容机制
 
+> 与 HashSet 一样
 
+## Hashtable 类
 
+### 特性
 
+- 存放键值对
+- 键和值都不能为 null
+- 使用方法与 HashMap 基本一样
+- 线程安全
+- 当 key 重复时，替换 value
 
+### 扩容机制
 
+- 底层有一个数组 `Hashtable$Entry[]` 初始容量为 $11$，初始阈值为 $8 = 11 * 0.75$。
+- 当达到阈值后，触发扩容，扩容为原来的 $2$ 倍再加 $1$。
 
+### 底层机制
 
+- 底层数据结构是数组 + 链表
+- 新元素的添加采用头插法
 
+### HashMap VS Hashtable
 
+|              | HaspMap | Hashtable |
+| ------------ | ------- | --------- |
+| 起源版本     | 1.2     | 1.0       |
+| 线程安全     | 不安全  | 安全      |
+| 效率         | 高      | 较低      |
+| 允许 null 值 | 允许    | 不允许    |
 
+## Properties 类
 
+### 特性
 
+- Properties 类继承于 Hashtable 类，实现了 Map 接口。
+- 使用键值对存储数据，值不能为 null。
+- 主要用于从 `*.properties` 文件中，加载数据到 Properties 类对象，并进行读取和修改。
+- `*.properties` 文件通常作为配置文件。
 
+### 底层机制
+
+- 调用 Hashtable 的 put 方法进行添加元素。
+
+## 集合选型
+
+![集合选型](https://cdn.jsdelivr.net/gh/chousinbin/Image/202411202156651.png)
