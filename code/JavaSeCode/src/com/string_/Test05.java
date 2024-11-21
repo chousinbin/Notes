@@ -4,7 +4,8 @@ package com.string_;
  * @Project: JavaSeCode
  * @Author: SinbinZhou
  * @Date: 2024/11/12 21:04
- * @Description: 读程序说出结果，理解内存结构图 ！！！
+ * @Description: P470 读程序说出结果，理解内存结构图 ！！！
+ * https://cdn.jsdelivr.net/gh/chousinbin/Image/202411211405503.png
  */
 public class Test05 {
     String str = new String("hsp");

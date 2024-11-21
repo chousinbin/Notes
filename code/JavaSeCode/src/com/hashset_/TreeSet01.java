@@ -2,7 +2,7 @@ package com.hashset_;
 
 import java.util.Comparator;
 import java.util.TreeSet;
-
+@SuppressWarnings({"all"})
 /**
  * @Project: JavaSeCode
  * @Author: SinbinZhou

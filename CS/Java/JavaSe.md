@@ -4273,7 +4273,7 @@ Exception in thread "main" com.exception_.AgeException: 输入应在18-120之间
 | throws | 异常处理的一种方式     | 方法声明处 | 异常类型     |
 | throw  | 手动生成异常类型关键字 | 方法体中   | 异常对象     |
 
-# 常用类
+# Util 类
 
 ## Wrapper 类
 
@@ -4633,10 +4633,9 @@ public class Test05 {
         System.out.println(ex.ch);
     }
 }
-
 ```
 
-补充图片...
+![String.drawio](https://cdn.jsdelivr.net/gh/chousinbin/Image/202411211405503.png)
 
 ## StringBuffer 类
 
@@ -5241,6 +5240,23 @@ System.out.println(res);
 
 更多的阅读源码或手册...
 
+## Cellections 类
+
+Collections 是一个操作 Set、List 和 Map 等集合的工具类。提供了一系列静态方法对几何元素进行排序、查询和修改等操作。
+
+| 方法名     | 返回类型 | 参数类型                     | 作用                                      |
+| ---------- | -------- | ---------------------------- | ----------------------------------------- |
+| reverse    | void     | List                         | 翻转 List 中的元素                        |
+| shuffle    | void     | List                         | 随机排序 List 中的元素                    |
+| sort       | void     | List                         | 升序                                      |
+| sort       | void     | List, Comparator             | 自定义排序                                |
+| swap       | void     | List, int, int               | 交换指定位置的两个元素                    |
+| max / min  | Object   | Collection                   | 根据元素自然排序，返回集合中最大 / 小元素 |
+| max / min  | Object   | Collection                   | 根据元素定义排序，返回集合中最大 / 小元素 |
+| frequency  | int      | Collection, Object           | 返回集合中指定元素的出现次数              |
+| copy       | void     | List dest, List src          | 将 src 拷贝到 dest                        |
+| replaceAll | boolean  | List, Object old, Object new | 将 List 中所有 old 替换为 new             |
+
 # 集合
 
 > 集合：多种数据放在一起。
@@ -5490,6 +5506,16 @@ private void grow(int minCapacity) {
 }
 ```
 
+### Vector VS ArrayList
+
+|          | ArrayList                                                   | Vector                                                       |
+| -------- | ----------------------------------------------------------- | ------------------------------------------------------------ |
+| 底层结构 | 可变数组                                                    | 可变数组                                                     |
+| 起源版本 | JDK1.2                                                      | JDK1.0                                                       |
+| 线程安全 | 不安全                                                      | 安全                                                         |
+| 效率     | 效率高                                                      | 效率低                                                       |
+| 扩容倍数 | 有参构造器 1.5 倍。无参构造器，第一次扩容为 10，满后 1.5 倍 | 有参构造器 2 倍。无参构造器，第一次扩容为 10，满后 2 倍扩容。 |
+
 ## LinkedList 类
 
 ### 特性
@@ -5568,9 +5594,9 @@ private void grow(int minCapacity) {
 - HashMap 底层是数组 + 链表 + 红黑树；数组和链表组成邻接表；
 - 通过调用 hash() 方法计算元素的哈希值得到所在数组的索引值；
   - 如果索引位置无结点，直接添加当前元素；
-  - 如果索引位置有结点，判断是否有重复元素（**判重标准**：对象相同或对象内容相同）。
+  - 如果索引位置有结点，判断是否有重复元素（**判重标准**：对象相同或对象内容 equals() 相同）。
     - 如果有重复元素，放弃添加；
-    - 如果无重复元素，加到末尾。
+    - 如果无重复元素，加到末尾。 
 - 在 Java8 中，当一条链表长度 $>$ 8 ，并且 table 数组的大小 $\geq$ 64 时，就会进化为红黑树；
 - 当链表长度到达阈值，数组未达到时，会先按 2 倍扩容数组；
 - table 初始容量为 16，阈值系数为 0.75，达到阈值执行 2 倍扩容；
@@ -5790,9 +5816,18 @@ final Node<K,V>[] resize() {
 
 ## TreeSet 类
 
-TreeSet 能实现排序。
+### 特性
 
+- TreeSet 在构造的时候传入一个比较器 Comparator，指定排序规则，**实现排序**。
+- 使用无参构造器时，仍然无序。
+- TreeSet 底层是 TreeMap，TreeMap 是二分查找树。
+- 不允许 null 值。
 
+### 添加过程
+
+1. 判断树是否为空。
+2. 从根节点开始遍历树，从树上找到最接近待加入的结点。
+3. 判断待加入结点属于左还是右。
 
 ## Map 接口
 
@@ -5945,6 +5980,145 @@ public class Map03 {
 
 - 调用 Hashtable 的 put 方法进行添加元素。
 
+## TreeMap 类
+
+### 特性
+
+- 存储键值对，键或值都不允许 null 值。
+- key 唯一，重复添加更新 value，并返回 oldValue。
+- 可以通过构造时传入 Comparator 类实现排序，是 TreeSet 的底层实现。
+
+### 判重机制
+
+- 如果该对象是 Comparator 构造的，根据实现的 compare() 方法返回值进行判断，如果为 0，说明重复。
+- 如果该对象是无参构造的，根据添加的对象实现的 Compareable 接口的 compareTo() 去重。
+
 ## 集合选型
 
 ![集合选型](https://cdn.jsdelivr.net/gh/chousinbin/Image/202411202156651.png)
+
+老韩强调：阅读源码的能力！
+
+# 泛型
+
+## 引入
+
+> 目前有如下需求：
+>
+> 1. 用 ArrayList 对象存储三个 Dog 类对象，Dog 类包含 name 和 age 字段；
+> 2. 遍历 ArrayList 对象，输出每个 Dog 类对象的 name 和 age；
+
+使用传统方法有如下缺点：
+
+1. 不能对加入集合 ArrayList 中的元素的数据类型进行约束（不安全）；
+2. 遍历对象时需要进行类型转换，步骤繁琐；
+
+引入泛型**约束集合存放元素的数据类型**能完美解决上面的缺点。
+
+```java
+ArrayList arrayList = new ArrayList();
+arrayList.add(new Dog("wangwang", 15));
+arrayList.add(new Dog("laixi", 5));
+arrayList.add(new Dog("laifu", 5));
+for (Object o : arrayList) {
+    Dog dog = (Dog) o;
+    System.out.println(dog.getName() + " " + dog.getAge());
+}
+
+/*
+    1. 程序员可能不小心添加一只猫到 ArrayList 中，可以使用泛型对数组的对象进行限制
+    2. 编历时需要额外的向下转型
+        -->引出泛型
+ */
+
+ArrayList<Dog> dogs = new ArrayList<>();
+dogs.add(new Dog("wangwang", 15));
+dogs.add(new Dog("laixi", 5));
+dogs.add(new Dog("laifu", 5));
+for (Dog dog : dogs) {
+    System.out.println(dog.getName() + " " + dog.getAge());
+}
+```
+
+## 介绍
+
+- 泛型又称参数化类型，是 JDK5.0 出现的新特性，解决数据类型的安全问题。
+- 在类的声明和实例化时需要指定具体数据类型，在编译期间就确定数据类型。
+- 泛型保证，如果程序在编译时无警告，那么运行时也不会产生 ClassCastException 异常。
+- 使用泛型可以使得代码更简洁和健壮，提高代码复用性。
+- 泛型的作用：可以在类声明时，通过一个标识表示类中某个**属性**、**返回值**和**参数**的类型。
+
+## 语法
+
+### 泛型的声明
+
+```java
+interface interfaceName<T> {}
+
+class className<K, V> {}
+```
+
+1. T、K 和 V 不代表值，代表类型。
+2. 泛型可以使用任意的字母，常用 T (Type) 。
+
+### 泛型的实例化
+
+```java
+ArrayList<Dog> dogs = new ArrayList<>();
+
+Iterator<Customer> iterator = customers.iterator();
+```
+
+### 使用细节
+
+- 泛型只能是**引用类型**，不能是基本数据类型。
+
+- 在指定泛型具体类型后，可以传入**本类型和其子类型**。
+
+- 泛型可以简写，可只在变量声明时（等号左）指定泛型，对象实例化时（等号右）可省略。
+
+  ```java
+  HashMap<String, Student> hashMap = new HashMap<>();
+  ```
+
+- 如果不指定泛型类型，则默认为 Object。
+
+  ```java
+  HashMap hashMap = new HashMap();
+  HashMap<Object, Object> hashMap = new HashMap<Object, Object>();
+  ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
