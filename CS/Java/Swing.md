@@ -1,10 +1,8 @@
-### 布局layout
+### 布局 Layout
 
 #### Border Layout
 
 属性是组件会充满整个页面, 所以边界布局一般用于根布局, 把面板充满, 面板里面再嵌套其他的布局其他的小组件
-
-
 
 #### Flow Layout
 
@@ -14,8 +12,6 @@
 new FlowLayout(FlowLayout.LEFT, 80, 80);
 对齐方式, 行间距, 列间距
 ```
-
-
 
 #### Spring Layout
 
