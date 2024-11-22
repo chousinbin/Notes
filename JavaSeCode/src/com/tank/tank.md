@@ -1,0 +1,41 @@
+# 坦克大战
+
+## Java 绘图体系
+
+### Java 坐标系
+
+- 坐标原点位于左上角，以像素为单位。
+- 第一个坐标是 X 坐标，表示水平方向距离坐标原点 X 个像素。
+- 第二个坐标是 Y 坐标，表示垂直方向距离坐标原点 Y 个像素。
+
+像素：显示器分辨率是由像素度量的，像素是分辨率的度量单位。分辨率只能表示像素点总数，不能表示图像的物理长度或者显示器的清晰度。这些概念依显示器尺寸和分辨率而异。
+
+### 绘图方法
+
+Component 类提供了两个绘图方法：
+
+1. paint(Graphics g) 绘制组件的外观。
+2. repaint() 刷新组件的外观。
+
+### paint(Graphice g) 方法
+
+#### 被调用的时机
+
+1. 当组件第一次在屏幕显示的时候，会自动调用。
+2. 窗口最小化或最大化。
+3. 窗口的大小发生变化。
+4. repaint 方法被调用。
+
+### Graphics 类
+
+提供了一系列绘制方法。
+
+| 方法名     | 返回类型 | 参数类型                                                  | 作用     |
+| ---------- | -------- | --------------------------------------------------------- | -------- |
+| drawLine   | void     | int x1, int y1, int x2, int y2                            | 直线     |
+| drawRect   | void     |                                                           | 矩形     |
+| drawOval   | void     |                                                           | 椭圆     |
+| fillRect   | void     |                                                           | 填充矩形 |
+| drawImage  | boolean  | Image, int x, int y, int width, int height, ImageObserver | 图片     |
+| drawString | void     | String, int x, int y                                      | 字符串   |
+
