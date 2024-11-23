@@ -6129,13 +6129,126 @@ class 类名 / 接口名 <T, ...> {
 2. `<? extends A>` 表示支持 A 类以及 A 类的子类（规定了泛型的上限）。
 3. `<? super A>` 表示支持 A 类以及 A 类的父类**们**（规定了泛型的下限）。
 
+# 线程
 
+## 基本概念
 
+- 程序：为完成某种任务，编写的指令的集合。
+- 进程：运行中的程序是动态过程。有自身产生、存在和消亡的过程。
+- 线程：线程是进程创建的一个实体，一个进程可以拥有多个线程。
+- 单线程：同一个时刻，只能执行一个线程。
+- 多线程：同一个时刻，可以执行多个线程。
+- 并发：同一时刻，多个任务交替执行，产生 “同时执行多个任务” 的错觉。（单核 CPU）
+- 并行：同一时刻，多个任务同时执行。（多核 CPU）
+- 并发混合并行：任务数 $>$ 进程数。
+- 超线程：通常为 2 个逻辑线程共享 1 个物理核心，能够优化并发，让线程交替执行更高效。
 
+## 线程使用
 
+在 Java 中，线程使用有两种方法：
 
+1. 继承 Thread 类，重写 run 方法。
+2. 实现 Runnable 接口，重写 run 方法。
 
+```mermaid
+classDiagram
+direction BT
 
+class FunctionalInterface {
+	<<interface>>
+}
+
+class Runnable {
+	<<interface>>
+}
+
+class Thread
+
+Thread ..|> Runnable
+Runnable --|> FunctionalInterface
+```
+
+## Thread 类
+
+### 线程创建
+
+1. 调用 start 方法，启动一个新线程
+
+  ```java 
+  public synchronized void start() {
+  	start0();
+  }
+  ```
+
+2. 底层是 start0 本地方法，由 JVM 调用，底层由 C/C++ 实现
+
+  ```java
+  private native void start0();
+  ```
+
+注：调用 start0 方法之后，线程变成了可运行状态，线程不一定会立即执行。执行时机取决于 CPU 调度。
+
+### 代码演示
+
+```java
+public class Thread01{
+    public static void main(String[] args) {
+        Cat cat1 = new Cat();
+        cat1.start();
+    }
+}
+
+class Cat extends Thread {
+    @Override
+    public void run() {
+        int times = 80;
+        while (-- times >= 0) {
+            System.out.println("Hello~" + Thread.currentThread().getName());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+}
+```
+
+## Runnable 接口
+
+> Java 是单继承的，某个类已经继承别的类，如果还需要使用多线程，那么就只能实现接口了。
+
+### 代理模式
+
+实现 Runnable 类的对象在创建线程时不能直接调用 start() 方法，需要把源对象作为参数创建一个 Thread 类的对象，再执行 start() 方法。
+
+### 代码演示
+
+```java
+public class Thread02 {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+        // 静态代理模式
+        Thread thread = new Thread(dog);
+        thread.start();
+    }
+}
+
+class Dog implements Runnable {
+    @Override
+    public void run() {
+        int cnt = 0;
+        while (cnt ++ < 6) {
+            System.out.println("汪~" + Thread.currentThread().getName());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+}
+```
 
 
 
