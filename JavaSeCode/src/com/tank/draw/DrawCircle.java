@@ -10,14 +10,14 @@ import java.awt.*;
  * @Description:
  */
 public class DrawCircle extends JFrame{
-    private MyPanel mp;
+    private com.tank.game.MyPanel mp;
 
     public static void main(String[] args) {
         new DrawCircle();
     }
 
     private DrawCircle() {
-        mp = new MyPanel();
+        mp = new com.tank.game.MyPanel();
         this.add(mp);
         this.setSize(1920, 1080);
         this.setVisible(true);

@@ -39,3 +39,16 @@ Component 类提供了两个绘图方法：
 | drawImage  | boolean  | Image, int x, int y, int width, int height, ImageObserver | 图片     |
 | drawString | void     | String, int x, int y                                      | 字符串   |
 
+## Java 事件处理机制
+
+Java事件处理采用**委派事件模型**。当事件发生时，产生事件的对象会将该“信息”传递给“事件监听者”处理。这里的“信息”实际上是 **`java.awt.event`** 事件类库中的某个类创建的对象，称为“事件对象”。
+
+事件源：产生事件的对象，按钮或窗口等。
+
+事件：承载事件源改变时的对象，比如键盘、鼠标、窗口事件等。
+
+ ```mermaid
+ graph LR
+ 事件源 --事件 --- 事件监听者
+ ```
+

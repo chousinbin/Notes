@@ -26,21 +26,29 @@ Component 类提供了两个绘图方法：
 3. 窗口的大小发生变化。
 4. repaint 方法被调用。
 
-
-
 ### Graphics 类
 
 提供了一系列绘制方法。
 
-| 方法名   | 返回类型 | 参数类型                       | 作用     |
-| -------- | -------- | ------------------------------ | -------- |
-| drawLine |          | int x1, int y1, int x2, int y2 | 直线     |
-| drawRect |          |                                | 矩形     |
-| drawOval |          |                                | 椭圆     |
-| fillRect |          |                                | 填充矩形 |
-|          |          |                                |          |
-|          |          |                                |          |
-|          |          |                                |          |
-|          |          |                                |          |
-|          |          |                                |          |
+| 方法名     | 返回类型 | 参数类型                                                  | 作用     |
+| ---------- | -------- | --------------------------------------------------------- | -------- |
+| drawLine   | void     | int x1, int y1, int x2, int y2                            | 直线     |
+| drawRect   | void     |                                                           | 矩形     |
+| drawOval   | void     |                                                           | 椭圆     |
+| fillRect   | void     |                                                           | 填充矩形 |
+| drawImage  | boolean  | Image, int x, int y, int width, int height, ImageObserver | 图片     |
+| drawString | void     | String, int x, int y                                      | 字符串   |
+
+## Java 事件处理机制
+
+Java事件处理采用**委派事件模型**。当事件发生时，产生事件的对象会将该“信息”传递给“事件监听者”处理。这里的“信息”实际上是 **`java.awt.event`** 事件类库中的某个类创建的对象，称为“事件对象”。
+
+事件源：产生事件的对象，按钮或窗口等。
+
+事件：承载事件源改变时的对象，比如键盘、鼠标、窗口事件等。
+
+ ```mermaid
+ graph LR
+ 事件源 --事件 --- 事件监听者
+ ```
 
