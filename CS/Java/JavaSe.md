@@ -6216,7 +6216,10 @@ class Cat extends Thread {
 
 ## Runnable 接口
 
-> Java 是单继承的，某个类已经继承别的类，如果还需要使用多线程，那么就只能实现接口了。
+建议使用实现 Runnable 的方式：
+
+- Java 是单继承的，某个类已经继承别的类，如果还需要使用多线程，那么就只能实现接口了。
+- 可以多个线程共享一个资源。
 
 ### 代理模式
 
@@ -6250,15 +6253,112 @@ class Dog implements Runnable {
 }
 ```
 
+## 线程终止
 
+线程终止是通过在主方法修改变量，破坏 run 方法执行，通知线程终止。
 
+```java
+public class ThreadExit {
+    public static void main(String[] args) {
+        T t = new T();
+        Thread thread = new Thread(t);
+        thread.start();
+        
+        try {
+            Thread.sleep(10 * 1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        
+        // 通知线程结束
+        t.setLoop(false);
+    }
+}
 
+class T implements Runnable {
+    private boolean loop = true;
+    @Override
+    public void run() {
+        while (loop) {
+            System.out.println("hi");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
+    public void setLoop(boolean loop) {
+        this.loop = loop;
+    }
+}
+```
 
+## 线程方法
 
+### 基本方法
 
+| 方法名      | 返回类型 | 参数列表 | 作用                          |
+| ----------- | -------- | -------- | ----------------------------- |
+| setName     | void     | String   | 设置线程名称                  |
+| getName     | String   | void     | 返回线程名称                  |
+| start       | void     | void     | 启动线程                      |
+| run         | void     | void     | 执行 run 方法，不会启动新线程 |
+| setPriority | int      | void     | 设置线程优先级                |
+| getPriority | void     | int      | 返回线程优先级                |
+| sleep       | void     | long     | 休眠线程（单位毫秒）          |
+| interrupt   | void     | void     | 中断线程，常中断休眠          |
 
+### 线程插队
 
+| 方法名 | 返回类型 | 参数列表 | 作用                                                    |
+| ------ | -------- | -------- | ------------------------------------------------------- |
+| yield  | void     | void     | 让出 CPU 让其他线程执行，礼让时间随机，不一定礼让成功。 |
+| join   | void     | void     | 线程插队                                                |
 
+### 守护线程
 
+- 守护线程：当所有用户线程结束时，守护线程自动结束。
+- 用户线程：也称为工作线程，当线程执行完或被通知以结束线程。
 
+| 方法名    | 返回类型 | 参数列表 | 作用         |
+| --------- | -------- | -------- | ------------ |
+| setDaemon | void     | boolean  | 设置守护线程 |
+
+## 线程声明周期
+
+<img src="https://cdn.jsdelivr.net/gh/chousinbin/Image/202411241729440.png" alt="线程" style="zoom: 15%;" />
+
+### 线程状态
+
+![1615964642254_线程状态转换图.png](https://cdn.jsdelivr.net/gh/chousinbin/Image/202411242006114.png)
+
+1. NEW：尚未启动的线程处于此状态。
+2. RUNNABLE：在 Java 虚拟机中执行的线程处于此状态。RUNNABLE 中有 Ready 和 Running 两种状态。
+3. BLOCKED：被阻塞等待监视器锁定的线程处于此状态。
+4. WAITING：正在等待另一个线程执行特定动作的线程处于此状态
+5. TIMED WAITING：正在等待另一个线程执行动作达到指定等待时间的线程处于此状
+6. TERMINATED：已退出的线程处于此状态。
+
+## 线程同步
+
+> 前面的三个窗口售票问题中，结果有概率出现超售。
+>
+> 当多个线程同时查询剩余票数（临界资源）之后立即发生线程切换，每个线程都认为剩余票是自己的，导致超售。
+
+- **同步**：任务按顺序执行，当前任务未完成时，后续任务必须等待。
+- **异步**：任务无需等待前一任务完成即可执行，任务之间独立。
+
+在多线程编程中，一些敏感数据不允许被多个线程同时访问。通过使用同步访问技术，实现在任意时刻，最多有一个线程访问数据，保证数据完整性。
+
+### 使用同步
+
+在 Java 中可以使用关键字 `Synchronized` 修饰代码块或方法实现同步：
+
+1. 同步代码块
+2. 同步方法
+
+### 为什么不能锁定 run 方法？
+
+把 `synchronized` 锁在实例方法 run 上，锁住的是当前对象，不是整个类的访问，临界资源不属于对象。在实现 Runnable 的线程对象中，因为共享一个线程对象，所以不会有问题。但在继承 Thread 类的线程对象中，如果同步 run 方法，等价于锁住的是单个对象，但由于有多个线程对象，所以同步失效。
