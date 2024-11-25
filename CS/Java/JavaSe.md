@@ -6352,13 +6352,152 @@ class T implements Runnable {
 
 在多线程编程中，一些敏感数据不允许被多个线程同时访问。通过使用同步访问技术，实现在任意时刻，最多有一个线程访问数据，保证数据完整性。
 
-### 使用同步
-
-在 Java 中可以使用关键字 `Synchronized` 修饰代码块或方法实现同步：
+在 Java 中可以使用关键字 `synchronized` 修饰代码块或方法实现同步：
 
 1. 同步代码块
 2. 同步方法
 
-### 为什么不能锁定 run 方法？
+## 互斥锁
 
-把 `synchronized` 锁在实例方法 run 上，锁住的是当前对象，不是整个类的访问，临界资源不属于对象。在实现 Runnable 的线程对象中，因为共享一个线程对象，所以不会有问题。但在继承 Thread 类的线程对象中，如果同步 run 方法，等价于锁住的是单个对象，但由于有多个线程对象，所以同步失效。
+### 基本概念
+
+- Java 中引入了对象互斥锁，每个对象都有一个称为 互斥锁 的标记。
+- 使用 `synchronized`关键字激活互斥锁，保证任一时刻，只能有一个线程访问该对象。
+- 同步的局限性：导致程序的执行效率降低。
+
+### 锁的范围
+
+- 锁在同步方法（非静态）上，锁住的默认是当前 `this` 对象，也可以是其他任意对象。但一定是同一个对象。这样多个线程会去同一个对象那里获取锁，来实现同步和互斥。
+- 锁在同步方法（静态的）上，锁住的是当前类 `Class.class`。
+- 锁在代码块上，锁住的是代码块对象。
+
+### 使用注意
+
+- 当实现 `Runnable` 接口时，多个线程默认调用同一对象，所以当默认锁住 `this` 对象时，不影响互斥。
+- 但继承 `Thread` 类时，每个线程对应一个独立的对象，此时不能锁住默认 `this` 对象，应该把锁放在多个对象共享的静态对象上，才不影响互斥。
+
+### 上锁步骤
+
+1. 分析需要上锁的代码。
+2. 选择同步代码块或同步方法。
+3. 确保多个线程的锁在同一个对象上。
+
+### 演示代码
+
+```java
+class Sell1 implements Runnable {
+    private static int ticketNum = 100;
+    @Override
+    public void run() {
+        while (true) {
+            synchronized (this) {
+                if (ticketNum == 0) {
+                    break;
+                }
+                --ticketNum;
+                System.out.println(Thread.currentThread().getName() + "售票" +
+                        "剩余" + ticketNum);
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        System.out.println("已售完");
+    }
+}
+
+class Sell2 extends Thread {
+    private static int ticketNum = 100;
+    // 锁在静态对象上，确保多个线程对象共享一个锁对象
+    private static final Object lock = new Object(); // 锁对象
+    @Override
+    public void run() {
+        while (true) {
+            synchronized (lock) {
+                if (ticketNum == 0) {
+                    break;
+                }
+                --ticketNum;
+                System.out.println(Thread.currentThread().getName() + "售票" +
+                        "剩余" + ticketNum);
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        System.out.println("已售完");
+    }
+}
+```
+
+## 线程死锁
+
+### 死锁条件
+
+1. 资源互斥：某一资源同一时刻只能由一个线程占用。
+2. 持有等待：一个线程已经持有了至少一个资源，在等待其他资源，但不释放已经持有的资源。
+3. 不可抢占：已经被某个线程占有的资源不能被其他线程强行抢占，只能由占有它的线程主动释放。
+4. 循环等待：存在一个线程等待链，链中的每个线程都在等待下一个线程持有的资源。
+
+### 死锁演示
+
+```java
+public class DeadLock {
+    public static void main(String[] args) {
+        Thread thread1 = new Thread(new Lock(true));
+        Thread thread2 = new Thread(new Lock(false));
+
+        thread1.start();
+        thread2.start();
+    }
+}
+
+class Lock implements Runnable {
+    private boolean flag;
+    private static final Object o1 = new Object();
+    private static final Object o2 = new Object();
+
+    public Lock(boolean flag) {
+        this.flag = flag;
+    }
+
+    @Override
+    public void run() {
+        if (flag) {
+            synchronized (o1) {
+                System.out.println(Thread.currentThread().getName() +
+                        " 进入 1");
+                synchronized (o2) {
+                    System.out.println(Thread.currentThread().getName() +
+                            " 进入 2");
+                }
+            }
+        } else {
+            synchronized (o2) {
+                System.out.println(Thread.currentThread().getName() +
+                        " 进入 3");
+                synchronized (o1) {
+                    System.out.println(Thread.currentThread().getName() +
+                            " 进入 4");
+                }
+            }
+        }
+    }
+}
+```
+
+### 锁释放条件
+
+1. 当前线程的同步方法或同步代码块执行结束。
+2. 当前线程在同步方法或同步代码块中遇到 return 或 break 导致退出。
+3. 当前线程在同步方法或同步代码块中出现未处理的 Error 或 Exception 导致异常结束。
+4. 当前线程在同步方法或同步代码块中执行了线程对象的 wait() 方法，使得当前线程暂停，释放锁。
+
+### 不释放情况
+
+1. 当前线程调用 Thread.sleep() 或 Thread.yield() 方法，暂停线程的执行，但不会释放锁。
+2. 其他线程调用 suspend() 方法将当前线程挂起，当前线程不会释放锁。
