@@ -12,7 +12,7 @@ import java.util.Vector;
  * @Date: 2024/11/23 13:06
  * @Description: 游戏面板
  */
-public class MyPanel extends JPanel implements KeyListener{
+public class MyPanel extends JPanel implements KeyListener, Runnable{
     MyTank hero = null;
     Vector<EnemyTank> enemyTanks = new Vector<>();
     int enemyTankSize = 3;
@@ -39,6 +39,10 @@ public class MyPanel extends JPanel implements KeyListener{
             EnemyTank enemyTank = enemyTanks.get(i);
             drawTank(enemyTank.getX(), enemyTank.getY(), g,
                     enemyTank.getDirection(), 0);
+        }
+        // 绘制自己子弹
+        if (hero.getShot() != null && hero.getShot().getIsLive() == true) {
+            g.fillOval(hero.getShot().getX(), hero.getShot().getY(), 4, 4);
         }
     }
 
@@ -109,7 +113,13 @@ public class MyPanel extends JPanel implements KeyListener{
             hero.moveDown();
         } else if (e.getKeyCode() == KeyEvent.VK_A) {
             hero.setDirection(3);
-            hero.moveLeft();
+            if (hero.getX() > 0) {
+                hero.moveLeft();
+            }
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_J) {
+            hero.shotEnemyTank();
         }
         repaint();
     }
@@ -117,5 +127,17 @@ public class MyPanel extends JPanel implements KeyListener{
     @Override
     public void keyReleased(KeyEvent e) {
 
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            this.repaint();
+        }
     }
 }

@@ -23,5 +23,8 @@ public class TankGame extends JFrame {
         this.setTitle("坦克大战");
         this.setLocation(320, 180);
         this.addKeyListener(panel);
+
+        Thread thread = new Thread(panel);
+        thread.start();
     }
 }
