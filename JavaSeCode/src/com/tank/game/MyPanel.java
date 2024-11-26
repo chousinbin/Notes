@@ -23,7 +23,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
 
 
     public MyPanel() {
-        hero = new HeroTank(100, 100);
+        hero = new HeroTank(800, 500);
         hero.setSpeed(2);
         for (int i = 0; i < enemyTankInitialSize; i++) {
             EnemyTank enemyTank = new EnemyTank(100 * (i + 1), 0);
@@ -45,7 +45,9 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
         // 默认黑色绘制地图
         g.fillRect(0, 0, 1904, 1041);
         // 绘制自己的坦克
-        drawTank(hero.getX(), hero.getY(), g, hero.getDirection(), 1);
+        if (hero.isLive()) {
+            drawTank(hero.getX(), hero.getY(), g, hero.getDirection(), 1);
+        }
         // 绘制自己子弹
         for (int i = 0; i < hero.getBullets().size(); i++) {
             Bullet bullet = hero.getBullets().get(i);
@@ -141,36 +143,36 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
         }
     }
 
-    public void checkHit(Bullet bullet, EnemyTank enemyTank) {
-        int xMin = enemyTank.getX();
-        int yMin = enemyTank.getY();
+    public void checkHit(Bullet bullet, Tank tank) {
+        int xMin = tank.getX();
+        int yMin = tank.getY();
         int xMax = xMin;
         int yMax = yMin;
 
-        switch (enemyTank.getDirection()) {
+        switch (tank.getDirection()) {
             case 0:
             case 2:
-                xMax = enemyTank.getX() + 40;
-                yMax = enemyTank.getY() + 60;
+                xMax = tank.getX() + 40;
+                yMax = tank.getY() + 60;
                 break;
             case 1:
             case 3:
-                xMax = enemyTank.getX() + 60;
-                yMax = enemyTank.getY() + 40;
+                xMax = tank.getX() + 60;
+                yMax = tank.getY() + 40;
                 break;
         }
 
         if (bullet.getX() >= xMin && bullet.getX() <= xMax &&
                 bullet.getY() >= yMin && bullet.getY() <= yMax) {
             bullet.setLive(false);
-            enemyTank.setLive(false);
+            tank.setLive(false);
             /*
                 移除被击中的敌人坦克，会导致敌人遗留的子弹同步被销毁
                 不如在线程 run 中事先判断敌人坦克是否存活
              */
 //            enemyTanks.remove(enemyTank);
             // 击中爆炸
-            Bomb bomb = new Bomb(enemyTank.getX(), enemyTank.getY());
+            Bomb bomb = new Bomb(tank.getX(), tank.getY());
             bombs.add(bomb);
         }
     }
@@ -224,6 +226,17 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
                         if (enemyTanks.get(j).isLive()) {
                             checkHit(bullet, enemyTanks.get(j));
                         }
+                    }
+                }
+            }
+            // 检查敌方是否击中我方坦克
+            for (int i = 0; i < enemyTanks.size(); i++) {
+                EnemyTank enemyTank = enemyTanks.get(i);
+                Vector<Bullet> bullets = enemyTank.getBullets();
+                for (int j = 0; j < bullets.size(); j++) {
+                    Bullet bullet = bullets.get(j);
+                    if (hero.isLive()) {
+                        checkHit(bullet, hero);
                     }
                 }
             }
