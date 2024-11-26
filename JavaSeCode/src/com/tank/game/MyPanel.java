@@ -24,7 +24,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
 
     public MyPanel() {
         hero = new HeroTank(100, 100);
-        hero.setSpeed(5);
+        hero.setSpeed(2);
         for (int i = 0; i < enemyTankInitialSize; i++) {
             EnemyTank enemyTank = new EnemyTank(100 * (i + 1), 0);
             new Thread(enemyTank).start();
@@ -43,7 +43,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
     public void paint(Graphics g) {
         super.paint(g);
         // 默认黑色绘制地图
-        g.fillRect(0, 0, 1920, 1080);
+        g.fillRect(0, 0, 1904, 1041);
         // 绘制自己的坦克
         drawTank(hero.getX(), hero.getY(), g, hero.getDirection(), 1);
         // 绘制自己子弹
@@ -188,9 +188,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
             hero.moveDown();
         } else if (e.getKeyCode() == KeyEvent.VK_A) {
             hero.setDirection(3);
-            if (hero.getX() > 0) {
-                hero.moveLeft();
-            }
+            hero.moveLeft();
         }
 
         if (e.getKeyCode() == KeyEvent.VK_J) {

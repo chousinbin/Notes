@@ -19,11 +19,11 @@ public class Tank {
     }
 
     public void moveRight() {
-        x = x + speed + 60 <= 1920 ? x + speed : x;
+        x = x + speed + 60 <= 1904 ? x + speed : x;
     }
 
     public void moveDown() {
-        y = y + speed + 60 <= 1080 ? y + speed :  y;
+        y = y + speed + 60 <= 1041 ? y + speed :  y;
     }
 
     public void moveLeft() {

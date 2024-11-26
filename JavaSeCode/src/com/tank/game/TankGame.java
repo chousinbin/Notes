@@ -18,6 +18,7 @@ public class TankGame extends JFrame {
     public TankGame() {
         panel = new MyPanel();
         this.add(panel);
+        // 边框数据：横向 16 纵向 39
         this.setSize(1920, 1080);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
