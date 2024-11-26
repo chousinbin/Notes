@@ -1,6 +1,7 @@
 package com.tank.game;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @Project: JavaSeCode
@@ -25,5 +26,7 @@ public class TankGame extends JFrame {
         this.addKeyListener(panel);
         // 面板启动多线程进行不断重绘
         new Thread(panel).start();
+        Image image = Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("/icon.jpg"));
+        this.setIconImage(image);
     }
 }

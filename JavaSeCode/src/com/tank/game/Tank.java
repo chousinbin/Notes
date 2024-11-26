@@ -15,19 +15,19 @@ public class Tank {
     private boolean isLive = true;
 
     public void moveUp() {
-        y -= speed;
+        y = y - speed >= 0 ? y - speed :  y;
     }
 
     public void moveRight() {
-        x += speed;
+        x = x + speed + 60 <= 1920 ? x + speed : x;
     }
 
     public void moveDown() {
-        y += speed;
+        y = y + speed + 60 <= 1080 ? y + speed :  y;
     }
 
     public void moveLeft() {
-        x -= speed;
+        x = x - speed >= 0 ? x - speed : x;
     }
 
     public Tank(int x, int y) {

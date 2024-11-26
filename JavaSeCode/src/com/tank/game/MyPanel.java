@@ -15,7 +15,7 @@ import java.util.Vector;
 public class MyPanel extends JPanel implements KeyListener, Runnable{
     HeroTank hero = null;
     Vector<EnemyTank> enemyTanks = new Vector<>();
-    int enemyTankSize = 3;
+    int enemyTankInitialSize = 3;
     Vector<Bomb> bombs = new Vector<>();
     Image image1 = null;
     Image image2 = null;
@@ -25,8 +25,9 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
     public MyPanel() {
         hero = new HeroTank(100, 100);
         hero.setSpeed(5);
-        for (int i = 0; i < enemyTankSize; i++) {
+        for (int i = 0; i < enemyTankInitialSize; i++) {
             EnemyTank enemyTank = new EnemyTank(100 * (i + 1), 0);
+            new Thread(enemyTank).start();
             enemyTank.setDirection(2);
             // 敌人创建一个子弹
             enemyTank.shotHeroTank();
@@ -51,7 +52,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
             g.fillOval(hero.getBullet().getX(), hero.getBullet().getY(), 4, 4);
         }
         // 绘制敌人的坦克
-        for (int i = 0; i < enemyTankSize; i++) {
+        for (int i = 0; i < enemyTanks.size(); i++) {
             EnemyTank enemyTank = enemyTanks.get(i);
             if (enemyTank.isLive()) {
                 drawTank(enemyTank.getX(), enemyTank.getY(), g,
@@ -158,6 +159,11 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
                 bullet.getY() >= yMin && bullet.getY() <= yMax) {
             bullet.setLive(false);
             enemyTank.setLive(false);
+            /*
+                移除被击中的敌人坦克，会导致敌人遗留的子弹同步被销毁
+                不如在线程 run 中事先判断敌人坦克是否存活
+             */
+//            enemyTanks.remove(enemyTank);
             // 击中爆炸
             Bomb bomb = new Bomb(enemyTank.getX(), enemyTank.getY());
             bombs.add(bomb);
