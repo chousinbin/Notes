@@ -37,20 +37,22 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
         // 绘制自己的坦克
         drawTank(hero.getX(), hero.getY(), g, hero.getDirection(), 1);
         // 绘制自己子弹
-        if (hero.getBullet() != null && hero.getBullet().getIsLive() == true) {
+        if (hero.getBullet() != null && hero.getBullet().getIsLive()) {
             g.setColor(Color.cyan);
             g.fillOval(hero.getBullet().getX(), hero.getBullet().getY(), 4, 4);
         }
         // 绘制敌人的坦克
         for (int i = 0; i < enemyTankSize; i++) {
             EnemyTank enemyTank = enemyTanks.get(i);
-            drawTank(enemyTank.getX(), enemyTank.getY(), g,
-                    enemyTank.getDirection(), 0);
+            if (enemyTank.isLive()) {
+                drawTank(enemyTank.getX(), enemyTank.getY(), g,
+                        enemyTank.getDirection(), 0);
+            }
             // 绘制敌人坦克的所有子弹
             for (int j = 0; j < enemyTank.getBullets().size(); j ++) {
                 g.setColor(Color.yellow);
                 Bullet bullet = enemyTank.getBullets().get(j);
-                if (bullet.isLive == true) {
+                if (bullet.getIsLive()) {
                     g.fillOval(bullet.getX(), bullet.getY(), 4, 4);
                 } else {
                     enemyTank.getBullets().remove(bullet);
@@ -108,6 +110,32 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
         }
     }
 
+    public void checkHit(Bullet bullet, EnemyTank enemyTank) {
+        int xMin = enemyTank.getX();
+        int yMin = enemyTank.getY();
+        int xMax = xMin;
+        int yMax = yMin;
+
+        switch (enemyTank.getDirection()) {
+            case 0:
+            case 2:
+                xMax = enemyTank.getX() + 40;
+                yMax = enemyTank.getY() + 60;
+                break;
+            case 1:
+            case 3:
+                xMax = enemyTank.getX() + 60;
+                yMax = enemyTank.getY() + 40;
+                break;
+        }
+
+        if (bullet.getX() >= xMin && bullet.getX() <= xMax &&
+                bullet.getY() >= yMin && bullet.getY() <= yMax) {
+            bullet.setLive(false);
+            enemyTank.setLive(false);
+        }
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -150,7 +178,17 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            // 重绘游戏面板
             this.repaint();
+            // 检查我方是否击中敌人坦克
+            if (hero.getBullet() != null && hero.getBullet().getIsLive()) {
+                for (int i = 0; i < enemyTanks.size(); i++) {
+                    if (enemyTanks.get(i).isLive()) {
+                        checkHit(hero.getBullet(), enemyTanks.get(i));
+                    }
+                }
+            }
+
         }
     }
 }

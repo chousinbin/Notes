@@ -12,6 +12,7 @@ public class Tank {
     private int y;
     private int direction;
     private int speed = 1;
+    private boolean isLive = true;
 
     public void moveUp() {
         y -= speed;
@@ -70,5 +71,13 @@ public class Tank {
 
     public void setDirection(int direction) {
         this.direction = direction;
+    }
+
+    public boolean isLive() {
+        return isLive;
+    }
+
+    public void setLive(boolean live) {
+        isLive = live;
     }
 }
