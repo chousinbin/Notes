@@ -16,6 +16,8 @@ public class Tank {
     private int speed = 1;
     private boolean isLive = true;
     private Vector<Bullet> bullets = new Vector<>();
+    private long lastShotTime = 0; // 上次射击时间
+    public static final int FIRE_INTERVAL = 333; // 333 毫秒限制，1 秒最多 3 次
 
     public void moveUp() {
         y = y - speed >= 0 ? y - speed :  y;
@@ -90,5 +92,13 @@ public class Tank {
 
     public void setBullets(Vector<Bullet> bullets) {
         this.bullets = bullets;
+    }
+
+    public long getLastShotTime() {
+        return lastShotTime;
+    }
+
+    public void setLastShotTime(long lastShotTime) {
+        this.lastShotTime = lastShotTime;
     }
 }

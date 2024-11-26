@@ -197,7 +197,6 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
         if (e.getKeyCode() == KeyEvent.VK_J) {
             hero.shotEnemyTank();
         }
-        repaint();
     }
 
     @Override

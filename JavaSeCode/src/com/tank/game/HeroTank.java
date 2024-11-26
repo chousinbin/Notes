@@ -1,5 +1,8 @@
 package com.tank.game;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 /**
  * @Project: JavaSeCode
  * @Author: SinbinZhou
@@ -31,10 +34,15 @@ public class HeroTank extends Tank{
                 shotY = this.getY() + 20;
                 break;
         }
+        // 限制攻速
+        long currentTimeMillis = System.currentTimeMillis();
+        if (currentTimeMillis - getLastShotTime() > Tank.FIRE_INTERVAL) {
+            Bullet bullet = new Bullet(shotX, shotY, this.getDirection());
+            new Thread(bullet).start();
+            this.getBullets().add(bullet);
+            this.setLastShotTime(currentTimeMillis);
+        }
 
-        Bullet bullet = new Bullet(shotX, shotY, this.getDirection());
-        new Thread(bullet).start();
-        this.getBullets().add(bullet);
 //        System.out.println("子弹发射");
     }
 }
