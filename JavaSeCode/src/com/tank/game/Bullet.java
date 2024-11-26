@@ -50,7 +50,7 @@ public class Bullet implements Runnable {
                 break;
             }
         }
-        System.out.println("子弹线程结束");
+//        System.out.println("子弹线程结束");
     }
 
     public int getX() {

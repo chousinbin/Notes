@@ -30,7 +30,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
             new Thread(enemyTank).start();
             enemyTank.setDirection(2);
             // 敌人创建一个子弹
-            enemyTank.shotHeroTank();
+            enemyTank.fire();
             enemyTanks.add(enemyTank);
         }
         // 初始化图片
@@ -197,7 +197,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
         }
 
         if (e.getKeyCode() == KeyEvent.VK_J) {
-            hero.shotEnemyTank();
+            hero.fire();
         }
     }
 
@@ -227,7 +227,6 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
                     }
                 }
             }
-
         }
     }
 }

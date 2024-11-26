@@ -17,7 +17,38 @@ public class Tank {
     private boolean isLive = true;
     private Vector<Bullet> bullets = new Vector<>();
     private long lastShotTime = 0; // 上次射击时间
-    public static final int FIRE_INTERVAL = 333; // 333 毫秒限制，1 秒最多 3 次
+    public static final int FIRE_INTERVAL = 500; // 500 毫秒限制，1 秒最多 2 次
+    public void fire() {
+        // 限制攻速
+        if (System.currentTimeMillis() - lastShotTime <= FIRE_INTERVAL) {
+            return;
+        }
+
+        int shotX = this.getX();
+        int shotY = this.getY();
+
+        switch (this.getDirection()) {
+            case 0:
+                shotX = this.getX() + 20;
+                break;
+            case 1:
+                shotX = this.getX() + 60;
+                shotY = this.getY() + 20;
+                break;
+            case 2:
+                shotX = this.getX() + 20;
+                shotY = this.getY() + 60;
+                break;
+            case 3:
+                shotY = this.getY() + 20;
+                break;
+        }
+
+        Bullet bullet = new Bullet(shotX, shotY, this.getDirection());
+        this.getBullets().add(bullet);
+        new Thread(bullet).start();
+        this.setLastShotTime(System.currentTimeMillis());
+    }
 
     public void moveUp() {
         y = y - speed >= 0 ? y - speed :  y;

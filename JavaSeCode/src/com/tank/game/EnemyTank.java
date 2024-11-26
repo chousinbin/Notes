@@ -9,32 +9,6 @@ import java.util.Vector;
  * @Description:
  */
 public class EnemyTank extends Tank implements Runnable{
-    public void shotHeroTank() {
-        int shotX = this.getX();
-        int shotY = this.getY();
-
-        switch (this.getDirection()) {
-            case 0:
-                shotX = this.getX() + 20;
-                break;
-            case 1:
-                shotX = this.getX() + 60;
-                shotY = this.getY() + 20;
-                break;
-            case 2:
-                shotX = this.getX() + 20;
-                shotY = this.getY() + 60;
-                break;
-            case 3:
-                shotY = this.getY() + 20;
-                break;
-        }
-
-        Bullet bullet = new Bullet(shotX, shotY, this.getDirection());
-        this.getBullets().add(bullet);
-        new Thread(bullet).start();
-    }
-
     public EnemyTank(int x, int y) {
         super(x, y);
     }
@@ -78,6 +52,8 @@ public class EnemyTank extends Tank implements Runnable{
             if (!this.isLive()) {
                 break;
             }
+
+            fire();
         }
     }
 
