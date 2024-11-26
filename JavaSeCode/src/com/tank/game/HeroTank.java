@@ -7,7 +7,6 @@ package com.tank.game;
  * @Description:
  */
 public class HeroTank extends Tank{
-    private Bullet bullet = null;
     public HeroTank(int x, int y) {
         super(x, y);
     }
@@ -33,16 +32,9 @@ public class HeroTank extends Tank{
                 break;
         }
 
-        bullet = new Bullet(shotX, shotY, this.getDirection());
+        Bullet bullet = new Bullet(shotX, shotY, this.getDirection());
         new Thread(bullet).start();
+        this.getBullets().add(bullet);
 //        System.out.println("子弹发射");
-    }
-
-    public Bullet getBullet() {
-        return bullet;
-    }
-
-    public void setBullet(Bullet bullet) {
-        this.bullet = bullet;
     }
 }

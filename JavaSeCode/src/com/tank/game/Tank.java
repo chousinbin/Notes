@@ -1,5 +1,7 @@
 package com.tank.game;
 
+import java.util.Vector;
+
 /**
  * @Project: JavaSeCode
  * @Author: SinbinZhou
@@ -13,6 +15,7 @@ public class Tank {
     private int direction;
     private int speed = 1;
     private boolean isLive = true;
+    private Vector<Bullet> bullets = new Vector<>();
 
     public void moveUp() {
         y = y - speed >= 0 ? y - speed :  y;
@@ -79,5 +82,13 @@ public class Tank {
 
     public void setLive(boolean live) {
         isLive = live;
+    }
+
+    public Vector<Bullet> getBullets() {
+        return bullets;
+    }
+
+    public void setBullets(Vector<Bullet> bullets) {
+        this.bullets = bullets;
     }
 }

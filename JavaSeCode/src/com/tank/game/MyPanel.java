@@ -47,9 +47,12 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
         // 绘制自己的坦克
         drawTank(hero.getX(), hero.getY(), g, hero.getDirection(), 1);
         // 绘制自己子弹
-        if (hero.getBullet() != null && hero.getBullet().getIsLive()) {
-            g.setColor(Color.cyan);
-            g.fillOval(hero.getBullet().getX(), hero.getBullet().getY(), 4, 4);
+        for (int i = 0; i < hero.getBullets().size(); i++) {
+            Bullet bullet = hero.getBullets().get(i);
+            if (bullet != null && bullet.getIsLive()) {
+                g.setColor(Color.cyan);
+                g.fillOval(bullet.getX(), bullet.getY(), 4, 4);
+            }
         }
         // 绘制敌人的坦克
         for (int i = 0; i < enemyTanks.size(); i++) {
@@ -213,13 +216,17 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
             // 重绘游戏面板
             this.repaint();
             // 检查我方是否击中敌人坦克
-            if (hero.getBullet() != null && hero.getBullet().getIsLive()) {
-                for (int i = 0; i < enemyTanks.size(); i++) {
-                    if (enemyTanks.get(i).isLive()) {
-                        checkHit(hero.getBullet(), enemyTanks.get(i));
+            for (int i = 0; i < hero.getBullets().size(); i++) {
+                Bullet bullet = hero.getBullets().get(i);
+                if (bullet != null && bullet.getIsLive()) {
+                    for (int j = 0; j < enemyTanks.size(); j++) {
+                        if (enemyTanks.get(j).isLive()) {
+                            checkHit(bullet, enemyTanks.get(j));
+                        }
                     }
                 }
             }
+
         }
     }
 }

@@ -9,8 +9,6 @@ import java.util.Vector;
  * @Description:
  */
 public class EnemyTank extends Tank implements Runnable{
-    private Vector<Bullet> bullets = new Vector<>();
-
     public void shotHeroTank() {
         int shotX = this.getX();
         int shotY = this.getY();
@@ -33,7 +31,7 @@ public class EnemyTank extends Tank implements Runnable{
         }
 
         Bullet bullet = new Bullet(shotX, shotY, this.getDirection());
-        bullets.add(bullet);
+        this.getBullets().add(bullet);
         new Thread(bullet).start();
     }
 
@@ -43,14 +41,6 @@ public class EnemyTank extends Tank implements Runnable{
 
     public EnemyTank(int x, int y, int direction) {
         super(x, y, direction);
-    }
-
-    public Vector<Bullet> getBullets() {
-        return bullets;
-    }
-
-    public void setBullets(Vector<Bullet> bullets) {
-        this.bullets = bullets;
     }
 
     @Override
