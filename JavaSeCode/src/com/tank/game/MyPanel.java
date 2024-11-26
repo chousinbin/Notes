@@ -51,7 +51,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
         // 绘制自己子弹
         for (int i = 0; i < hero.getBullets().size(); i++) {
             Bullet bullet = hero.getBullets().get(i);
-            if (bullet.getIsLive()) {
+            if (bullet.isLive()) {
                 g.setColor(Color.cyan);
                 g.fillOval(bullet.getX(), bullet.getY(), 4, 4);
             } else {
@@ -69,7 +69,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
             for (int j = 0; j < enemyTank.getBullets().size(); j ++) {
                 g.setColor(Color.yellow);
                 Bullet bullet = enemyTank.getBullets().get(j);
-                if (bullet.getIsLive()) {
+                if (bullet.isLive()) {
                     g.fillOval(bullet.getX(), bullet.getY(), 4, 4);
                 } else {
                     enemyTank.getBullets().remove(bullet);
@@ -225,7 +225,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
             // 检查我方是否击中敌人坦克
             for (int i = 0; i < hero.getBullets().size(); i++) {
                 Bullet bullet = hero.getBullets().get(i);
-                if (bullet != null && bullet.getIsLive()) {
+                if (bullet != null && bullet.isLive()) {
                     for (int j = 0; j < enemyTanks.size(); j++) {
                         if (enemyTanks.get(j).isLive()) {
                             checkHit(bullet, enemyTanks.get(j));
@@ -239,7 +239,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
                 Vector<Bullet> bullets = enemyTank.getBullets();
                 for (int j = 0; j < bullets.size(); j++) {
                     Bullet bullet = bullets.get(j);
-                    if (hero.isLive()) {
+                    if (hero.isLive() && bullet.isLive()) {
                         checkHit(bullet, hero);
                     }
                 }

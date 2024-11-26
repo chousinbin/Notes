@@ -85,7 +85,7 @@ public class Bullet implements Runnable {
         this.speed = speed;
     }
 
-    public boolean getIsLive() {
+    public boolean isLive() {
         return isLive;
     }
 

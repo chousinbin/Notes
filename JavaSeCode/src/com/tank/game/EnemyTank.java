@@ -54,7 +54,9 @@ public class EnemyTank extends Tank implements Runnable{
 
             this.setDirection((int)(Math.random() * 4));
 
-            fire();
+            if(isLive()) {
+                fire();
+            }
         }
     }
 
