@@ -80,9 +80,9 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
         // 绘制炸弹
         for (int i = 0; i < bombs.size(); i++) {
             Bomb bomb = bombs.get(i);
-            if (bomb.getLife() > 6) {
+            if (bomb.getLife() > 20) {
                 g.drawImage(image1, bomb.getX(), bomb.getY(), 60, 60, this);
-            } else if (bomb.getLife() > 3) {
+            } else if (bomb.getLife() > 10) {
                 g.drawImage(image2, bomb.getX(), bomb.getY(), 60, 60, this);
             } else {
                 g.drawImage(image3, bomb.getX(), bomb.getY(), 60, 60, this);

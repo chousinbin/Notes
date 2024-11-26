@@ -8,7 +8,7 @@ package com.tank.game;
  */
 public class Bomb {
     private int x, y;
-    private int life = 9;
+    private int life = 30;
     private boolean isLive = true;
 
     public Bomb(int x, int y) {
