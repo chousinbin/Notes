@@ -15,6 +15,9 @@ public class HeroTank extends Tank{
     }
 
     public void shotEnemyTank() {
+        if (getBullets().size() >= 3) {
+            return;
+        }
         int shotX = this.getX();
         int shotY = this.getY();
 

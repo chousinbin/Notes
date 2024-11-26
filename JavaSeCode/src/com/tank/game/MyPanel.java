@@ -49,9 +49,11 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
         // 绘制自己子弹
         for (int i = 0; i < hero.getBullets().size(); i++) {
             Bullet bullet = hero.getBullets().get(i);
-            if (bullet != null && bullet.getIsLive()) {
+            if (bullet.getIsLive()) {
                 g.setColor(Color.cyan);
                 g.fillOval(bullet.getX(), bullet.getY(), 4, 4);
+            } else {
+                hero.getBullets().remove(bullet);
             }
         }
         // 绘制敌人的坦克
