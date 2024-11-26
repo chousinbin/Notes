@@ -16,6 +16,11 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
     HeroTank hero = null;
     Vector<EnemyTank> enemyTanks = new Vector<>();
     int enemyTankSize = 3;
+    Vector<Bomb> bombs = new Vector<>();
+    Image image1 = null;
+    Image image2 = null;
+    Image image3 = null;
+
 
     public MyPanel() {
         hero = new HeroTank(100, 100);
@@ -27,6 +32,10 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
             enemyTank.shotHeroTank();
             enemyTanks.add(enemyTank);
         }
+        // 初始化图片
+        image1 = Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("/bomb_1.gif"));
+        image2 = Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("/bomb_2.gif"));
+        image3 = Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("/bomb_3.gif"));
     }
 
     @Override
@@ -57,6 +66,22 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
                 } else {
                     enemyTank.getBullets().remove(bullet);
                 }
+            }
+        }
+
+        // 绘制炸弹
+        for (int i = 0; i < bombs.size(); i++) {
+            Bomb bomb = bombs.get(i);
+            if (bomb.getLife() > 6) {
+                g.drawImage(image1, bomb.getX(), bomb.getY(), 60, 60, this);
+            } else if (bomb.getLife() > 3) {
+                g.drawImage(image2, bomb.getX(), bomb.getY(), 60, 60, this);
+            } else {
+                g.drawImage(image3, bomb.getX(), bomb.getY(), 60, 60, this);
+            }
+            bomb.lifeDown();
+            if (bomb.getLife() == 0) {
+                bombs.remove(bomb);
             }
         }
     }
@@ -133,6 +158,9 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
                 bullet.getY() >= yMin && bullet.getY() <= yMax) {
             bullet.setLive(false);
             enemyTank.setLive(false);
+            // 击中爆炸
+            Bomb bomb = new Bomb(enemyTank.getX(), enemyTank.getY());
+            bombs.add(bomb);
         }
     }
 
@@ -174,7 +202,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
     public void run() {
         while (true) {
             try {
-                Thread.sleep(100);
+                Thread.sleep(16);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -188,7 +216,6 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
                     }
                 }
             }
-
         }
     }
 }

@@ -43,7 +43,7 @@ public class Bullet implements Runnable {
                     x -= speed;
                     break;
             }
-            System.out.println("子弹 " + getX() + ' ' + getY());
+//            System.out.println("子弹 " + getX() + ' ' + getY());
             // 子弹到达边界 或者 子弹击中坦克 销毁
             if (!(x >= 0 && x <= 1920 && y >= 0 && y <= 1080) || this.isLive == false) {
                 isLive = false;
