@@ -6,15 +6,15 @@ package com.tank.game;
  * @Date: 2024/11/23 13:05
  * @Description:
  */
-public class MyTank extends Tank{
-    private Shot shot = null;
-    public MyTank(int x, int y) {
+public class HeroTank extends Tank{
+    private Bullet bullet = null;
+    public HeroTank(int x, int y) {
         super(x, y);
     }
 
     public void shotEnemyTank() {
-        int shotX = 0;
-        int shotY = 0;
+        int shotX = this.getX();
+        int shotY = this.getY();
 
         switch (this.getDirection()) {
             case 0:
@@ -33,17 +33,16 @@ public class MyTank extends Tank{
                 break;
         }
 
-        shot = new Shot(shotX, shotY, this.getDirection());
-        Thread thread = new Thread(shot);
-        thread.start();
+        bullet = new Bullet(shotX, shotY, this.getDirection());
+        new Thread(bullet).start();
 //        System.out.println("子弹发射");
     }
 
-    public Shot getShot() {
-        return shot;
+    public Bullet getBullet() {
+        return bullet;
     }
 
-    public void setShot(Shot shot) {
-        this.shot = shot;
+    public void setBullet(Bullet bullet) {
+        this.bullet = bullet;
     }
 }

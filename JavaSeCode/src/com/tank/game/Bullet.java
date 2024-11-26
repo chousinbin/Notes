@@ -6,7 +6,7 @@ package com.tank.game;
  * @Date: 2024/11/25 22:06
  * @Description: 射击子弹
  */
-public class Shot implements Runnable {
+public class Bullet implements Runnable {
     // 子弹横纵坐标
     private int x;
     private int y;
@@ -14,7 +14,7 @@ public class Shot implements Runnable {
     private int speed = 2;
     boolean isLive = true;
 
-    public Shot(int x, int y, int direction) {
+    public Bullet(int x, int y, int direction) {
         this.x = x;
         this.y = y;
         this.direction = direction;
@@ -28,7 +28,7 @@ public class Shot implements Runnable {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-
+            // 根据子弹方向移动子弹
             switch (direction) {
                 case 0:
                     y -= speed;

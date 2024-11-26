@@ -13,16 +13,18 @@ import java.util.Vector;
  * @Description: 游戏面板
  */
 public class MyPanel extends JPanel implements KeyListener, Runnable{
-    MyTank hero = null;
+    HeroTank hero = null;
     Vector<EnemyTank> enemyTanks = new Vector<>();
     int enemyTankSize = 3;
 
     public MyPanel() {
-        hero = new MyTank(100, 100);
+        hero = new HeroTank(100, 100);
         hero.setSpeed(5);
         for (int i = 0; i < enemyTankSize; i++) {
             EnemyTank enemyTank = new EnemyTank(100 * (i + 1), 0);
             enemyTank.setDirection(2);
+            // 敌人创建一个子弹
+            enemyTank.shotHeroTank();
             enemyTanks.add(enemyTank);
         }
     }
@@ -34,15 +36,26 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
         g.fillRect(0, 0, 1920, 1080);
         // 绘制自己的坦克
         drawTank(hero.getX(), hero.getY(), g, hero.getDirection(), 1);
+        // 绘制自己子弹
+        if (hero.getBullet() != null && hero.getBullet().getIsLive() == true) {
+            g.setColor(Color.cyan);
+            g.fillOval(hero.getBullet().getX(), hero.getBullet().getY(), 4, 4);
+        }
         // 绘制敌人的坦克
         for (int i = 0; i < enemyTankSize; i++) {
             EnemyTank enemyTank = enemyTanks.get(i);
             drawTank(enemyTank.getX(), enemyTank.getY(), g,
                     enemyTank.getDirection(), 0);
-        }
-        // 绘制自己子弹
-        if (hero.getShot() != null && hero.getShot().getIsLive() == true) {
-            g.fillOval(hero.getShot().getX(), hero.getShot().getY(), 4, 4);
+            // 绘制敌人坦克的所有子弹
+            for (int j = 0; j < enemyTank.getBullets().size(); j ++) {
+                g.setColor(Color.yellow);
+                Bullet bullet = enemyTank.getBullets().get(j);
+                if (bullet.isLive == true) {
+                    g.fillOval(bullet.getX(), bullet.getY(), 4, 4);
+                } else {
+                    enemyTank.getBullets().remove(bullet);
+                }
+            }
         }
     }
 
