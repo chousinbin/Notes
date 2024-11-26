@@ -6501,3 +6501,113 @@ class Lock implements Runnable {
 
 1. 当前线程调用 Thread.sleep() 或 Thread.yield() 方法，暂停线程的执行，但不会释放锁。
 2. 其他线程调用 suspend() 方法将当前线程挂起，当前线程不会释放锁。
+
+# IO 流
+
+## 基本概念
+
+- 文件流：文件在程序中是以流的形式来操作的。
+- 流：数据在数据源和程序之间经历的路径。
+- 输入流：数据从数据源（磁盘）到程序（内存）的路径。
+- 输出流：数据从程序（内存）到数据源（磁盘）的路径。
+
+## 文件操作
+
+### 构造方法
+
+| 方法名 | 返回类型 | 参数列表                           | 作用           |
+| ------ | -------- | ---------------------------------- | -------------- |
+| File   | File     | String filePath                    | 字符串绝对路径 |
+| File   | File     | String parentPath, String fileName | 字符串相对路径 |
+| File   | File     | File parentPath, String fileName   | 相对路径对象化 |
+
+### 常用方法
+
+| 方法名          | 返回类型 | 参数列表 | 作用                                 |
+| --------------- | -------- | -------- | ------------------------------------ |
+| getName         | String   | void     | 返回文件名称                         |
+| getParent       | String   | void     | 返回父路径                           |
+| getAbsolutePath | String   | void     | 返回绝对路径                         |
+| length          | long     | void     | 返回文件大小（字节）                 |
+| exists          | boolean  | void     | 判断文件对象表示的文件在本地是否存在 |
+| isFile          | boolean  | void     | 判断是不是文件                       |
+| isDirectory     | boolean  | void     | 判断是不是目录                       |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 网络编程
+
+
+
+
+
+# 反射
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
