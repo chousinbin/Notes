@@ -24,7 +24,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
 
     public MyPanel() {
         hero = new HeroTank(800, 500);
-        hero.setSpeed(2);
+        hero.setSpeed(10);
         for (int i = 0; i < enemyTankInitialSize; i++) {
             EnemyTank enemyTank = new EnemyTank(100 * (i + 1), 0);
             new Thread(enemyTank).start();
@@ -184,6 +184,10 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
 
     @Override
     public void keyPressed(KeyEvent e) {
+        // 确保死亡之后不会移动和发射
+        if (!hero.isLive()) {
+            return;
+        }
         if (e.getKeyCode() == KeyEvent.VK_W) {
             hero.setDirection(0);
             hero.moveUp();

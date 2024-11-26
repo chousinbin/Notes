@@ -20,6 +20,11 @@ public class EnemyTank extends Tank implements Runnable{
     @Override
     public void run() {
         while (true) {
+            // 死亡之后不再移动和发射
+            if (!this.isLive()) {
+                break;
+            }
+
             switch (this.getDirection()) {
                 case 0:
                     for (int i = 0; i < 30; i++) {
@@ -48,10 +53,6 @@ public class EnemyTank extends Tank implements Runnable{
             }
 
             this.setDirection((int)(Math.random() * 4));
-
-            if (!this.isLive()) {
-                break;
-            }
 
             fire();
         }
