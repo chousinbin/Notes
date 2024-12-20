@@ -6504,14 +6504,12 @@ class Lock implements Runnable {
 
 # IO 流
 
-## 基本概念
+- **文件流**：文件在程序中是以流的形式来操作的。
+- **流**：文件在数据源和程序之间传输的载体，文件需要包装成流的形式。
+- **输入流**：数据从数据源（磁盘）到程序（内存）的路径。
+- **输出流**：数据从程序（内存）到数据源（磁盘）的路径。
 
-- 文件流：文件在程序中是以流的形式来操作的。
-- 流：数据在数据源和程序之间经历的路径。
-- 输入流：数据从数据源（磁盘）到程序（内存）的路径。
-- 输出流：数据从程序（内存）到数据源（磁盘）的路径。
-
-## 文件操作
+## File
 
 ### 构造方法
 
@@ -6521,7 +6519,7 @@ class Lock implements Runnable {
 | File   | File     | String parentPath, String fileName | 字符串相对路径 |
 | File   | File     | File parentPath, String fileName   | 相对路径对象化 |
 
-### 常用方法
+### 获取信息
 
 | 方法名          | 返回类型 | 参数列表 | 作用                                 |
 | --------------- | -------- | -------- | ------------------------------------ |
@@ -6533,45 +6531,344 @@ class Lock implements Runnable {
 | isFile          | boolean  | void     | 判断是不是文件                       |
 | isDirectory     | boolean  | void     | 判断是不是目录                       |
 
+### 目录操作
+
+| 方法名 | 返回类型 | 参数列表 | 作用           |
+| ------ | -------- | -------- | -------------- |
+| mkdir  | boolean  | void     | 创建一级目录   |
+| mkdirs | boolean  | void     | 创建多级目录   |
+| delete | boolean  | void     | 删除文件或目录 |
+
+## Stream
+
+Java 程序中，数据的输入和输出操作以流的方式进行。Java.io 包下提供了各种流类和接口，用来获取不同种类的数据，并通过方法输入或输出数据。
+
+### 流的分类
+
+- 按数据单位：字节流、字符流
+- 按数据流向：输入流、输出流
+- 按流的角色：节点流、处理流、包装流
+
+| 抽象基类 | 字节流       | 字符流 |
+| -------- | ------------ | ------ |
+| 输入流   | InputStream  | Reader |
+| 输出流   | OutputStream | Writer |
+
+注：Java.io 包下的 40 多个有关流的类都是以上四个抽象基类派生的，子类名字的后缀都是这些基类名字。
+
+## 节点流（文件）
+
+**节点流**可以从一个特定的数据源读写数据，如 FileReader, FileWriter 等。
+
+### FileInputStream
+
+> 文件输入流，按照字节操作
+
+```java
+public void read01() {
+    String path = "D:\\hello.txt";
+    FileInputStream fileInputStream = null;
+    int readDate = 0;
+    try {
+        fileInputStream = new FileInputStream(path);
+        while ((readDate = fileInputStream.read()) != -1) {
+            System.out.print((char)readDate);
+        }
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    } finally {
+        try {
+            fileInputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+
+public void read02() {
+    String path = "D:\\hello.txt";
+    FileInputStream fileInputStream = null;
+    int byteCount = 0;
+    byte[] buffer = new byte[8];
+    try {
+        fileInputStream = new FileInputStream(path);
+        while ((byteCount = fileInputStream.read(buffer)) != -1) {
+            System.out.println(byteCount);
+            System.out.print(new String(buffer, 0, byteCount));
+        }
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    } finally {
+        try {
+            fileInputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+```
+
+### FileOutputStream
+
+> 文件输出流，按照字节操作
+
+```java
+    @Test
+    public void output01() {
+        FileOutputStream fileOutputStream = null;
+        String path = "D:\\a.txt";
+
+        try {
+            fileOutputStream = new FileOutputStream(path);
+            // 写入字符
+//            fileOutputStream.write('Z');
+            // 写入字符串
+            String str = "hello, world!";
+//            fileOutputStream.write(str.getBytes());
+            fileOutputStream.write(str.getBytes(), 0 , str.length());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Test
+    public void output02() {
+        FileOutputStream fileOutputStream = null;
+        String path = "D:\\a.txt";
+
+        try {
+            // 追加模式
+            fileOutputStream = new FileOutputStream(path, true);
+            fileOutputStream.write('\n');
+            // 写入字符
+//            fileOutputStream.write('Z');
+            // 写入字符串
+            String str = "hello, world!";
+//            fileOutputStream.write(str.getBytes());
+            fileOutputStream.write(str.getBytes(), 0 , str.length());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+}
+```
+
+**文件拷贝**
+
+```java
+public static void main(String[] args) {
+    String filePath = "D:\\logo.jpg";
+    String destPath = "D:\\new\\logo.jpg";
+
+    FileInputStream fileInputStream = null;
+    FileOutputStream fileOutputStream = null;
 
 
+    try {
+        fileInputStream = new FileInputStream(filePath);
+        fileOutputStream = new FileOutputStream(destPath);
 
+        byte[] buffer = new byte[1024];
+        int len = 0;
 
+        while ((len = fileInputStream.read(buffer)) != -1) {
+            fileOutputStream.write(buffer, 0, len);
+            /**
+             * fileOutputStream.write(buffer);
+             * 这种写法不安全
+             */
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if (fileInputStream != null) {
+                fileInputStream.close();
+            }
+            if (fileOutputStream != null) {
+                fileOutputStream.close();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+```
 
+### FileReader
 
+> 字符输入流，按照字符操作 IO
 
+```java
+public class FileReader_ {
+    public static void main(String[] args) {
+        readBySingleChar();
+        System.out.println();
+        readByMultiChar();
+    }
 
+    private static void readByMultiChar() {
+        String filePath = "D:\\a.txt";
+        FileReader fileReader = null;
 
+        char data[] = new char[8];
+        int len;
 
+        try {
+            fileReader = new FileReader(filePath);
+            while ((len = fileReader.read(data)) != -1) {
+                // 字符数组转 String
+                System.out.print(new String(data, 0, len));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (fileReader != null) {
+                    fileReader.close();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
+    private static void readBySingleChar() {
+        String filePath = "D:\\a.txt";
+        FileReader fileReader = null;
+        int data;
+        try {
+            fileReader = new FileReader(filePath);
+            while ((data = fileReader.read()) != -1) {
+                System.out.print((char) data);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (fileReader != null) {
+                    fileReader.close();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+}
+```
 
+### FileWriter
 
+>  字符输出流，按照字符操作 IO
 
+- FileWriter 使用后，必须 close() 或 flush() 否则写入文件无法成功。
 
+```java
+public class FileWriter_ {
+    public static void main(String[] args) {
+        writeBySingleChar();
+        writeByCharArray();
+        writeByString();
+    }
 
+    private static void writeByCharArray() {
+        String filePath = "resource\\b.txt";
+        FileWriter fileWriter = null;
+        File file = null;
 
+        char[] chars = {'z', 'x', 'b'};
 
+        try {
+            // 文件创建
+            file = new File(filePath);
+            file.createNewFile();
+            // 文件写入
+            fileWriter = new FileWriter(filePath);
+            // 写入单个字符
+            fileWriter.write(chars);
+            fileWriter.write(chars, 0, 2);
+            fileWriter.write("我是周新斌");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            // FileWriter 必须关闭对象，否则无法写入
+            try {
+                fileWriter.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
+    private static void writeBySingleChar() {
+        String filePath = "resource\\b.txt";
+        FileWriter fileWriter = null;
+        File file = null;
 
+        try {
+            // 文件创建
+            file = new File(filePath);
+            file.createNewFile();
+            // 文件写入
+            fileWriter = new FileWriter(filePath);
+            // 写入单个字符
+            fileWriter.write('Z');
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            // FileWriter 必须关闭对象，否则无法写入
+            try {
+                fileWriter.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
+    private static void writeByString() {
+        String filePath = "resource\\b.txt";
+        FileWriter fileWriter = null;
+        File file = null;
 
+        try {
+            // 文件创建
+            file = new File(filePath);
+            file.createNewFile();
+            // 文件写入
+            fileWriter = new FileWriter(filePath);
+            // 写入单个字符
+            fileWriter.write("我是周新斌");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            // FileWriter 必须关闭对象，否则无法写入
+            try {
+                fileWriter.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+}
+```
 
+## 处理流（缓冲）
 
+**处理流（包装流）**可以建立在已存在的流（节点流或处理流）之上，为程序提供更为强大的读写功能，如 BufferedReader, BufferedWriter 等。
 
-
-# 网络编程
-
-
-
-
-
-# 反射
-
-
-
-
-
-
+如 BufferedReader 处理流内封装 Reader 成员函数，则可以是任何 Reader 类的子类的节点流或处理流。
 
 
 
