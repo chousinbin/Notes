@@ -14,11 +14,10 @@ public class FileCreate {
         fun1();
         fun2();
         fun3();
-
     }
     // 完整路径
     public static void fun1() {
-        String filePath = "D:\\file1.txt";
+        String filePath = "resource\\file1.txt";
         File file = new File(filePath);
         try {
             file.createNewFile();
@@ -28,7 +27,7 @@ public class FileCreate {
     }
     // 父路径对象化，可以方便灵活修改父路径
     public static void fun2() {
-        File parentPath = new File("D:\\");
+        File parentPath = new File("resource");
         String fileName = "file2.txt";
         File file = new File(parentPath, fileName);
         try {
@@ -39,7 +38,7 @@ public class FileCreate {
     }
     // 相对路径
     public static void fun3() {
-        String parentPath = "D:\\";
+        String parentPath = "resource";
         String name = "file3.txt";
         File file = new File(parentPath, name);
         System.out.println(file.exists());
