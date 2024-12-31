@@ -4174,7 +4174,7 @@ Exception in thread "main" java.lang.NumberFormatException: For input string: "z
 
 ### try
 
-#### try-catch-finall
+#### try-catch-finally
 
 ```java
 try {
@@ -6533,11 +6533,12 @@ class Lock implements Runnable {
 
 ### 目录操作
 
-| 方法名 | 返回类型 | 参数列表 | 作用           |
-| ------ | -------- | -------- | -------------- |
-| mkdir  | boolean  | void     | 创建一级目录   |
-| mkdirs | boolean  | void     | 创建多级目录   |
-| delete | boolean  | void     | 删除文件或目录 |
+| 方法名        | 返回类型 | 参数列表 | 作用           |
+| ------------- | -------- | -------- | -------------- |
+| mkdir         | boolean  | void     | 创建一级目录   |
+| mkdirs        | boolean  | void     | 创建多级目录   |
+| delete        | boolean  | void     | 删除文件或目录 |
+| createNewFile | boolean  | void     | 创建文件       |
 
 ## Stream
 
@@ -6547,7 +6548,7 @@ Java 程序中，数据的输入和输出操作以流的方式进行。Java.io �
 
 - 按数据单位：字节流、字符流
 - 按数据流向：输入流、输出流
-- 按流的角色：节点流、处理流、包装流
+- 按流的角色：节点流、处理流（包装流）
 
 | 抽象基类 | 字节流       | 字符流 |
 | -------- | ------------ | ------ |
@@ -6556,9 +6557,26 @@ Java 程序中，数据的输入和输出操作以流的方式进行。Java.io �
 
 注：Java.io 包下的 40 多个有关流的类都是以上四个抽象基类派生的，子类名字的后缀都是这些基类名字。
 
-## 节点流（文件）
+| 分类                 | 字节输入流             | 字节输出流              | 字符输入流          | 字符输出流           |
+| -------------------- | ---------------------- | ----------------------- | ------------------- | -------------------- |
+| 抽象基类             | `InputStream`          | `OutputStream`          | `Reader`            | `Writer`             |
+| 访问文件（节点流起） | `FileInputStream`      | `FileOutputStream`      | `FileReader`        | `FileWriter`         |
+| 访问数组             | `ByteArrayInputStream` | `ByteArrayOutputStream` | `CharArrayReader`   | `CharArrayWriter`    |
+| 访问管道             | `PipedInputStream`     | `PipedOutputStream`     | `PipedReader`       | `PipedWriter`        |
+| 访问字符串           | -                      | -                       | `StringReader`      | `StringWriter`       |
+| 缓冲流（处理流起）   | `BufferedInputStream`  | `BufferedOutputStream`  | `BufferedReader`    | `BufferedWriter`     |
+| 转换流               | -                      | -                       | `InputStreamReader` | `OutputStreamWriter` |
+| 对象流               | `ObjectInputStream`    | `ObjectOutputStream`    | -                   | -                    |
+| 过滤流               | `FilterInputStream`    | `FilterOutputStream`    | `FilterReader`      | `FilterWriter`       |
+| 打印流               | -                      | `PrintStream`           | -                   | `PrintWriter`        |
+| 推回输入流           | `PushbackInputStream`  | -                       | `PushbackReader`    | -                    |
+| 特殊流               | `DataInputStream`      | `DataOutputStream`      | -                   | -                    |
+
+## 节点流
 
 **节点流**可以从一个特定的数据源读写数据，如 FileReader, FileWriter 等。
+
+### 文件流
 
 ### FileInputStream
 
@@ -6864,21 +6882,239 @@ public class FileWriter_ {
 }
 ```
 
-## 处理流（缓冲）
+## 处理流
 
 **处理流（包装流）**可以建立在已存在的流（节点流或处理流）之上，为程序提供更为强大的读写功能，如 BufferedReader, BufferedWriter 等。
 
-如 BufferedReader 处理流内封装 Reader 成员函数，则可以是任何 Reader 类的子类的节点流或处理流。
+处理流使用了修饰器设计模式对节点流进行包装，如 BufferedReader 处理流内封装 Reader 成员函数，则可以是任何 Reader 类的子类的节点流或处理流。
+
+**处理流优点**
+
+- 性能提高：增加缓冲的方式提高输入输出效率。
+- 操作便捷：提供一系列便捷方法实现一次输入输出大批量数据，使用更加方便。
+
+### 缓冲流
+
+### BufferedReader
+
+> BufferedReader 和 BufferedWriter 属于字符流。
+
+```mermaid
+classDiagram
+direction TB
+
+    AutoCloseable <|.. Closeable
+    Closeable <|.. Reader
+    Readable <|.. Reader
+    Reader <|-- InputStreamReader
+    Reader <|-- BufferedReader
+    InputStreamReader <|-- FileReader
+```
+
+关闭时，只需关闭处理流，处理流的 close 方法会调用节点流的 close 方法关闭节点流。
+
+```java
+String path = "resource\\b.txt";
+BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+String line;
+while ((line = bufferedReader.readLine()) != null) {
+    System.out.println(line);
+}
+bufferedReader.close();
+```
+
+### BufferedWriter
+
+使用处理流时，如果想要以追加的方式写入，需要在创建节点流对象时标记追加，处理流不提供追加。
+
+```java
+String path = "resource\\a.txt";
+BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path, true));
+bufferedWriter.write("hello");
+bufferedWriter.newLine();
+bufferedWriter.write("周新斌");
+bufferedWriter.close();
+```
+
+### BufferedInputStream
+
+> 字节流，处理二进制文件，如：图片、音频、视频、PDF 文档等。
 
 
 
+### BufferedOutputStream
 
+```mermaid
+classDiagram
+    AutoCloseable <|.. Closeable
+    Closeable <|.. OutputStream
+    Flushable <|.. OutputStream
+    OutputStream <|-- FilterOutputStream
+    FilterOutputStream <|-- BufferedOutputStream
+```
 
+### 对象流
 
+**对象流**能够将**基本数据类型**或**对象**进行**序列化**和**反序列化**操作。
 
+- 序列化：保存数据的值和数据类型。
+- 反序列化：恢复数据的值和数据类型。
 
+可序列化的类必须满足其实现了以下两个接口之一：
 
+1. `Serializable`：标记接口，无方法
+2. `Externalizable`：有方法需要实现
 
+**注意事项：**
+
+- **反序列化的顺序要与序列化的顺序一致**，否则数据和类型不会匹配导致读取出错。
+- 序列化的类中建议添加 `private static final long serialVersionUID = 1L;` 为序列化版本号，提高兼容性。
+- 序列化对象时，默认将所有属性都序列化，除了 `static ` 和 `transient` （`transient` 是标记属性不被序列化的关键词）修饰的成员。
+- 序列化对象时，要求成员属性的类型也实现**序列化接口**。
+- 序列化具备可继承性。
+
+### ObjectInputStream
+
+提供反序列化功能
+
+```java
+ObjectInputStream objectIntputStream = new ObjectInputStream(
+        new FileInputStream("resource\\obj.bak"));
+
+System.out.println(objectIntputStream.readInt());
+System.out.println(objectIntputStream.readBoolean());
+System.out.println(objectIntputStream.readDouble());
+System.out.println(objectIntputStream.readChar());
+System.out.println(objectIntputStream.readUTF());
+
+objectIntputStream.close();
+```
+
+### ObjectOutputStream
+
+提供序列化功能
+
+```java
+ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+        new FileOutputStream("resource\\obj.bak"));
+
+objectOutputStream.writeInt(100);
+objectOutputStream.writeBoolean(true);
+objectOutputStream.writeDouble(1.2);
+objectOutputStream.writeChar('z');
+objectOutputStream.writeUTF("zxb");
+//objectOutputStream.writeObject(new Object());
+
+objectOutputStream.close();
+```
+
+### 转换流
+
+转换流可以将字节流包装成字符流，字节流 + 编码 = 字符流（转换流），处理文本效率更高。可指定编码，解决中文乱码问题。
+
+### InputStreamReader
+
+Reader 的子类，将 InputStream 包装成 Reader。
+
+```java
+public class InputStreamReader_ {
+    public static void main(String[] args) throws IOException {
+        InputStreamReader inputStreamReader = new InputStreamReader(
+                new FileInputStream("resource\\gbk.txt"), "GBK");
+        BufferedReader bf = new BufferedReader(inputStreamReader);
+
+        String line = bf.readLine();
+        System.out.println(line);
+        bf.close();
+    }
+}
+```
+
+### OutputStreamWriter
+
+Writer 的子类，将 OutputStream 包装成 Writer。
+
+```java
+public class OutputStreamWriter_ {
+    public static void main(String[] args) throws IOException {
+        OutputStreamWriter osw = new OutputStreamWriter(
+                new FileOutputStream("resource\\aa.txt"), "UTF-8");
+
+        osw.write("hello 周新斌");
+        
+        osw.close();
+    }
+}
+```
+
+### 打印流
+
+打印流只有输出流，没有输入流。
+
+### PrintStream
+
+```java
+public class PrintStream_ {
+    public static void main(String[] args) throws IOException {
+        PrintStream out = System.out;
+        // 默认输出位置是显示器
+        out.println("hello, 周新斌");
+        // print 底层是 write
+        out.write("你好".getBytes());
+        // 修改输出位置
+        System.setOut(new PrintStream("resource\\ps.txt"));
+        System.out.println("加瓦");
+    }
+}
+```
+
+### PrintWriter
+
+```java
+public class PrintWriter_ {
+    public static void main(String[] args) throws IOException {
+        PrintWriter printWriter = new PrintWriter(System.out);
+        printWriter.write("大连");
+
+        printWriter = new PrintWriter(new FileWriter("resource\\pw.txt"));
+        printWriter.write("打印字符流");
+
+        printWriter.close();
+    }
+}
+```
+
+## 标准输入输出流
+
+- System.in 的编译类型为 InputStream 运行类型为 BufferedInputStream
+- System.out 的编译类型为 PrintStream 运行类型为 PrintStream 
+
+```java
+public class Test {
+    public static void main(String[] args) {
+        System.out.println(System.in.getClass());
+        System.out.println(System.out.getClass());
+
+        Scanner scanner = new Scanner(System.in);
+        String res = scanner.next();
+        System.out.println(res);
+    }
+}
+```
+
+## Properties
+
+用来读写配置文件的集合类，父类为 `hashtable`，配置文件是键值对的集合。键值对不需要空格，值不需要用引号括起来，数据类型为 `String`。
+
+### 常用方法
+
+| 方法名      | 返回类型    | 参数列表               | 作用                  |
+| ----------- | ----------- | ---------------------- | --------------------- |
+| load        | void        | 读取流                 | 读取配置文件到对象    |
+| list        | void        | 输出流                 | 输出整个配置文件      |
+| getProperty | String      | String key             | 获取 key 对应的 value |
+| setProperty | Object 旧值 | String K, String V     | 设置键值对            |
+| store       | void        | 输出流, String comment | 将对象存储到文件      |
 
 
 
