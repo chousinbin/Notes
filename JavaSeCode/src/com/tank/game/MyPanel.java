@@ -15,7 +15,7 @@ import java.util.Vector;
 public class MyPanel extends JPanel implements KeyListener, Runnable{
     HeroTank hero = null;
     Vector<EnemyTank> enemyTanks = new Vector<>();
-    int enemyTankInitialSize = 3;
+    int enemyTankInitialSize = 10;
     Vector<Bomb> bombs = new Vector<>();
     Image image1 = null;
     Image image2 = null;
@@ -32,6 +32,10 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
             // 敌人创建一个子弹
             enemyTank.fire();
             enemyTanks.add(enemyTank);
+        }
+
+        for (int i = 0; i < enemyTanks.size(); i++) {
+            enemyTanks.get(i).setEnemyTanks(enemyTanks);
         }
         // 初始化图片
         image1 = Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("/bomb_1.gif"));

@@ -45,6 +45,7 @@ public class Tank {
         }
 
         Bullet bullet = new Bullet(shotX, shotY, this.getDirection());
+        this.getBullets().clear(); // 限制同一时间存在单发子弹
         this.getBullets().add(bullet);
         new Thread(bullet).start();
         this.setLastShotTime(System.currentTimeMillis());
