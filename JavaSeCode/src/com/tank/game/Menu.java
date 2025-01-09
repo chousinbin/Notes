@@ -66,7 +66,6 @@ public class Menu extends JFrame {
                             "Message",
                             JOptionPane.INFORMATION_MESSAGE);
                 }
-
             }
         });
     }

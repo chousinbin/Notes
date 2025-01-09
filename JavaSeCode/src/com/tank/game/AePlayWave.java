@@ -4,59 +4,40 @@ import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * @Project: JavaSeCode
- * @Author: SinbinZhou
- * @Date: 2025/1/9 22:06
- * @Description:
- */
 public class AePlayWave extends Thread {
     private String filename;
+    private boolean loop; // 控制是否循环播放
 
-    public AePlayWave(String wavfile) {
-        filename = wavfile;
+    public AePlayWave(String wavfile, boolean loop) {
+        this.filename = wavfile;
+        this.loop = loop; // 是否循环播放
     }
 
     public void run() {
+        do {
+            File soundFile = new File(filename);
 
-        File soundFile = new File(filename);
+            try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile)) {
+                AudioFormat format = audioInputStream.getFormat();
+                DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+                SourceDataLine auline = (SourceDataLine) AudioSystem.getLine(info);
+                auline.open(format);
 
-        AudioInputStream audioInputStream = null;
-        try {
-            audioInputStream = AudioSystem.getAudioInputStream(soundFile);
-        } catch (Exception e1) {
-            e1.printStackTrace();
-            return;
-        }
+                auline.start();
+                byte[] abData = new byte[512]; // 缓冲区
+                int nBytesRead;
 
-        AudioFormat format = audioInputStream.getFormat();
-        SourceDataLine auline = null;
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+                while ((nBytesRead = audioInputStream.read(abData, 0, abData.length)) != -1) {
+                    auline.write(abData, 0, nBytesRead);
+                }
 
-        try {
-            auline = (SourceDataLine) AudioSystem.getLine(info);
-            auline.open(format);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
+                auline.drain();
+                auline.close();
 
-        auline.start();
-        int nBytesRead = 0;
-        // 这是缓冲
-        byte[] abData = new byte[512];
-
-        try {
-            while (nBytesRead != -1) {
-                nBytesRead = audioInputStream.read(abData, 0, abData.length);
-                if (nBytesRead >= 0) auline.write(abData, 0, nBytesRead);
+            } catch (Exception e) {
+                e.printStackTrace();
+                break; // 如果发生错误，退出循环
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        } finally {
-            auline.drain();
-            auline.close();
-        }
+        } while (loop); // 如果 loop 为 true，则继续播放
     }
 }
