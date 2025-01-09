@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  * @Project: JavaSeCode
@@ -46,7 +47,6 @@ public class Menu extends JFrame {
         newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("开始新游戏");
                 new TankGame(0);
                 dispose();
             }
@@ -55,9 +55,18 @@ public class Menu extends JFrame {
         lastGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("继续旧游戏");
-                new TankGame(1);
-                dispose();
+                if (new File(Recorder.getEnemyTanksPath()).exists() &&
+                new File(Recorder.getScorePath()).exists()) {
+                    new TankGame(1);
+                    dispose();
+                } else {
+                    UIManager.put("OptionPane.messageFont", new Font("宋体", Font.BOLD, 20));
+                    UIManager.put("OptionPane.buttonFont", new Font("宋体", Font.BOLD, 20));
+                    JOptionPane.showMessageDialog(null, "无存档，请开始新游戏！",
+                            "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+
             }
         });
     }

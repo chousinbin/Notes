@@ -113,4 +113,12 @@ public class Recorder {
     public static void setEnemyTanks(Vector<EnemyTank> enemyTanks) {
         Recorder.enemyTanks = enemyTanks;
     }
+
+    public static String getScorePath() {
+        return scorePath;
+    }
+
+    public static String getEnemyTanksPath() {
+        return enemyTanksPath;
+    }
 }
