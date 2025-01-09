@@ -20,23 +20,39 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
     Image image1 = null;
     Image image2 = null;
     Image image3 = null;
+    int key;
 
 
-    public MyPanel() {
+    public MyPanel(int key) {
+        this.key = key;
         hero = new HeroTank(800, 500);
         hero.setSpeed(10);
-        for (int i = 0; i < enemyTankInitialSize; i++) {
-            EnemyTank enemyTank = new EnemyTank(100 * (i + 1), 0);
-            new Thread(enemyTank).start();
-            enemyTank.setDirection(2);
-            // 敌人创建一个子弹
-            enemyTank.fire();
-            enemyTanks.add(enemyTank);
+        if (key == 0) { // 开始新游戏创建新的敌人坦克
+            for (int i = 0; i < enemyTankInitialSize; i++) {
+                EnemyTank enemyTank = new EnemyTank(100 * (i + 1), 0);
+                new Thread(enemyTank).start();
+                enemyTank.setDirection(2);
+                // 敌人创建一个子弹
+                enemyTank.fire();
+                enemyTanks.add(enemyTank);
+            }
+        } else { // 读取保存的坦克
+           enemyTanks = Recorder.readEnemyTanks();
+           for (EnemyTank enemyTank : enemyTanks) {
+               new Thread(enemyTank).start();
+               for (Bullet b : enemyTank.getBullets()) {
+                   new Thread(b).start();
+               }
+           }
+           Recorder.setEnemyTankHitCount(Recorder.readScore());
         }
+
 
         for (int i = 0; i < enemyTanks.size(); i++) {
             enemyTanks.get(i).setEnemyTanks(enemyTanks);
         }
+        // 给 Recorder 设置敌人坦克
+        Recorder.setEnemyTanks(enemyTanks);
         // 初始化图片
         image1 = Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("/bomb_1.gif"));
         image2 = Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("/bomb_2.gif"));

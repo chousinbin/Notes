@@ -1,5 +1,6 @@
 package com.tank.game;
 
+import java.io.Serializable;
 import java.util.Vector;
 
 /**
@@ -10,6 +11,8 @@ import java.util.Vector;
  */
 public class EnemyTank extends Tank implements Runnable {
     private Vector<EnemyTank> enemyTanks = new Vector<>();
+
+    public EnemyTank() {}
 
     public EnemyTank(int x, int y) {
         super(x, y);

@@ -1,7 +1,6 @@
 package com.tank.game;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -13,12 +12,10 @@ import java.awt.event.WindowEvent;
  */
 public class TankGame extends JFrame {
     MyPanel panel = null;
-    public static void main(String[] args) {
-        new TankGame();
-    }
 
-    public TankGame() {
-        panel = new MyPanel();
+
+    public TankGame(int key) {
+        panel = new MyPanel(key);
         this.add(panel);
         // 边框数据：横向 16 纵向 39
         this.setSize(2400, 1095);
@@ -36,8 +33,8 @@ public class TankGame extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                System.out.println("关闭窗口了");
-                Recorder.save();
+                Recorder.saveScore();
+                Recorder.saveEnemyTanks();
                 System.exit(0);
             }
         });

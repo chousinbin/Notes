@@ -1,5 +1,6 @@
 package com.tank.game;
 
+import java.io.Serializable;
 import java.util.Vector;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Vector;
  * @Date: 2024/11/22 20:20
  * @Description:
  */
-public class Tank {
+public class Tank implements Serializable {
     // 坦克的坐标，指坦克左上角
     private int x;
     private int y;
@@ -67,6 +68,8 @@ public class Tank {
         x = x - speed >= 0 ? x - speed : x;
     }
 
+
+    public Tank() {}
     public Tank(int x, int y) {
         this.x = x;
         this.y = y;

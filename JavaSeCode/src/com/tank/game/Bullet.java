@@ -1,12 +1,14 @@
 package com.tank.game;
 
+import java.io.Serializable;
+
 /**
  * @Project: JavaSeCode
  * @Author: SinbinZhou
  * @Date: 2024/11/25 22:06
  * @Description: 射击子弹
  */
-public class Bullet implements Runnable {
+public class Bullet implements Runnable, Serializable {
     // 子弹横纵坐标
     private int x;
     private int y;

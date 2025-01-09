@@ -17,7 +17,7 @@ public class DrawCircle extends JFrame{
     }
 
     private DrawCircle() {
-        mp = new com.tank.game.MyPanel();
+        mp = new com.tank.game.MyPanel(0);
         this.add(mp);
         this.setSize(1920, 1080);
         this.setVisible(true);
