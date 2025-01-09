@@ -96,6 +96,20 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
                 bombs.remove(bomb);
             }
         }
+
+        // 绘制计分板
+        drawRecorder(g);
+    }
+
+    public void drawRecorder(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("宋体", Font.BOLD, 25));
+        g.drawString("您的成绩", 1940, 30);
+
+        drawTank(1940, 50, g, 0, 0);
+        g.setColor(Color.BLACK);
+        g.drawString(Recorder.getEnemyTankHitCount() + "", 1980, 80);
+
     }
 
     public void drawTank(int x, int y, Graphics g, int direction, int type) {
@@ -170,6 +184,9 @@ public class MyPanel extends JPanel implements KeyListener, Runnable{
                 bullet.getY() >= yMin && bullet.getY() <= yMax) {
             bullet.setLive(false);
             tank.setLive(false);
+            if (tank instanceof EnemyTank) {
+                Recorder.add();
+            }
             /*
                 移除被击中的敌人坦克，会导致敌人遗留的子弹同步被销毁
                 不如在线程 run 中事先判断敌人坦克是否存活
