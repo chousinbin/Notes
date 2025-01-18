@@ -6502,7 +6502,7 @@ class Lock implements Runnable {
 1. 当前线程调用 Thread.sleep() 或 Thread.yield() 方法，暂停线程的执行，但不会释放锁。
 2. 其他线程调用 suspend() 方法将当前线程挂起，当前线程不会释放锁。
 
-# IO 流
+# IO
 
 - **文件流**：文件在程序中是以流的形式来操作的。
 - **流**：文件在数据源和程序之间传输的载体，文件需要包装成流的形式。
@@ -7116,29 +7116,171 @@ public class Test {
 | setProperty | Object 旧值 | String K, String V     | 设置键值对            |
 | store       | void        | 输出流, String comment | 将对象存储到文件      |
 
+# 网络编程
 
+## InetAddress
 
+`InetAddress` 类是 `java.net` 包下的一个类，提供一些方法来处理主机名解析和 IP 地址操作。
 
+### 常用静态方法
 
+| 方法名       | 参数        | 返回类型    | 作用                                      |
+| ------------ | ----------- | ----------- | ----------------------------------------- |
+| getLocalHost | -           | InetAddress | 获取本机 InetAddress 对象                 |
+| getByName    | String host | InetAddress | 根据主机名 / 域名获取 InetAddress 对象    |
+| getByAddress | byte[] addr | InetAddress | 根据 IP 地址字节数组获取 InetAddress 对象 |
 
+### 常用成员方法
 
+| 方法名         | 参数 | 返回类型 | 作用                                 |
+| -------------- | ---- | -------- | ------------------------------------ |
+| getHostName    | -    | String   | 获取 InetAddress 对象的主机名 / 域名 |
+| getHostAddress | -    | String   | 获取 InetAddress 对象的 IP 地址      |
 
+## TCP 编程
 
+### Socket
 
+网络应用程序广泛采用 Socket 进行开发，Socket 是两台主机之间通信的端点，网络通信就是 Socket 间的通信。
 
+Socket 把网络连接作为一个流，数据在两个 Socket 之间通过 IO 传输。
 
+ServerSocket 有一个指定的端口号，客户端 Socket 虽然并未显示指定端口号，实际上是根据 TCP/IP 被分配一个随机端口号，用来与服务器端的 ServerSocket 进行通信。
 
+### 字节流
 
+**Server**
 
+```java
+ServerSocket serverSocket = new ServerSocket(9999);
+Socket acceptSocket = serverSocket.accept();
+// 字节流写
+InputStream is = acceptSocket.getInputStream();
+byte[] buffer = new byte[1024];
+int len = 0;
+while ((len = is.read(buffer)) != -1) {
+    System.out.println(new String(buffer, 0, len));
+}
 
+// 字节流读
+OutputStream oos = acceptSocket.getOutputStream();
+oos.write("hello, client".getBytes());
+acceptSocket.shutdownOutput(); // 结束输出流
 
+is.close();
+oos.close();
+acceptSocket.close();
+serverSocket.close();
+```
 
+**Client**
 
+```java
+Socket socket = new Socket(InetAddress.getLocalHost(), 9999);
+// 字节流写
+OutputStream oos = socket.getOutputStream();
+oos.write("hello, server".getBytes());
+socket.shutdownOutput();
 
+// 字节流读
+InputStream is = socket.getInputStream();
+byte[] buffer = new byte[1024];
+int len = 0;
+while ((len = is.read(buffer)) != -1) {
+    System.out.println(new String(buffer, 0, len));
+}
 
+is.close();
+oos.close();
+socket.close();
+```
 
+### 字符流
 
+**Server**
 
+```java
+ServerSocket serverSocket = new ServerSocket(9999);
+Socket acceptSocket = serverSocket.accept();
+// 字符流读
+InputStream is = acceptSocket.getInputStream();
+BufferedReader br = new BufferedReader(new InputStreamReader(is));
+String line;
+while((line = br.readLine()) != null && !line.equals("EOF")) {
+    System.out.println(line);
+}
+
+// 字节流写
+OutputStream oos = acceptSocket.getOutputStream();
+BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(oos));
+bw.write("hello, client");
+bw.newLine();
+bw.write("EOF");
+bw.newLine();
+bw.flush();
+
+bw.close();
+br.close();
+acceptSocket.close();
+serverSocket.close();
+```
+
+**Client**
+
+```java
+Socket socket = new Socket(InetAddress.getLocalHost(), 9999);
+// 字节流转换为字符流
+OutputStream oos = socket.getOutputStream();
+BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(oos));
+bw.write("hello, server");
+bw.newLine();
+bw.write("EOF");
+bw.newLine();
+bw.flush(); // 字符流手动刷新
+
+// 字符流读
+InputStream is = socket.getInputStream();
+BufferedReader br = new BufferedReader(new InputStreamReader(is));
+String line;
+while((line = br.readLine()) != null && !line.equals("EOF")) {
+    System.out.println(line);
+}
+
+bw.close();
+br.close();
+socket.close();
+```
+
+## UDP 编程
+
+### DatagramSocket
+
+DatagramSocket 负责发送和接收数据，可以指定端口。
+
+### DatagramPacket
+
+DatagramPacket 负责封装数据，包括数据和起止地址 + 端口号。
+
+### 代码实践
+
+```java
+DatagramSocket datagramSocket = new DatagramSocket(9998);
+// 发送
+byte[] data = "hello\nUDP B".getBytes();
+DatagramPacket datagramPacket = new DatagramPacket(
+    data, data.length,
+    InetAddress.getLocalHost(), 9999);
+datagramSocket.send(datagramPacket);
+// 接收
+byte[] buffer = new byte[64 * 1024]; // UDP 数据报最大 64KB
+datagramPacket = new DatagramPacket(buffer, buffer.length);
+datagramSocket.receive(datagramPacket);
+int length = datagramPacket.getLength(); // 数据实际长度
+data = datagramPacket.getData();
+System.out.println(new String(data, 0, length));
+// 关闭资源
+datagramSocket.close();
+```
 
 
 
