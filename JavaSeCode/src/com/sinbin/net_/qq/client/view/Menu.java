@@ -72,9 +72,10 @@ public class Menu {
                     System.out.println("发送文件：");
                     break;
                 case "9": // 输入 9 之后，未处理线程，导致程序不能结束
-                    System.out.println("退出登录：");
+                    System.out.println("退出登录...");
                     MenuLoop = false;
-//                    ManageClientConnectServerThread.closeAllThread();
+                    // 告诉服务器释放本账号相关线程和 Socket
+                    userService.clientExit();
                     break;
             }
         }

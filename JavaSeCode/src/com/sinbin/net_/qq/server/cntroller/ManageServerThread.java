@@ -30,4 +30,8 @@ public class ManageServerThread {
         }
         return res;
     }
+
+    public static void removeThread(String userId) {
+        hm.remove(userId);
+    }
 }

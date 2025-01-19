@@ -24,8 +24,9 @@ public class ServerConnectClientThread extends Thread{
 
     @Override
     public void run() {
+        boolean loop = true;
         // 线程需要在后台监听客户端发来的未知消息
-        while (true) {
+        while (loop) {
 //            System.out.println("线程等待客户端" + userId + "消息");
             try {
                 ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
@@ -41,6 +42,19 @@ public class ServerConnectClientThread extends Thread{
                         message1.setReceiver(message.getSender());
                         ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
                         oos.writeObject(message1);
+                        break;
+                    case MessageType.MESSAGE_CLIENT_EXIT:
+                        System.out.println(message.getSender() + " 退出登录");
+                        // 给要退出的客户端发送退出消息
+                        Message message2 = new Message();
+                        message2.setReceiver(message.getSender());
+                        message2.setMessageType(MessageType.MESSAGE_CLIENT_EXIT);
+                        ObjectOutputStream oos2 = new ObjectOutputStream(socket.getOutputStream());
+                        oos2.writeObject(message2);
+                        // 释放服务端的相关线程和 Socket 资源
+                        ManageServerThread.removeThread(userId);
+                        socket.close();
+                        loop = false;
                         break;
                 }
             } catch (Exception e) {

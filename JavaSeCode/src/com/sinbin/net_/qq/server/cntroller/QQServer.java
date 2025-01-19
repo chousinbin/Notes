@@ -43,6 +43,7 @@ public class QQServer {
                 Message message = new Message();
                 // 检查账户密码
                 if (checkUser(user.getUserId(), user.getUserPwd())) {
+                    System.out.println(user.getUserId() + " 登陆成功");
                     message.setMessageType(MessageType.MESSAGE_LOGIN_SUCCEED);
                     oos.writeObject(message);
                     // 创建一个线程，与客户端保持通信
@@ -51,6 +52,7 @@ public class QQServer {
                     // 添加到线程集合
                     ManageServerThread.addThread(user.getUserId(), thread);
                 } else {
+                    System.out.println(user.getUserId() + " 登陆失败");
                     message.setMessageType(MessageType.MESSAGE_LOGIN_FAIL);
                     oos.writeObject(message);
                     // 登录失败关闭 Socket

@@ -22,12 +22,7 @@ public class ManageClientConnectServerThread {
     public static ClientConnectServerThread query(String userId) {
         return hm.get(userId);
     }
-    // 试图关闭所有线程
-    public static void closeAllThread() {
-        Set keySet = hm.keySet();
-        for (Object key : keySet) {
-            ClientConnectServerThread thread = hm.get(key);
-            thread.stop();
-        }
+    public static void removeThread(String userId) {
+        hm.remove(userId);
     }
 }

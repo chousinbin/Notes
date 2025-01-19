@@ -22,8 +22,9 @@ public class ClientConnectServerThread extends Thread{
 
     @Override
     public void run() {
+        boolean loop = true;
         // 线程需要在后台监听服务器发来的未知消息
-        while (true) {
+        while (loop) {
 //            System.out.println("客户端线程等待服务器消息");
             try {
                 ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
@@ -36,6 +37,11 @@ public class ClientConnectServerThread extends Thread{
                         for (int i = 0; i < users.length; i ++) {
                             System.out.println(users[i]);
                         }
+                        break;
+                    case MessageType.MESSAGE_CLIENT_EXIT:
+                        ManageClientConnectServerThread.removeThread(message.getReceiver());
+                        socket.close();
+                        loop = false;
                         break;
                 }
             } catch (Exception e) {

@@ -58,8 +58,20 @@ public class UserService {
         try {
             ObjectOutputStream oos = new ObjectOutputStream(
                     ManageClientConnectServerThread.query(user.getUserId()).
-                            getSocket().
-                            getOutputStream());
+                            getSocket().getOutputStream());
+            oos.writeObject(message);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void clientExit() {
+        Message message = new Message();
+        message.setMessageType(MessageType.MESSAGE_CLIENT_EXIT);
+        message.setSender(user.getUserId());
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(ManageClientConnectServerThread.query(user.getUserId()).
+                    getSocket().getOutputStream());
             oos.writeObject(message);
         } catch (IOException e) {
             throw new RuntimeException(e);
