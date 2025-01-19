@@ -1,4 +1,4 @@
-package com.sinbin.net_.qq.server.cntroller;
+package com.sinbin.net_.qq.server.controller;
 
 import com.sinbin.net_.qq.common.Message;
 import com.sinbin.net_.qq.common.MessageType;
@@ -26,10 +26,8 @@ public class QQServer {
         validUsers.put("10002", new User("10002", "123456"));
         validUsers.put("10003", new User("10001", "123456"));
     }
-    public static void main(String[] args) {
-        new QQServer();
-    }
-     QQServer(){
+
+     public QQServer(){
         try {
             serverSocket = new ServerSocket(9999);
 

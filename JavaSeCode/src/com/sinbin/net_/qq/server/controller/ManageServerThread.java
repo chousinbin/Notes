@@ -1,6 +1,4 @@
-package com.sinbin.net_.qq.server.cntroller;
-
-import com.sinbin.net_.qq.client.controller.ClientConnectServerThread;
+package com.sinbin.net_.qq.server.controller;
 
 import java.util.HashMap;
 import java.util.Set;

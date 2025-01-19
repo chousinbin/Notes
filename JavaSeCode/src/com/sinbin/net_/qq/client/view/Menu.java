@@ -17,7 +17,7 @@ public class Menu {
     private boolean MenuLoop = true;
     private String option;
     private UserService userService = new UserService(); // 用于登录服务
-    private void showLogin() throws IOException, ClassNotFoundException {
+    public void showLogin() throws IOException, ClassNotFoundException {
         while (loginLoop) {
             System.out.println("========网络通信系统-登录界面========");
             System.out.println("\t\t 1 登录系统");
@@ -79,10 +79,5 @@ public class Menu {
                     break;
             }
         }
-    }
-
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-        new Menu().showLogin();
-        System.out.println("退出客户端...");
     }
 }

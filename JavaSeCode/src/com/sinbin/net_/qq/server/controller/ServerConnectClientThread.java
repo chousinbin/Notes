@@ -1,4 +1,4 @@
-package com.sinbin.net_.qq.server.cntroller;
+package com.sinbin.net_.qq.server.controller;
 
 import com.sinbin.net_.qq.common.Message;
 import com.sinbin.net_.qq.common.MessageType;

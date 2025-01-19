@@ -3,7 +3,6 @@ package com.sinbin.net_.qq.client.controller;
 import com.sinbin.net_.qq.common.Message;
 import com.sinbin.net_.qq.common.MessageType;
 import com.sinbin.net_.qq.common.User;
-import com.sinbin.net_.qq.server.cntroller.ManageServerThread;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
