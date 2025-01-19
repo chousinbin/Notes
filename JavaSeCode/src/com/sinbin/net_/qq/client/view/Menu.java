@@ -1,6 +1,9 @@
 package com.sinbin.net_.qq.client.view;
 
+import com.sinbin.net_.qq.client.controller.UserService;
 import com.sinbin.net_.qq.client.utils.Utility;
+
+import java.io.IOException;
 
 /**
  * @Project: JavaSeCode
@@ -12,7 +15,8 @@ public class Menu {
     private boolean loginLoop = true;
     private boolean MenuLoop = true;
     private String option;
-    private void showLogin() {
+    private UserService userService = new UserService(); // 用于登录服务
+    private void showLogin() throws IOException, ClassNotFoundException {
         while (loginLoop) {
             System.out.println("========网络通信系统-登录界面========");
             System.out.println("\t\t 1 登录系统");
@@ -28,7 +32,7 @@ public class Menu {
                     System.out.print("UserPwd: ");
                     String userPwd = Utility.readString(20);
 
-                    if (true) {
+                    if (userService.checkUser(userId, userPwd)) {
                         System.out.println("登录成功");
                         showMenu(userId);
                     } else {
@@ -72,7 +76,7 @@ public class Menu {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         new Menu().showLogin();
         System.out.println("退出客户端...");
     }
