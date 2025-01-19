@@ -1,10 +1,12 @@
 package com.sinbin.net_.qq.client.controller;
 
 import com.sinbin.net_.qq.common.Message;
+import com.sinbin.net_.qq.common.MessageType;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+
 /**
  * @Project: JavaSeCode
  * @Author: SinbinZhou
@@ -22,10 +24,20 @@ public class ClientConnectServerThread extends Thread{
     public void run() {
         // 线程需要在后台监听服务器发来的未知消息
         while (true) {
-            System.out.println("客户端线程等待服务器消息");
+//            System.out.println("客户端线程等待服务器消息");
             try {
                 ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
                 Message message = (Message)ois.readObject();
+                // 判断 message 类型，做相应的处理
+                switch (message.getMessageType()) {
+                    case MessageType.MESSAGE_RET_ONLINE_USER:
+                        String[] users = message.getContent().split(" ");
+                        System.out.println("当前在线用户：");
+                        for (int i = 0; i < users.length; i ++) {
+                            System.out.println(users[i]);
+                        }
+                        break;
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

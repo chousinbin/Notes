@@ -3,6 +3,7 @@ package com.sinbin.net_.qq.server.cntroller;
 import com.sinbin.net_.qq.client.controller.ClientConnectServerThread;
 
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * @Project: JavaSeCode
@@ -19,5 +20,14 @@ public class ManageServerThread {
 
     public static ServerConnectClientThread getThread(String userId) {
         return hm.get(userId);
+    }
+
+    public static String getOnlineUserList() {
+        String res = "";
+        Set<String> keySet = hm.keySet();
+        for (String key : keySet) {
+            res += key + " ";
+        }
+        return res;
     }
 }

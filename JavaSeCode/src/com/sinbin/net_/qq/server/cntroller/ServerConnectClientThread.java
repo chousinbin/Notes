@@ -1,8 +1,10 @@
 package com.sinbin.net_.qq.server.cntroller;
 
 import com.sinbin.net_.qq.common.Message;
+import com.sinbin.net_.qq.common.MessageType;
 
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
@@ -24,10 +26,23 @@ public class ServerConnectClientThread extends Thread{
     public void run() {
         // 线程需要在后台监听客户端发来的未知消息
         while (true) {
-            System.out.println("线程等待客户端" + userId + "消息");
+//            System.out.println("线程等待客户端" + userId + "消息");
             try {
                 ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
                 Message message = (Message)ois.readObject();
+                // 判断 message 类型，做相应的处理
+                switch (message.getMessageType()) {
+                    case MessageType.MESSAGE_GET_ONLINE_USER:
+                        System.out.println(message.getSender() + " 获取在线列表");
+                        String onlineUserList = ManageServerThread.getOnlineUserList();
+                        Message message1 = new Message();
+                        message1.setContent(onlineUserList);
+                        message1.setMessageType(MessageType.MESSAGE_RET_ONLINE_USER);
+                        message1.setReceiver(message.getSender());
+                        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                        oos.writeObject(message1);
+                        break;
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

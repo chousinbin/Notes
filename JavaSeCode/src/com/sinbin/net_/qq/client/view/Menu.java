@@ -59,7 +59,8 @@ public class Menu {
             option = Utility.readString(1);
             switch (option) {
                 case "1":
-                    System.out.println("在线用户：");
+                    System.out.println("获取在线用户...");
+                    userService.getOnlineUser();
                     break;
                 case "2":
                     System.out.println("消息群发：");
