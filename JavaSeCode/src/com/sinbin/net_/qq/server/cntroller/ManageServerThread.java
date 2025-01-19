@@ -1,0 +1,23 @@
+package com.sinbin.net_.qq.server.cntroller;
+
+import com.sinbin.net_.qq.client.controller.ClientConnectServerThread;
+
+import java.util.HashMap;
+
+/**
+ * @Project: JavaSeCode
+ * @Author: SinbinZhou
+ * @Date: 2025/1/19 18:35
+ * @Description: 管理服务端线程
+ */
+public class ManageServerThread {
+    private static HashMap<String, ServerConnectClientThread> hm = new HashMap<>();
+
+    public static void addThread(String userId, ServerConnectClientThread thread) {
+        hm.put(userId, thread);
+    }
+
+    public static ServerConnectClientThread getThread(String userId) {
+        return hm.get(userId);
+    }
+}

@@ -7,10 +7,8 @@ import com.sinbin.net_.qq.common.User;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 /**
  * @Project: JavaSeCode
@@ -42,6 +40,8 @@ public class UserService {
             // 线程放入集合
             ManageClientConnectServerThread.add(userId, clientConnectServerThread);
         } else {
+            // 防止重新登陆时自动返回上次的 true
+            status = false;
             // 登录失败，不启动线程，关闭 Socket
             socket.close();
         }

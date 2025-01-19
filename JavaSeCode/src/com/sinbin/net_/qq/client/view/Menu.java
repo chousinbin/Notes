@@ -1,5 +1,6 @@
 package com.sinbin.net_.qq.client.view;
 
+import com.sinbin.net_.qq.client.controller.ManageClientConnectServerThread;
 import com.sinbin.net_.qq.client.controller.UserService;
 import com.sinbin.net_.qq.client.utils.Utility;
 
@@ -27,6 +28,7 @@ public class Menu {
 
             switch (option) {
                 case "1":
+                    MenuLoop = true;
                     System.out.print("UserID: ");
                     String userId = Utility.readString(10);
                     System.out.print("UserPwd: ");
@@ -68,9 +70,10 @@ public class Menu {
                 case "4":
                     System.out.println("发送文件：");
                     break;
-                case "9":
-                    System.out.println("退出系统：");
+                case "9": // 输入 9 之后，未处理线程，导致程序不能结束
+                    System.out.println("退出登录：");
                     MenuLoop = false;
+//                    ManageClientConnectServerThread.closeAllThread();
                     break;
             }
         }
