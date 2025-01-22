@@ -62,27 +62,31 @@ public class ServerConnectClientThread extends Thread{
                                 message.getContent());
                         if(ManageServerThread.isOnline(message.getReceiver())) {
                             // 得到服务器与接收者之间的线程
-                            ServerConnectClientThread thread = ManageServerThread.getThread(message.getReceiver());
-                            ObjectOutputStream oos3 = new ObjectOutputStream(thread.getSocket().getOutputStream());
+                            ObjectOutputStream oos3 = new ObjectOutputStream(ManageServerThread.
+                                    getThread(message.getReceiver()).getSocket().getOutputStream());
                             oos3.writeObject(message);
                         } else { // 如果客户端不在线，可以保存到数据库
-
+                            ManageOfflineMessage.add(message.getReceiver(), message);
                         }
                         break;
                     case MessageType.MESSAGE_GROUP_MES:
                         System.out.println(message.getSender() + " to ALL: " +
                                 message.getContent());
-                        Set<String> users = ManageServerThread.getKeySet();
+                        Set<String> users = ManageUser.getKeySet();
                         for (String user : users) {
                             if (user.equals(message.getSender())) {
                                 continue;
                             }
-                            ServerConnectClientThread thread = ManageServerThread.getThread(user);
-                            ObjectOutputStream oos4 = new ObjectOutputStream(thread.getSocket().getOutputStream());
-                            oos4.writeObject(message);
+                            if (ManageServerThread.isOnline(user)) {
+                                ObjectOutputStream oos4 = new ObjectOutputStream(ManageServerThread.
+                                        getThread(user).getSocket().getOutputStream());
+                                oos4.writeObject(message);
+                            } else {
+                                ManageOfflineMessage.add(user, message);
+                            }
                         }
                         break;
-                    case MessageType.MESSAGE_FILE: // 转发消息
+                    case MessageType.MESSAGE_FILE: // 转发文件
                         System.out.println(message.getSender() + " to " + message.getReceiver() + "(file): " +
                                 message.getContent());
                         if (ManageServerThread.isOnline(message.getReceiver())) {
@@ -91,7 +95,7 @@ public class ServerConnectClientThread extends Thread{
                             ObjectOutputStream oos5 = new ObjectOutputStream(thread.getSocket().getOutputStream());
                             oos5.writeObject(message);
                         } else { // 如果客户端不在线，可以保存到数据库
-
+                            ManageOfflineMessage.add(message.getReceiver(), message);
                         }
                         break;
                 }

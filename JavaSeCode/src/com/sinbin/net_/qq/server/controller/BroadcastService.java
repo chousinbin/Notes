@@ -30,15 +30,19 @@ public class BroadcastService implements Runnable{
             message.setSender("Server");
             message.setContent(news);
             message.setSendTime(new Date().toString());
-            // 遍历在线用户
-            Set<String> users = ManageServerThread.getKeySet();
+            // 遍历所有用户
+            Set<String> users = ManageUser.getKeySet();
             for (String user : users) {
-                try {
-                    ObjectOutputStream oos =
-                            new ObjectOutputStream(ManageServerThread.getThread(user).getSocket().getOutputStream());
-                    oos.writeObject(message);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                if (ManageServerThread.isOnline(user)) { // 在线的立即推送
+                    try {
+                        ObjectOutputStream oos = new ObjectOutputStream(ManageServerThread.getThread(user).
+                                getSocket().getOutputStream());
+                        oos.writeObject(message);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else { // 不在线的暂存服务器
+                    ManageOfflineMessage.add(user, message);
                 }
             }
         }

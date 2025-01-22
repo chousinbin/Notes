@@ -21,7 +21,7 @@ public class MessageService {
      * @param sender 发送者ID
      */
     public void sendPrivateMessage(String sender) {
-        System.out.print("请输入接收者的ID(在线): ");
+        System.out.print("请输入接收者的ID: ");
         String receiver = Utility.readString(10);
         System.out.print("请输入发送的消息: ");
         String content = Utility.readString(100);

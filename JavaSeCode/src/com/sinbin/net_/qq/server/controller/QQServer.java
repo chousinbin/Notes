@@ -25,7 +25,8 @@ public class QQServer {
             serverSocket = new ServerSocket(9999);
             // 服务器广播服务
             new Thread(new BroadcastService()).start();
-
+            // 离线消息推送服务
+            new Thread(new OfflineMessageService()).start();
             while (true) {
                 Socket socket = serverSocket.accept();
 
