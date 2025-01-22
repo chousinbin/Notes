@@ -1,10 +1,8 @@
 package com.sinbin.net_.qq.client.controller;
 
-import com.sinbin.net_.qq.client.utils.Utility;
 import com.sinbin.net_.qq.common.Message;
 import com.sinbin.net_.qq.common.MessageType;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 

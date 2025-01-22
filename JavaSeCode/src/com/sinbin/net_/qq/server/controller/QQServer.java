@@ -30,6 +30,8 @@ public class QQServer {
      public QQServer(){
         try {
             serverSocket = new ServerSocket(9999);
+            // 服务器广播服务
+            new Thread(new BroadcastService()).start();
 
             while (true) {
                 Socket socket = serverSocket.accept();
