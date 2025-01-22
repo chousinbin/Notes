@@ -15,6 +15,8 @@ public class Message implements Serializable {
     private String content;
     private String sendTime;
     private String messageType;
+    private byte[] filebytes;
+    private int fileLen;
 
     public String getSender() {
         return sender;
@@ -54,5 +56,21 @@ public class Message implements Serializable {
 
     public void setMessageType(String messageType) {
         this.messageType = messageType;
+    }
+
+    public byte[] getFilebytes() {
+        return filebytes;
+    }
+
+    public void setFilebytes(byte[] filebytes) {
+        this.filebytes = filebytes;
+    }
+
+    public int getFileLen() {
+        return fileLen;
+    }
+
+    public void setFileLen(int fileLen) {
+        this.fileLen = fileLen;
     }
 }

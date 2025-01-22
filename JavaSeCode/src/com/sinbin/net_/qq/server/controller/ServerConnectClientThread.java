@@ -82,6 +82,18 @@ public class ServerConnectClientThread extends Thread{
                             oos4.writeObject(message);
                         }
                         break;
+                    case MessageType.MESSAGE_FILE: // 转发消息
+                        System.out.println(message.getSender() + " to " + message.getReceiver() + "(file): " +
+                                message.getContent());
+                        if (ManageServerThread.isOnline(message.getReceiver())) {
+                            // 得到服务器与接收者之间的线程
+                            ServerConnectClientThread thread = ManageServerThread.getThread(message.getReceiver());
+                            ObjectOutputStream oos5 = new ObjectOutputStream(thread.getSocket().getOutputStream());
+                            oos5.writeObject(message);
+                        } else { // 如果客户端不在线，可以保存到数据库
+
+                        }
+                        break;
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);

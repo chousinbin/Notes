@@ -6,6 +6,7 @@ import com.sinbin.net_.qq.common.MessageType;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.sql.SQLOutput;
 import java.util.Date;
 
 /**

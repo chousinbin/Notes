@@ -1,5 +1,6 @@
 package com.sinbin.net_.qq.client.controller;
 
+import com.sinbin.net_.qq.client.utils.Utility;
 import com.sinbin.net_.qq.common.Message;
 import com.sinbin.net_.qq.common.MessageType;
 
@@ -50,6 +51,11 @@ public class ClientConnectServerThread extends Thread{
                     case MessageType.MESSAGE_GROUP_MES:
                         System.out.println("\n" + message.getSender() + "(" + message.getSendTime() + ")2all:");
                         System.out.println(message.getContent());
+                        break;
+                    case MessageType.MESSAGE_FILE:
+                        System.out.println("\n" + message.getSender() + "(" + message.getSendTime() + "): " +
+                                message.getContent());
+                        new FileService().saveFile(message);
                         break;
                 }
             } catch (Exception e) {

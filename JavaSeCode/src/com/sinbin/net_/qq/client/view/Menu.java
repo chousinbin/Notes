@@ -1,5 +1,6 @@
 package com.sinbin.net_.qq.client.view;
 
+import com.sinbin.net_.qq.client.controller.FileService;
 import com.sinbin.net_.qq.client.controller.ManageClientConnectServerThread;
 import com.sinbin.net_.qq.client.controller.MessageService;
 import com.sinbin.net_.qq.client.controller.UserService;
@@ -19,6 +20,7 @@ public class Menu {
     private String option;
     private UserService userService = new UserService(); // 登录服务
     private MessageService messageService = new MessageService(); // 消息服务
+    private FileService fileService = new FileService(); // 文件传输服务
     public void showLogin() throws IOException, ClassNotFoundException {
         while (loginLoop) {
             System.out.println("========网络通信系统-登录界面========");
@@ -71,7 +73,7 @@ public class Menu {
                     messageService.sendPrivateMessage(userId);
                     break;
                 case "4":
-                    System.out.println("发送文件：");
+                    fileService.sendFile(userId);
                     break;
                 case "9": // 输入 9 之后，未处理线程，导致程序不能结束
                     System.out.println("退出登录...");
