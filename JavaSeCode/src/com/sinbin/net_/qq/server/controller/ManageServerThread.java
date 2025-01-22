@@ -29,6 +29,10 @@ public class ManageServerThread {
         return res;
     }
 
+    public static boolean isOnline(String userId) {
+        return hm.get(userId) != null;
+    }
+
     public static void removeThread(String userId) {
         hm.remove(userId);
     }

@@ -43,6 +43,10 @@ public class ClientConnectServerThread extends Thread{
                         socket.close();
                         loop = false;
                         break;
+                    case MessageType.MESSAGE_PRIVATE_MES:
+                        System.out.println("\n" + message.getSender() + "(" + message.getSendTime() + "):");
+                        System.out.println(message.getContent());
+                        break;
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
