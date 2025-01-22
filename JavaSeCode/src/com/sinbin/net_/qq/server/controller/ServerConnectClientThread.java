@@ -6,6 +6,7 @@ import com.sinbin.net_.qq.common.MessageType;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Set;
 
 /**
  * @Project: JavaSeCode
@@ -66,6 +67,19 @@ public class ServerConnectClientThread extends Thread{
                             oos3.writeObject(message);
                         } else { // 如果客户端不在线，可以保存到数据库
 
+                        }
+                        break;
+                    case MessageType.MESSAGE_GROUP_MES:
+                        System.out.println(message.getSender() + " to ALL: " +
+                                message.getContent());
+                        Set<String> users = ManageServerThread.getKeySet();
+                        for (String user : users) {
+                            if (user.equals(message.getSender())) {
+                                continue;
+                            }
+                            ServerConnectClientThread thread = ManageServerThread.getThread(user);
+                            ObjectOutputStream oos4 = new ObjectOutputStream(thread.getSocket().getOutputStream());
+                            oos4.writeObject(message);
                         }
                         break;
                 }

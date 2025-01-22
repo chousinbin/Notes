@@ -36,4 +36,8 @@ public class ManageServerThread {
     public static void removeThread(String userId) {
         hm.remove(userId);
     }
+
+    public static Set<String> getKeySet() {
+        return hm.keySet();
+    }
 }

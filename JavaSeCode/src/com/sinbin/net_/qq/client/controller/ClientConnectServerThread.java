@@ -47,6 +47,10 @@ public class ClientConnectServerThread extends Thread{
                         System.out.println("\n" + message.getSender() + "(" + message.getSendTime() + "):");
                         System.out.println(message.getContent());
                         break;
+                    case MessageType.MESSAGE_GROUP_MES:
+                        System.out.println("\n" + message.getSender() + "(" + message.getSendTime() + ")2all:");
+                        System.out.println(message.getContent());
+                        break;
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);

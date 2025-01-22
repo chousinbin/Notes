@@ -65,10 +65,9 @@ public class Menu {
                     userService.getOnlineUser();
                     break;
                 case "2":
-                    System.out.println("消息群发：");
+                    messageService.sendGroupMessage(userId);
                     break;
                 case "3":
-                    messageService = new MessageService();
                     messageService.sendPrivateMessage(userId);
                     break;
                 case "4":

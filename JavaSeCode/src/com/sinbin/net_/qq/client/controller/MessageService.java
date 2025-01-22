@@ -42,6 +42,27 @@ public class MessageService {
                     } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public void sendGroupMessage(String sender) {
+        System.out.print("请输入发送的消息: ");
+        String content = Utility.readString(100);
+
+        Message message = new Message();
+        message.setMessageType(MessageType.MESSAGE_GROUP_MES);
+        message.setSender(sender);
+        message.setContent(content);
+        message.setSendTime(new Date().toString());
+
+        System.out.println("\n" + message.getSender() + "(" + message.getSendTime() + "):");
+        System.out.println(message.getContent());
+
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(ManageClientConnectServerThread.
+                    query(sender).getSocket().getOutputStream());
+            oos.writeObject(message);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
