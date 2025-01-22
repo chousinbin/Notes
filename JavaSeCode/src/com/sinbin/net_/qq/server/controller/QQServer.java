@@ -19,13 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class QQServer {
     private ServerSocket serverSocket = null;
-    private static ConcurrentHashMap<String, User> validUsers = new ConcurrentHashMap<>(); // 线程安全
-    // 静态代码块自动初始化
-    static {
-        validUsers.put("10001", new User("10001", "123456"));
-        validUsers.put("10002", new User("10002", "123456"));
-        validUsers.put("10003", new User("10001", "123456"));
-    }
 
      public QQServer(){
         try {
@@ -42,7 +35,7 @@ public class QQServer {
                 ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
                 Message message = new Message();
                 // 检查账户密码
-                if (checkUser(user.getUserId(), user.getUserPwd())) {
+                if (ManageUser.checkPwd(user.getUserId(), user.getUserPwd())) {
                     System.out.println(user.getUserId() + " 登陆成功");
                     message.setMessageType(MessageType.MESSAGE_LOGIN_SUCCEED);
                     oos.writeObject(message);
@@ -64,21 +57,12 @@ public class QQServer {
             throw new RuntimeException(e);
         } finally {
             try {
-                serverSocket.close();
+                if (serverSocket != null) {
+                    serverSocket.close();
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    private boolean checkUser(String userId, String userPwd) {
-        User user = validUsers.get(userId);
-        if (user == null) {
-            return false;
-        }
-        if (!user.getUserPwd().equals(userPwd)) {
-            return false;
-        }
-        return true;
     }
 }
