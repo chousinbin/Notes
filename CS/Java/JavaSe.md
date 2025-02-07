@@ -3555,8 +3555,6 @@ public class Test {
 }
 ```
 
-
-
 ### 静态内部类
 
 #### 定义
@@ -3597,19 +3595,15 @@ public class Other {
 }
 ```
 
-# 枚举和注解
+# 枚举
 
-## 枚举类
-
-### 概括
-
-#### 定义
+## 定义
 
 枚举类(enumeration, 简称 enum), 枚举是一组常量的集合; 枚举类可以理解为是一种特殊的类, 里面只包含一组有限的特定的对象。
 
-### 自定义类实现枚举
+## 自定义类实现枚举
 
-#### 步骤
+### 步骤
 
 1. 将构造器私有化（防止实例化对象）；
 2. 删除 `setXxx()` 方法（防止对象的属性被修改）；
@@ -3670,9 +3664,9 @@ class Season {
 }
 ```
 
-### enum 关键字实现枚举
+## enum 关键字实现枚举
 
-#### 步骤
+### 步骤
 
 1. 使用关键字 `enum` 替代 `Class`；
 2. **首行**（定义对象在属性声明之前）使用 `对象常量名(参数列表)` 替代自定义类实现枚举中的创建对象方式
@@ -3680,12 +3674,12 @@ class Season {
 3. 如有多个常量对象, 使用逗号间隔, 重复步骤 2；
 4. 私有化构造器。
 
-#### 细节
+### 细节
 
 1. 当我们使用enum关键字开发一个枚举类时, 会隐式继承Enum类, 而且是一个`final`类, 通过`javap`反编译可以证明以上; 所以, **enum类不能继承其他的类**;
 2. 在用enum枚举类时传统的`public static final 对象名 = new 类名(参数列表)` 会被简化成`对象名(参数列表)`
 
-#### 反编译
+### 反编译
 
 ```bash
 E:\Github\Notes\CodeTest\javaProject\javaTest\out\production\javaTest\com\enum_\enum_enum>javap Season.class
@@ -3704,7 +3698,7 @@ final class com.enum_.enum_enum.Season extends java.lang.Enum<com.enum_.enum_enu
 }
 ```
 
-#### 演示代码
+### 演示代码
 
 ```java
 package com.enum_.enum_enum;
@@ -3756,33 +3750,33 @@ enum Season {
 
 ```
 
-### Enum 成员方法
+## Enum 成员方法
 
-#### name()
+### name()
 
 返回当前枚举类的常量的名称(对象名)
 
-#### toString()
+### toString()
 
 已经被Enum类重写, 返回当前对象名, 子类可以重写该方法, 用于返回对象属性信息
 
-#### ordinal()
+### ordinal()
 
 返回当前枚举的对象的编号, 编号从0开始;
 
-#### values()
+### values()
 
 返回包含当前枚举类的所有对象名的数组
 
-#### valueOf()
+### valueOf()
 
 将字符串与枚举类中的对象名进行匹配, 匹配成功返回对象, 否则报错
 
-#### compareTo()
+### compareTo()
 
 比较两个枚举常量的位置号, 返回前者位置号与后者位置号相减的结果
 
-#### 演示代码
+### 演示代码
 
 ```java
 package com.enum_;
@@ -3838,11 +3832,11 @@ enum Season {
 }
 ```
 
-### enum 实现接口
+## enum 实现接口
 
 枚举类和普通类一样可以实现接口。枚举类隐式继承 `Enum` 类，所以不能继承其他类。
 
-#### 演示代码
+### 演示代码
 
 ```java
 public class enumInterface {
@@ -3865,19 +3859,19 @@ enum Music implements IP{
 }
 ```
 
-## 注解
+# 注解
 
-### 概括
+## 概括
 
-#### 定义
+### 定义
 
 注解(Annotation)也被称为元数据(Metadata), 用于修饰包, 类, 方法, 属性, 构造器, 局部变量等数据信息;和注释一样, 注解不影响程序逻辑, 但注解可以被编译运行, 相当于嵌入在代码中的补充信息; 
 
-#### 作用
+### 作用
 
 在JavaSe中, 注解的使用目的比较简单, 例如标记过时的功能, 忽略警告等. 在JavaEE中注解占据了重要角色, 例如用来配置应用程序的任何切面, 代替JavaEE旧版中所遗留的繁冗代码和XML配置等;
 
-### @Override
+## @Override
 
 @Override表示指定重写父类方法, 如果注解了@Override的方法在父类中没有, 则会报错. 如果不写@Override注解, 而父类有子类同名方法, 则依然构成方法重写.
 
@@ -3885,7 +3879,7 @@ enum Music implements IP{
 
 @Target是修饰注解的注解, 称为源注解
 
-#### 源码
+### 源码
 
 ```java
 @Target(ElementType.METHOD)
@@ -3894,7 +3888,7 @@ public @interface Override {
 }
 ```
 
-### @Deprecated
+## @Deprecated
 
 @Deprecated注解修饰某个元素, 表明该元素已过时, 即不推荐使用, 但不是不能用;
 
@@ -3902,7 +3896,7 @@ public @interface Override {
 
 @Deprecated可以做JDK版本升级过度使用
 
-#### 源码
+### 源码
 
 ```java
 @Documented
@@ -3912,21 +3906,21 @@ public @interface Deprecated {
 }
 ```
 
-### @SuppressWarnings
+## @SuppressWarnings
 
 我们写的有些代码, IEDA会在界面上有警告信息, 可以用@SuppressWarnings注解那些代码, 来抑制IDEA的警告;
 
-#### 语法
+### 语法
 
 ```java
 @SuppressWarings({"警告类型", "警告类型"})
 ```
 
-#### 作用范围
+### 作用范围
 
 作用范围和编写的位置相关, 比如@SuprressWarnings放在一个方法的前一行, 那么作用范围为整个方法;
 
-#### 警告类型表
+### 警告类型表
 
 |警告类型|作用|
 | ---- | ---- |
@@ -3955,7 +3949,7 @@ public @interface Deprecated {
 |unqualified-field-access| 抑制与栏位存取不合格相关的警告|
 |unused| 抑制与未用的程式码及停用的程式码相关的警告|
 
-#### 源码
+### 源码
 
 ```java
 @Target({TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE})
@@ -3965,11 +3959,11 @@ public @interface SuppressWarnings {
 }
 ```
 
-### 元注解
+## 元注解
 
 JDK的元注解用于修饰其他的注解
 
-#### Retention
+### Retention
 
 只能用于修饰一个 Annotation 定义, 用于指定该 Annotation 可以保留多长时间, @Rentention 包含一个 RetentionPolicy
 类型的成员变量, 使用 @Rentention 时必须为该 value 成员变量指定值:
@@ -3993,7 +3987,7 @@ public @interface Retention {
 }
 ```
 
-#### Target
+### Target
 
 用于修饰一个 Annotation 定义, 指定被修饰的注解可以修饰哪些程序元素. @Target也包含一个名为value的成员变量
 
@@ -4012,7 +4006,7 @@ public @interface Target {
 }
 ```
 
-#### Documented
+### Documented
 
 用于指定被该元注解修饰的注解类将被JavaDoc工具提取成文档, 即在生成文档时, 可以看到该注解;
 
@@ -4024,7 +4018,7 @@ public @interface Documented {
 }
 ```
 
-#### Inherited
+### Inherited
 
 被@Inherited修饰的注解将具有继承性, 即如果某个类使用了被@Inherited修饰的注解, 则子类将自动被那个注解修饰;
 
@@ -6972,6 +6966,7 @@ classDiagram
 - 序列化对象时，默认将所有属性都序列化，除了 `static ` 和 `transient` （`transient` 是标记属性不被序列化的关键词）修饰的成员。
 - 序列化对象时，要求成员属性的类型也实现**序列化接口**。
 - 序列化具备可继承性。
+- 序列化类在客户端和服务端之间通信，必须保证序列化类的**包路径相同**，否则会被认为是两个完全不同的类。
 
 ### ObjectInputStream
 
@@ -7137,15 +7132,15 @@ public class Test {
 | getHostName    | -    | String   | 获取 InetAddress 对象的主机名 / 域名 |
 | getHostAddress | -    | String   | 获取 InetAddress 对象的 IP 地址      |
 
-## TCP 编程
-
-### Socket
+## Socket
 
 网络应用程序广泛采用 Socket 进行开发，Socket 是两台主机之间通信的端点，网络通信就是 Socket 间的通信。
 
 Socket 把网络连接作为一个流，数据在两个 Socket 之间通过 IO 传输。
 
 ServerSocket 有一个指定的端口号，客户端 Socket 虽然并未显示指定端口号，实际上是根据 TCP/IP 被分配一个随机端口号，用来与服务器端的 ServerSocket 进行通信。
+
+## TCP 编程
 
 ### 字节流
 
@@ -7217,7 +7212,7 @@ bw.write("hello, client");
 bw.newLine();
 bw.write("EOF");
 bw.newLine();
-bw.flush();
+bw.flush(); // 缓冲区内容强制写入输出流
 
 bw.close();
 br.close();
@@ -7281,6 +7276,293 @@ System.out.println(new String(data, 0, length));
 // 关闭资源
 datagramSocket.close();
 ```
+
+# 反射
+
+> 在不修改源码情况下，通过外部配置文件来控制程序，符合开闭原则。
+
+反射机制允许程序在执行期借助 Reflection API 取得任何类的内部结构信息，并能操作对象的属性和方法。
+
+类加载之后，在堆中产生一个唯一的 Class 类型的对象，该对象包含类的完整结构。通过这个 Class 对象可以得到类的结构，这个 Class 对象就如同类的一面镜子，所以称为反射。
+
+## Java 程序的三个阶段
+
+1. **编译阶段**：运行 `javac` 将 .`java `源文件编译成 .`class` 字节码文件。
+2. **类加载阶段**：**类加载器**将字节码文件加载到  JVM 的方法区，并在堆中为该类创建一个 `Class` 类对象，该 `Class` 对象用面向对象的方式管理类的结构信息，包括：成员变量、构造器、成员方法等。
+3. **运行阶段**：当类加载完毕后，类对象属于 `Class` 对象。得到 `Class` 对象，可以实例化该类的对象、调用方法、操作属性。
+
+## 反射机制
+
+### 反射作用
+
+1. 在运行时判断任意一个对象所属的类。
+2. 在运行时构造任意一个类的对象。
+3. 在运行时得到任意一个类所具有的成员方法和变量。
+4. 在运行时调用任意一个对象的成员变量和方法。
+5. 生成动态代理。
+
+### 反射相关类
+
+1. java.lang.Class: 代表一个类，Class 对象表示某个类加载后在堆中的对象。
+2. java.lang.reflect.Method: 代表类的成员方法，Method 对象表示某个类的方法。
+3. java.lang.reflect.Field: 代表类的成员变量，Field 对象表示某个类的成员变量。
+4. java.lang.reflect.Constructor: 代表类的构造方法，Constructor 对象表示某个类的构造方法。
+
+### 反射优缺点
+
+1. **优点**：可以动态的创建和使用对象，使用灵活，是框架的底层核心。
+2. **缺点**：使用反射基本是解释执行，对执行速度有影响。
+
+### 反射性能优化
+
+Field, Constructor, Method 类都有 setAccessible() 方法，作用是启动和禁用访问安全检查的开关。当值为 true 时，表示反射对象在使用时取消访问检查，提高反射效率。
+
+## Class 类
+
+```mermaid
+classDiagram
+direction BT
+    class Class {
+    }
+    Class --|> Object
+    Class ..|> AnnotatedElement
+    Class ..|> GenericDeclaration
+    Class ..|> Serializable
+    Class ..|> Type
+    GenericDeclaration --|> AnnotatedElement
+
+    class Object {
+    }
+    class AnnotatedElement {
+    }
+    class GenericDeclaration {
+    }
+    class Serializable {
+    }
+    class Type {
+    }
+
+```
+
+### Class 类特性
+
+1. Class 类也是类，继承自 Object 类的底层类
+2. Class 类对象不是 new 出来的，是 JVM 通过类加载器 loadClass 出来的。
+3. 对于一个非 Class 类，只有一个 Class 类对象，在内存中也只有一份，因为类加载只出现一次。
+4. 每个类的实例都知道自己是哪个 Class 类对象生成的。`.getClass()`
+5. 通过 Class 对象可以完整的得到某个类的结构。
+6. Class 对象存放在堆中。
+7. 类的字节码二进制数据，存放在方法区
+
+### Class 类方法
+
+| 方法名                    | 返回类型       | 参数        | 备注                                                         |
+| ------------------------- | -------------- | ----------- | ------------------------------------------------------------ |
+| getClass()                | Class          | void        | Class 对象的运行类型                                         |
+| getSuperClass()           | Class          | void        | 返回父类的 Class 对象                                        |
+| getPackage().getName()    | String         | void        | Class 对象对应类的包名                                       |
+| getName()                 | String         | void        | Class 对象对应类的全限定名                                   |
+| getSimpleName()           | String         | void        | Class 对象对应类的简单类名                                   |
+| newInstance()             | Object         | void        | 通过反射创建对象实例                                         |
+| getField()                | Field          | String name | 通过字段名获取字段对象                                       |
+| getFields()               | Field[]        | void        | 获取该类以及父类的公有字段对象                               |
+| getDeclaredFields()       | Field[]        | void        | 获取该类以及父类的所有字段对象                               |
+| getMethed()               | Methed         | String name | 通过方法名获取方法对象                                       |
+| getMetheds()              | Methed[]       | void        | 获取该类以及父类的公有方法对象                               |
+| getDeclaredMetheds()      | Methed[]       | void        | 获取该类以及父类的所有方法对象                               |
+| getConstructors()         | Constructors[] | void        | 获取该类的公有构造器对象                                     |
+| getDeclaredConstructors() | Constructors[] | void        | 获取该类的所有构造器对象                                     |
+| getInterfaces()           | Class[]        | void        | 返回接口信息                                                 |
+| getAnnotations()          | Annotation[]   | void        | 返回注解信息                                                 |
+| 成员.getModifiers()       | int            | void        | 返回修饰符，默认 0，公有 1，私有 2，受保护 4，静态 8，常量 16 |
+| 成员.getName()            | String         | void        | 返回成员属性名                                               |
+| 属性.getType()            | Class          | void        | 返回属性类型                                                 |
+| 方法.getReturnType()      | Class          | void        | 返回方法的返回类型                                           |
+| 方法.getParameterTypes()  | Class[]        | void        | 返回方法的参数类型数组                                       |
+
+### Class 类对象获取
+
+1. 已知类的全限定名，使用 Class 类的静态方法 `forName()` 获取，可能抛出 `ClassNotFoundException`。
+   应用场景：配置文件，读取类全路径，加载类。
+
+2. 已知具体类，通过 `类.class` 获取，最安全可靠，程序性能高。
+   应用场景：参数传递，比如通过反射获得对应构造器对象。
+
+3. 已知某个类的实例，通过 `类对象.getClass()` 获取，
+   应用场景：通过创建好的对象，获取 Class 对象。
+
+4. 通过**类加载器**获取，通过类对象得到类加载器，再通过类加载器得到 Class 对象。
+   ```java
+   ClassLoader cl = 对象.getClass().getClassLoader();
+   Class cls = cl.loadClass("classFullPath");
+   ```
+
+5. 基本数据类型
+   ```java
+   Class cls = 基本数据类型.class;
+   ```
+
+6. 基本数据类型对应的包装类
+   ```java
+   Class cls = 包装类.TYPE;
+   ```
+
+### 有 Class 对象的类
+
+1. 外部类、成员内部类、静态内部类、局部内部类、匿名内部类
+2. interface
+3. 数组
+4. enum
+5. annotation
+6. 基本数据类型
+7. void
+
+## 类加载
+
+### 类加载模式
+
+- 静态加载：编译时加载相关的类，高耦合，依赖性强。
+- 动态加载：运行时加载需要的类，低耦合，依赖性弱。
+
+### 类加载时机
+
+1. 使用 new 创建对象时
+2. 子类被加载时：如果父类未加载，先加载父类，再加载子类
+3. 调用类中的静态成员时：如果该类未加载，则先加载类，再调用静态成员
+4. 反射
+
+### 类加载阶段
+
+1. **加载**：JVM 将字节码从不同的数据源（class 文件、jar 包、网络）转化为二进制字节流加载到内存中（方法区），并为之创建一个唯一的 java.lang.Class 对象（堆区）。
+2. **链接**（验证、准备、解析）：将类的二进制数据整合到 JRE 中，确保类的结构是正确和可用的。
+   - **验证**：检查类文件是否符合 JVM 的规范和安全要求，防止不合法代码危害 JVM。包括：文件格式验证（魔数 cafe babe）、元数据验证、字节码验证、符号引用验证。可以使用 `-Xverify:none` 关闭验证，以缩短类加载时间。
+   - **准备**：为类的静态变量分配内存，并设置**默认**初始值。（在方法区内）
+   - **解析**：将类中的符号引用（字符串）转换为直接引用（内存地址）。
+3. **初始化**：JVM 负责对类进行静态初始化，静态变量赋予**正确**初始值，完成类的初始化工作。
+
+## 反射创建对象
+
+1. 公有无参数构造器。
+2. 公有有参数构造器。
+3. 私有有参数构造器（反射爆破）。
+
+```java
+public class ReflectionCreateObject {
+    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        Class<?> cls = Class.forName("com.sinbin.reflection_.User");
+        // 1. 公有无参构造器
+        Object o1 = cls.newInstance();
+        System.out.println(o1);
+        // 2. 公有有参构造器
+        Constructor<?> constructor1 = cls.getConstructor(String.class);
+        Object o2 = constructor1.newInstance("zxk");
+        System.out.println(o2);
+        // 3. 私有有参构造器
+        Constructor<?> constructor2 = cls.getDeclaredConstructor(int.class, String.class);
+        constructor2.setAccessible(true); // 爆破
+        Object o3 = constructor2.newInstance(20, "zxk");
+        System.out.println(o3);
+    }
+}
+
+class User {
+    private int age = 10;
+    private String name = "zxb";
+
+    public User() {}
+    public User(String name) {
+        this.name = name;
+    }
+    private User(int age, String name) {
+        this.age = age;
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "age=" + age +
+                ", name='" + name + '\'' +
+                '}';
+    }
+}
+```
+
+## 反射操作属性
+
+```java
+public class AccessProperty {
+    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchFieldException {
+        Class<?> cls = Class.forName("com.sinbin.reflection_.Student");
+        Object o = cls.newInstance();
+        // 公有字段
+        Field age = cls.getField("age");
+        age.set(o, 22);
+        System.out.println(age.get(o));
+        // 私有字段
+        Field name = cls.getDeclaredField("name");
+        name.setAccessible(true);
+        name.set(null, "zxb"); // 静态属性对象无关
+        System.out.println(name.get(o));
+    }
+}
+
+class Student {
+    public int age;
+    private static String name;
+
+    public Student() {}
+}
+```
+
+## 反射操作方法
+
+反射操作方法时，返回类型统一变为 Object。
+
+```java
+public class InvokeMethods {
+    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        Class<?> cls = Class.forName("com.sinbin.reflection_.Dog");
+        Object o = cls.newInstance();
+
+        cls.getMethod("hi").invoke(null);
+
+        Method cry = cls.getDeclaredMethod("cry", String.class);
+        cry.setAccessible(true);
+        cry.invoke(o, "旺旺");
+    }
+}
+
+class Dog {
+    public static void hi() {
+        System.out.println("你好");
+    }
+
+    private void cry(String name) {
+        System.out.println("汪汪 " + name);
+    }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
