@@ -2,6 +2,8 @@
 
 # HTML
 
+> Hyper Text Marked Language 超文本标记语言
+
 ## 标签和元素
 
 - 标签：用尖括号括起来 <>，一般为双标签\<html> \</html>，也有单标签 \<br/>
@@ -245,6 +247,417 @@ font 标签有三个基本属性：
 ```html
 您的购物车有<span style="color: red;font-size: 40px">10</span>个商品
 ```
+
+# CSS
+
+> Cascading Style Sheets 层叠样式表
+>
+> CSS 让 HTML 页面的内容和样式分离，降低耦合程度，提高 Web 开发效率。
+
+## CSS 语法
+
+- CSS 由**选择器**（元素、标签）和**声明**组成；
+- 声明由属性和值组成，多个属性之间使用分号隔开；
+- CSS 注释语法 /* 注释内容 */
+
+## CSS 常用样式
+
+### 字体颜色
+
+颜色属性的值有三种写法：
+
+1. 颜色的英文：red, orange, green
+2. 颜色的十六进制：#FF0000
+3. 颜色的RGB：rgb(255, 255, 255)
+
+```html
+<style type="text/css">
+  div {
+    /*color: red;*/
+    /*color: #ff7d44;*/
+    color: rgb(255, 255, 255);
+  }
+</style>
+```
+
+### 边框
+
+boarder 属性有三个参数，分别为：边框宽度、边框样式、边框颜色。三个参数使用空格隔开。
+
+```
+<line-width> || <line-style> || <color>
+<line-width> = <length [0,∞]> | thin | medium | thick
+<line-style> = none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset
+```
+
+```html
+<head>
+    <meta charset="UTF-8">
+    <title>边框</title>
+  <style type="text/css">
+    div {
+      width: 300px;
+      height: 100px;
+      border: 10px dashed blue;
+    }
+  </style>
+</head>
+```
+
+### 背景颜色
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS 快速入门</title>
+  	<!-- div 表示对 <div> 元素进行样式指定 -->
+    <style type="text/css">
+      div {
+        width: 300px;
+        height: 100px;
+        background-color: orange;
+      }
+    </style>
+</head>
+<body>
+  <div> hello Beijing </div>
+  <br>
+  <div> hello Nanjing </div>
+</body>
+</html>
+```
+
+### 字体样式
+
+字体样式常用属性有：
+
+1. font-size: 字体大小
+2. font-weight: 字体是否加粗
+3. font-family: 字体类型
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>字体样式</title>
+    <style type="text/css">
+        div {
+            font-size: 36px;
+            font-family: "fangsong";
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div> 周新斌</div>
+</body>
+</html>
+```
+
+### div 水平居中
+
+ ```html
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <title>div居中</title>
+     <style type="text/css">
+         div {
+             margin-left: auto;
+             margin-right: auto;
+             height: 100px;
+             width: 300px;
+             border: 5px dashed red;
+         }
+     </style>
+ </head>
+ <body>
+ <div> 周新斌</div>
+ </body>
+ </html>
+ ```
+
+### 文本水平居中
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>文本居中</title>
+  <style type="text/css">
+    div {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div> 周新斌 </div>
+</body>
+</html>
+```
+
+### 超链接去下划线
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>超链接</title>
+    <style type="text/css">
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<a href="https://jd.com">跳转到京东</a>
+</body>
+</html>
+```
+
+### 表格
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表格细线</title>
+    <style type="text/css">
+        /* 共用样式 */
+        table, tr, td {
+            width: 300px;
+            border: 1px solid black;
+            border-collapse: collapse;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <tr>
+        <td> 1</td>
+        <td> 2</td>
+        <td> 3</td>
+        <td> 4</td>
+    </tr>
+    <tr>
+        <td> 苹果</td>
+        <td> 杨桃</td>
+        <td> 香蕉</td>
+        <td> 李子</td>
+    </tr>
+</table>
+
+</body>
+</html>
+```
+
+### 无序列表去符号
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>无序列表去符号</title>
+    <style type="text/css">
+        ul {
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+<ul>
+    <li> a</li>
+    <li> b</li>
+</ul>
+</body>
+</html>
+```
+
+## CSS 使用方式
+
+1. 在标签的 style 属性上设置 CSS 样式
+2. 在 head 标签中，使用 style 标签定义样式
+3. 把 CSS 样式写成单独的 CSS 文件，在通过 link 标签引入
+
+**CSS3.html**
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>link 引入 css</title>
+    <link href="./CSS/use/my.css" rel="stylesheet"/>
+</head>
+<body>
+<div> link 标签引入 CSS</div>
+<br>
+<span> hello, world</span>
+</body>
+</html>
+```
+
+**my.css**
+
+```css
+div {
+    width: 400px;
+    height: 200px;
+    background-color: #ff7d44;
+}
+
+span {
+    border: 2px dashed blue;
+}
+```
+
+## CSS 选择器
+
+### 元素选择器
+
+元素选择器是最常见的选择器，CSS 元素选择器的元素/标签通常是 HTML 的某个元素或标签。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>元素选择器</title>
+    <style type="text/css">
+        p {
+            font-family: fangsong;
+            font-size: 24px;
+            color: red;
+        }
+      
+        div {
+            width: 300px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+<p>元素选择器会修饰所有的对应元素</p>
+</body>
+</html>
+```
+
+### ID 选择器
+
+- ID 选择器为**特定元素**指定样式；
+- ID 选择器用 #id 标记特定元素；
+- ID 选择器不能重复，每个 ID 只能被使用一次；
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ID 选择器</title>
+    <style type="text/css">
+        #css1 {
+            color: orange;
+        }
+
+        #css2 { 
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<p id="css1"> hello</p>
+<p id="css2"> world</p>
+</body>
+</html>
+```
+
+### 类选择器
+
+ class 属性的值可以重复，每个 class 可以被多次使用。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>类选择器</title>
+    <style type="text/css">
+        .css1 {
+            color: red;
+        }
+
+        .css2 {
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+<div class="css1"> zxb</div>
+<div class="css1"> zxb zxb</div>
+</body>
+</html>
+```
+
+### 组合选择器
+
+**组合选择器**让多个选择器共用一个 CSS 样式代码。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组合选择器</title>
+    <style type="text/css">
+        .css1, #css1 {
+            width: 300px;
+            height: 100px;
+            color: red;
+            background-color: cornflowerblue;
+        }
+    </style>
+</head>
+<body>
+<div id=css1> zxb</div>
+<br>
+<div class=css1> zxb</div>
+</body>
+</html>
+```
+
+### 选择器优先级
+
+1. 行内样式
+2. ID 选择器
+3. class 选择器
+4. 元素选择器
+
+# JavaScript
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
