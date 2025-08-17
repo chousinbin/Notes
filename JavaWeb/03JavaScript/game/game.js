@@ -1,5 +1,7 @@
 window.onload = function () {
     let wugui = document.getElementById("wugui");
+    let chicken = document.getElementById("chicken");
+
     let currentTop = parseInt(window.getComputedStyle(wugui).top);
     let currentLeft = parseInt(window.getComputedStyle(wugui).left);
 
@@ -25,7 +27,6 @@ window.onload = function () {
     }
 
     function checkEat() {
-        let chicken = document.getElementById("chicken");
         let wuguiRect = wugui.getBoundingClientRect();
         let chickenRect = chicken.getBoundingClientRect();
 
