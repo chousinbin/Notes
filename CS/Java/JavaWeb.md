@@ -643,19 +643,429 @@ span {
 
 # JavaScript
 
+## 特点
 
+1. 解释型脚本语言
+2. 弱类型变量
+3. 基于对象的脚本语言，可以创建对象，也可以使用现有的对象
 
+## 使用方式
 
+同一个 \<script> 标签中，两种方式只能生效一个，生效的是引入的 JS 代码
 
+### \<script> 标签直接使用
 
+```html
+<head>
+    <meta charset="UTF-8">
+    <title>使用方式</title>
+    <script type="text/javascript">
+        console.log("在 script 中使用")
+    </script>
+</head>
+<body>
+<script type="text/javascript">
+    console.log("在 body 中使用")
+</script>
+</body>
+</html>
+```
 
+### \<script> 标签引入 JS 文件
 
+```html
+<head>
+    <meta charset="UTF-8">
+    <title>引入 js 文件</title>
+    <script type="text/javascript" src="/JavaScript/script_use2.js"></script>
+</head>
+<body>
 
+</body>
+</html>
+```
 
+## 查看错误信息
 
+浏览器打开 检查，console 栏报错信息；
 
+![image-20250812140834155](https://cdn.jsdelivr.net/gh/chousinbin/Image/202508121408214.png)
 
+可以在浏览器中定位错误代码。
 
+![image-20250812140910255](https://cdn.jsdelivr.net/gh/chousinbin/Image/202508121409280.png)
+
+## 数据类型
+
+### 数据类型
+
+| 数据类型 | 变量含义   |
+| -------- | ---------- |
+| number   | 数值类型   |
+| string   | 字符串类型 |
+| object   | 对象类型   |
+| boolean  | 布尔类型   |
+| function | 函数类型   |
+
+### 特殊值
+
+| 特殊值    | 含义                |
+| --------- | ------------------- |
+| undefined | 未赋值的初始值      |
+| null      | 空值                |
+| NaN       | Not a Number 非数值 |
+
+### var let const
+
+| 特性         | `var`                      | `let`                | `const`              |
+| ------------ | -------------------------- | -------------------- | -------------------- |
+| **作用域**   | 函数作用域                 | 块级作用域           | 块级作用域           |
+| **变量提升** | 是（赋值前为 `undefined`） | 否（存在暂时性死区） | 否（存在暂时性死区） |
+| **重复声明** | 允许                       | 不允许               | 不允许               |
+| **可变性**   | 可变                       | 可变                 | 不可变（常量）       |
+
+### 注意事项
+
+- stirng 字符串可以使用单双引号；
+- var 变量可以被多次声明，值不变；
+
+## 运算符
+
+### 算术运算符
+
+同 Java
+
+### 赋值运算符
+
+同 Java
+
+### 关系运算符
+
+基本同 Java，多了一个 ===，意为全等（类型和值）
+
+### 逻辑运算符
+
+同 Java
+
+- 所有变量都可以作为 boolean 类型使用，0 null undefined “” 都认为是 false。
+- 对于 && 运算。
+  - 表达式两边全真时，返回最后一个表达式的值。
+  - 有一个为假，返回第一个为假的表达式的值。
+- 对于 || 运算。
+  - 表达式两边全假时，返回最后一个表达式的值。
+  - 有一个为真，返回第一个为真的表达式的值。
+- && 与 || 运算有 **短路** 现象：运算结果确定后，后面表达式不再进行。
+
+### 条件运算符
+
+同 Java
+
+## 数组
+
+### 定义数组
+
+```js
+// f1
+let cars1 = ["BMW", "Benz", "Audi"];
+console.log(cars1);
+console.log(cars1[0]);
+
+// f2
+let cars2 = [];  // 空数组
+cars2[0] = "BMW";
+cars2[1] = "Benz";
+cars2[2] = "Audi";
+console.log(cars2);
+console.log(cars2[1]);
+
+// f3
+let cars3 = new Array("BMW", "Benz", "Audi");
+console.log(cars3);
+console.log(cars3[2]);
+
+// f4
+let cars4 = new Array();
+console.log("type of cars4 " + typeof cars4);
+cars4[0] = "宝马";
+cars4[1] = "奔驰";
+cars4[2] = "奥迪";
+cars4[3] = "沃尔沃";
+console.log(cars4);
+console.log(cars4[3]);
+```
+
+### 遍历数组
+
+```javascript
+console.log("type of cars4 " + typeof cars4);
+cars4[0] = "宝马";
+cars4[1] = "奔驰";
+cars4[2] = "奥迪";
+cars4[3] = "沃尔沃";
+console.log(cars4);
+for (let i = 0; i < cars4.length; i ++) {
+  console.log(cars4[i]);
+}
+```
+
+## 函数
+
+函数是由事件驱动的，当他被调用时，执行可重复使用的代码块。
+
+### 函数定义
+
+```js
+// 无参
+function f1() {
+    console.log("函数 f1 被调用");
+}
+f1();
+// 有参数，无需定义参数类型
+function f2(n1) {
+    console.log(n1);
+}
+f2("123");
+// 有参数和返回值，同样不需要定义返回类型
+function f3(n1, n2) {
+    return n1 + n2;
+}
+console.log(f3(1, 2));
+```
+
+### 函数赋值给变量
+
+```js
+let f4 = function () {
+    console.log("hello");
+}
+console.log(typeof f4);
+f4();
+
+let f5 = f4;
+f5();
+```
+
+### 函数调用
+
+执行函数有两种方式，**主动调用** 或 **事件触发**。
+
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>函数</title>
+    <script type="text/javascript">
+        function hi() {
+          alert("hello world");
+        }
+        // 主动调用
+        hi();
+    </script>
+</head>
+<body>
+<!-- 绑定点击事件触发 hi() 函数 -->
+<button onclick="hi()">点我一下</button>
+</body>
+</html>
+```
+
+### 注意事项
+
+- js 函数没有重载，重复定义会覆盖上一个函数定义。
+- 函数带有隐藏参数 arguments，本质是一个对象数组。函数有形参的时候，在传入实参时按照顺序匹配：
+  - 实参个数 >= 形参个数：匹配上的赋值，最后把所有实参赋值给 arguments。
+  - 实参个数 < 形参个数：匹配上的赋值，多余形参为 undefined，所有赋给 arguments。
+
+## 对象
+
+### 使用 Object 定义
+
+```js
+let person = new Object();
+person.name = "zxb";
+person.age = 22;
+person.say = function() {
+  	console.log("hello" + this.name + " " + this.age);
+};
+
+person.say();
+```
+
+### 使用 {} 定义
+
+```js
+let objectName = {
+		fielddName: fieldValue,
+  	functionName: function() {
+      	
+    }
+};
+
+objectName.functionName();
+objectName.fieldName;
+```
+
+## 事件
+
+### 事件分类
+
+| 事件类型 | 含义                                            |
+| -------- | ----------------------------------------------- |
+| onload   | 页面加载之后                                    |
+| onclick  | 鼠标单击某个对象                                |
+| onblur   | 失去焦点                                        |
+| onchange | 内容发生改变                                    |
+| onsubmit | 表单提交（**重要，form 表单提交前先 JS 校验**） |
+
+### 动态注册
+
+1. 获取标签对象/dom 对象
+2. 标签对象.事件名 = function() {}
+
+```js
+// onload 页面加载完毕之后执行代码
+window.onload = function () {
+    console.log("动态绑定");
+};
+```
+
+示例代码：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>失去焦点-小写转大写</title>
+    <script type="text/javascript">
+        // 动态绑定
+      	// 先等页面加载完毕，不然获取不到 id
+        window.onload = function () {
+            document.getElementById("ip2").onblur = function () {
+                document.getElementById("ip2").value =
+                    document.getElementById("ip2").value.toUpperCase();
+            }
+        }
+    </script>
+</head>
+<body>
+<input type="text" id="ip2"/>
+</body>
+</html>
+```
+
+### 静态注册
+
+在 HTML 标签上绑定
+
+```html
+<body onload="init()">
+```
+
+示例代码：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>失去焦点-小写转大写</title>
+    <script type="text/javascript">
+        // 静态绑定
+        function upperCase() {
+            document.getElementById("ip1").value =
+                document.getElementById("ip1").value.toUpperCase();
+        }
+    </script>
+</head>
+<body>
+<input type="text" id="ip1" onblur="upperCase()"/>
+</body>
+</html>
+```
+
+### 动态 VS 静态
+
+| **对比项**   | 静态注册                            | 动态注册                              |
+| ------------ | ----------------------------------- | ------------------------------------- |
+| **绑定方式** | HTML 标签属性（如 `<body onload>`） | JavaScript 代码（如 `window.onload`） |
+| **灵活性**   | 固定，不可修改                      | 可动态绑定/解绑                       |
+| **事件覆盖** | 多次声明会覆盖                      | 可通过 `addEventListener` 避免覆盖    |
+| **维护性**   | 较差（HTML 与 JS 混合）             | 较好（行为与结构分离）                |
+
+# DOM
+
+> Document Object Model 文档对象模型
+
+DOM 是把文档中的标签、属性、文本等元素转换成对象来管理
+
+```mermaid
+graph LR
+DOM --- HTML.DOM
+DOM --- CSS.DOM
+DOM --- XML.DOM
+```
+
+## HTML DOM 树
+
+当页面被加载时，浏览器会创建页面的文档对象模型
+
+```mermaid
+graph TB
+document --- HTML
+HTML --- head
+HTML --- body
+head --- title
+body --- a
+body --- h1
+body --- form
+body --- ...
+```
+
+## Document 对象
+
+当 HTML 文档加载到 Web 浏览器中时，它就变成了一个**文档对象**。
+
+**文档对象**是 HTML 文档的根节点。
+
+**文档对象**是*窗口对象*的属性。
+
+### 常用方法
+
+| 方法名                                                       | 作用                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [getElementById()](https://www.w3school.com.cn/jsref/met_document_getelementbyid.asp) | 返回拥有指定值的 ID 属性的元素。                             |
+| [getElementsByClassName()](https://www.w3school.com.cn/jsref/met_document_getelementsbyclassname.asp) | 返回包含拥有指定类名的所有元素的 [HTMLCollection](https://www.w3school.com.cn/jsref/dom_obj_htmlcollection.asp)。 |
+| [getElementsByName()](https://www.w3school.com.cn/jsref/met_doc_getelementsbyname.asp) | 返回包含拥有指定名称的所有元素的活动 [NodeList](https://www.w3school.com.cn/jsref/dom_obj_html_nodelist.asp)。 |
+| [getElementsByTagName()](https://www.w3school.com.cn/jsref/met_document_getelementsbytagname.asp) | 返回包含拥有指定标签名称的所有元素的 [HTMLCollection](https://www.w3school.com.cn/jsref/dom_obj_htmlcollection.asp)。 |
+| [createElement()](https://www.w3school.com.cn/jsref/met_document_createelement.asp) | 创建元素节点。                                               |
+
+## Elemment 对象
+
+Element 对象代表 HTML 元素，如 P、DIV、A、TABLE 或任何其他 HTML 元素。
+
+### 常用方法
+
+| 方法名                                                       | 作用                                 |
+| ------------------------------------------------------------ | ------------------------------------ |
+| [childElementCount](https://www.w3school.com.cn/jsref/prop_element_childelementcount.asp) | 返回元素的子元素个数。               |
+| [childNodes](https://www.w3school.com.cn/jsref/prop_node_childnodes.asp) | 返回元素子节点的 NodeList。          |
+| [children](https://www.w3school.com.cn/jsref/prop_element_children.asp) | 返回元素的子元素的 HTMLCollection。  |
+| [getElementsByClassName()](https://www.w3school.com.cn/jsref/met_element_getelementsbyclassname.asp) | 返回拥有给定类名的子元素的集合。     |
+| [getElementsByTagName()](https://www.w3school.com.cn/jsref/met_element_getelementsbytagname.asp) | 返回拥有给定标签名称的子元素的集合。 |
+| [innerHTML](https://www.w3school.com.cn/jsref/prop_html_innerhtml.asp) | 设置或返回元素的内容。               |
+| [innerText](https://www.w3school.com.cn/jsref/prop_node_innertext.asp) | 设置或返回节点及其后代的文本内容。   |
+| [parentNode](https://www.w3school.com.cn/jsref/prop_node_parentnode.asp) | 返回元素的父节点。                   |
+| [parentElement](https://www.w3school.com.cn/jsref/prop_node_parentelement.asp) | 返回元素的父元素节点。               |
+
+### 子元素与子节点区别
+
+- **子节点**：元素节点、文本节点或注释节点（元素之间的空白也是文本节点）
+- **子元素**：不返回文本节点和注释节点
+
+# XML
+
+> 可扩展标记语言
 
 
 
