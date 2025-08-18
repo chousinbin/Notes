@@ -1060,22 +1060,239 @@ Element 对象代表 HTML 元素，如 P、DIV、A、TABLE 或任何其他 HTML 
 
 ### 子元素与子节点区别
 
-- **子节点**：元素节点、文本节点或注释节点（元素之间的空白也是文本节点）
+- **子节点**：元素节点、文本节点或注释节点（元素之间的**空白**、**换行符**也是文本节点）
 - **子元素**：不返回文本节点和注释节点
 
 # XML
 
-> 可扩展标记语言
+> eXtensible Markup Language 可扩展标记语言
 
+- XML 也可以看做树结构
+- XML 旨在存储和传输数据
+- XML 常用作配置文件
 
+## XML 组成
 
+- 序言
+- 元素
+- 属性
+- 注释
+- CDATA、特殊字符
 
+## XML 命名规则
 
+- 元素名称区分大小写
+- 元素名称必须以字母或下划线开头
+- 元素名称不能以字母 xml（或 XML、Xml 等）开头
+- 元素名称可以包含字母、数字、连字符、下划线和句点
+- 元素名称不能包含空格
 
+注：使用数据库的名称规则来命名 XML 文档中的元素
 
+## XML 语法
 
+### 序言
 
+- 序言包含XML规范和字符编码
+- 是可选的；如果有，则必须在第一行
 
+### 元素
 
+- 每个 XML 文档 **有且只有** 一个根元素
+- 元素要有始末标签，标签不能嵌套
+- 多个空格会被视为一个空格
+- 标签对大小写敏感
 
+### 属性
+
+- XML 元素可以在开始标签中包含属性，提供关于元素的额外信息。
+- 属性值必须加引号，可单可双。
+
+**属性与元素：**
+
+- 属性不能包含多个值（元素可以）
+- 属性无法描述树结构（元素可以）
+- 属性不易扩展（为未来的变化）
+
+### 注释
+
+同 HTML 注释格式，不能嵌套。
+
+### CDATA
+
+XML 文档中的所有文本均会被解析器解析。只有 CDATA 区段中的文本会被解析器忽略。
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+
+<![CDATA[
+    <script>
+        console.log("hello");
+    </script>
+]]>
+```
+
+### 转义字符
+
+| 转义字符 | 符号 | 含义           |
+| -------- | ---- | -------------- |
+| \&lt;    | <    | less than      |
+| \&gt;    | >    | greater than   |
+| \&amp;   | &    | ampersand      |
+| \&apos;  | '    | apostrophe     |
+| \&quot;  | "    | quotation mark |
+
+## XML 解析器
+
+- [XML DOM（文档对象模型）](https://www.w3school.com.cn/xml/dom_intro.asp)定义了用于访问和编辑 XML 的属性和方法。
+- 然而，在访问 XML 文档之前，必须将其加载到 XML DOM 对象中。
+- 所有现代浏览器都提供内置的 XML 解析器，可以将文本转换为 XML DOM 对象。
+
+### DOM4J
+
+JDOM 在 DOM 基础上进行了封装，DOM4J 在 JDOM 基础上进行了封装。
+
+### 获取 Document 对象
+
+```java
+@Test
+public void loadXML() throws DocumentException {
+    // 创建解析器
+    SAXReader reader = new SAXReader();
+    // XML Document
+    Document document = reader.read(
+            new File("/Users/sinpin/Desktop/GitHub/MyCode/JavaWeb/04XML/students.xml"));
+    // 在此设置断点，执行调试，可以发现 Document 对象是一个树形结构，对应 XML 文件内容
+    System.out.println(document);
+}
+```
+
+### 遍历
+
+```java
+// 遍历 Students
+@Test
+public void listStudents() throws DocumentException {
+    SAXReader reader = new SAXReader();
+    Document document = reader.read(
+            new File("/Users/sinpin/Desktop/GitHub/MyCode/JavaWeb/04XML/students.xml"));
+    // 获取根节点
+    Element rootElement = document.getRootElement();
+    // 获取根节点的子节点
+    List<Element> student = rootElement.elements("student");
+    // 输出信息
+    System.out.println(student.size());
+    for (Element o : student) {
+        Element name = o.element("name");
+        Element gender = o.element("gender");
+        Element age = o.element("age");
+        System.out.println(name.getText() + " " + age.getText() + " " + gender.getText());
+    }
+}
+```
+
+XPath 可以更方便的读取元素值，避免层层遍历。
+
+### 添加
+
+```java
+@Test
+public void addStudent() throws DocumentException, IOException {
+    SAXReader reader = new SAXReader();
+    Document document = reader.read(
+            new File("/Users/sinpin/Desktop/GitHub/MyCode/JavaWeb/04XML/students.xml"));
+    // 在内存中添加节点
+    Element student = DocumentHelper.createElement("student");
+    student.addAttribute("id","03");
+
+    Element name = DocumentHelper.createElement("name");
+    name.setText("宋江");
+    student.add(name);
+
+    Element gender = DocumentHelper.createElement("gender");
+    gender.setText("男");
+    student.add(gender);
+
+    Element age = DocumentHelper.createElement("age");
+    age.setText("55");
+    student.add(age);
+
+    document.getRootElement().add(student);
+
+    // 解决乱码
+    OutputFormat outputFormat = OutputFormat.createPrettyPrint();
+    outputFormat.setEncoding("UTF-8");
+    // XML 文件更新
+    XMLWriter xmlWriter = new XMLWriter(
+            new FileOutputStream(
+                    new File("/Users/sinpin/Desktop/GitHub/MyCode/JavaWeb/04XML/students.xml")), outputFormat);
+    xmlWriter.write(document);
+    xmlWriter.close();
+    // 遍历
+    listStudents();
+}
+```
+
+### 删除
+
+1. 先找到被删除的元素
+2. 再找到该元素的父元素
+3. 通过父元素删除子元素
+
+```java
+@Test
+public void removeStudent() throws DocumentException, IOException {
+    SAXReader reader = new SAXReader();
+    Document document = reader.read(
+            new File("/Users/sinpin/Desktop/GitHub/MyCode/JavaWeb/04XML/students.xml"));
+
+    Element rootElement = document.getRootElement();
+    List<Element> student = (List<Element>) rootElement.elements("student");
+    Element element = student.get(0);
+    element.getParent().remove(element);
+    // 解决乱码
+    OutputFormat outputFormat = OutputFormat.createPrettyPrint();
+    outputFormat.setEncoding("UTF-8");
+    // XML 文件更新
+    XMLWriter xmlWriter = new XMLWriter(
+            new FileOutputStream(
+                    new File("/Users/sinpin/Desktop/GitHub/MyCode/JavaWeb/04XML/students.xml")), outputFormat);
+    xmlWriter.write(document);
+    xmlWriter.close();
+    // 遍历
+    listStudents();
+}
+```
+
+### 更新
+
+1. 先找到被修改的元素
+2. 修改元素属性
+
+```java
+@Test
+public void updateStudent() throws DocumentException, IOException {
+    SAXReader reader = new SAXReader();
+    Document document = reader.read(
+            new File("/Users/sinpin/Desktop/GitHub/MyCode/JavaWeb/04XML/students.xml"));
+
+    Element rootElement = document.getRootElement();
+    List<Element> students = (List<Element>) rootElement.elements("student");
+    Element student = students.get(0);
+    int age = Integer.parseInt(student.element("age").getText());
+    age += 3;
+    student.element("age").setText(String.valueOf(age));
+    // 解决乱码
+    OutputFormat outputFormat = OutputFormat.createPrettyPrint();
+    outputFormat.setEncoding("UTF-8");
+    // XML 文件更新
+    XMLWriter xmlWriter = new XMLWriter(
+            new FileOutputStream(
+                    new File("/Users/sinpin/Desktop/GitHub/MyCode/JavaWeb/04XML/students.xml")), outputFormat);
+    xmlWriter.write(document);
+    xmlWriter.close();
+    // 遍历
+    listStudents();
+}
+```
 
