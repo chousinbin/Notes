@@ -1296,3 +1296,77 @@ public void updateStudent() throws DocumentException, IOException {
 }
 ```
 
+# Tomcat
+
+## URL 请求过程
+
+```mermaid
+sequenceDiagram
+    participant User as 用户/浏览器
+    participant DNS as DNS服务器
+    participant Server as 目标服务器
+    participant CDN as CDN节点（可选）
+
+    User->>DNS: 1. DNS查询（www.example.com）
+    DNS-->>User: 2. 返回IP地址（如 93.184.216.34）
+    
+    alt 使用CDN
+        User->>CDN: 3. 请求资源（HTTP GET /）
+        CDN-->>User: 4. 返回缓存内容
+    else 直连服务器
+        User->>Server: 3. TCP三次握手
+        User->>Server: 4. HTTPS TLS握手（如https）
+        User->>Server: 5. HTTP请求（GET /）
+        Server-->>User: 6. HTTP响应（HTML/CSS/JS等）
+    end
+```
+
+## DNS 解析过程
+
+```mermaid
+sequenceDiagram
+    participant User as 用户/应用
+    participant Browser as 浏览器/App缓存
+    participant System as 系统缓存/Hosts
+    participant ManualDNS as 手动DNS (8.8.8.8)
+    participant RouterDNS as 路由器DNS
+    participant Recursive as 递归查询 (根→TLD→权威)
+
+    User->>Browser: 1. 发起DNS查询 (example.com)
+    alt 浏览器/App缓存命中
+        Browser-->>User: 2. 直接返回缓存IP
+    else 未命中
+        Browser->>System: 3. 检查系统缓存/Hosts
+        alt 系统缓存/Hosts命中
+            System-->>User: 4. 返回IP
+        else 未命中
+            alt 手动配置了DNS?
+                System->>ManualDNS: 5. 向手动DNS (8.8.8.8) 查询
+                ManualDNS->>Recursive: 6. 递归查询 (根→TLD→权威)
+                Recursive-->>ManualDNS: 7. 返回IP
+                ManualDNS-->>User: 8. 返回IP并缓存
+            else 使用路由器DNS
+                System->>RouterDNS: 5. 向路由器DNS查询
+                RouterDNS->>Recursive: 6. 递归查询 (根→TLD→权威)
+                Recursive-->>RouterDNS: 7. 返回IP
+                RouterDNS-->>User: 8. 返回IP并缓存
+            end
+        end
+    end
+
+```
+
+## IDEA 创建 Web 项目
+
+1. 新建一个普通 Java 项目
+2. 打开项目设置，添加 Web 模块，设置对应工件
+3. 配置 Tomcat，配置 Tomcat 的 Deployment
+
+
+
+
+
+
+
+
+
