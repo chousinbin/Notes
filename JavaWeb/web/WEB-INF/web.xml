@@ -3,4 +3,41 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+    <!--web.xml用来配置Web需要用的Servlet-->
+    <servlet>
+        <servlet-name>HelloServlet</servlet-name>
+        <servlet-class>Servlet.HelloServlet</servlet-class> <!--类地址-->
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HelloServlet</servlet-name>
+        <url-pattern>/helloServlet</url-pattern> <!--URL地址-->
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>Servlet.Login</servlet-class> <!--类地址-->
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/login</url-pattern> <!--URL地址-->
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ServletCat</servlet-name>
+        <servlet-class>Servlet.ServletCat</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletCat</servlet-name>
+        <url-pattern>/cat</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ServletDog</servlet-name>
+        <servlet-class>Servlet.ServletDog</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletDog</servlet-name>
+        <url-pattern>/dog</url-pattern>
+    </servlet-mapping>
 </web-app>
+
+
+
