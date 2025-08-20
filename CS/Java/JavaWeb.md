@@ -1362,6 +1362,645 @@ sequenceDiagram
 2. 打开项目设置，添加 Web 模块，设置对应工件
 3. 配置 Tomcat，配置 Tomcat 的 Deployment
 
+# Servlet
+
+Servlet 本质是 Java 类，由 Server 调用，是开发动态 Web 的基础。
+
+Servlet 是常驻内存的，是**单例**模式（一个类在整个程序中只有一个实例）。
+
+```java
+public class HelloServlet implements Servlet {
+    // Servlet 是单例
+    private int count = 0;
+    /**
+     * 1. 初始化 Servlet
+     * 2. 创建 HelloServlet 实例时，调用 init()
+     * 3. 该方法只会被调用一次
+     * @param servletConfig
+     * @throws ServletException
+     */
+    @Override
+    public void init(ServletConfig servletConfig) throws ServletException {
+        System.out.println("Initializing HelloServlet");
+    }
+
+    /**
+     * 返回 ServletConfig
+     * @return
+     */
+    @Override
+    public ServletConfig getServletConfig() {
+        return null;
+    }
+    /**
+     * 1. 处理浏览器的请求
+     * 2. 每请求一次，被调用一次
+     * 3. 当 Tomcat 调用方法时，会把 HTTP 请求封装成实现了 ServletRequest 接口的 Request 对象
+     * 4. 通过 ServletRequest 对象，获取提交的属性
+     * 5. 把响应内容封装成 Response 对象给 Tomcat
+     * @param servletRequest
+     * @param servletResponse
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Override
+    public void service(ServletRequest servletRequest, ServletResponse servletResponse) throws ServletException, IOException {
+        count++;
+        System.out.println("servlet 被调用 " + count);
+        System.out.println(Thread.currentThread().getId());
+    }
+
+    /**
+     * 返回 Servlet 信息
+     * @return
+     */
+    @Override
+    public String getServletInfo() {
+        return "HelloServlet";
+    }
+
+    /**
+     * 该方法用于 Servlet 被销毁时，被 Tomcat 调用，只调用一次
+     */
+    @Override
+    public void destroy() {
+        System.out.println("Destroying HelloServlet");
+    }
+}
+```
+
+## Servlet 请求过程
+
+```mermaid
+%%{init: {'theme': 'default', 'fontFamily': 'Arial'}}%%
+sequenceDiagram
+    participant User as 浏览器
+    participant Tomcat as Tomcat容器
+    participant WebXML as web.xml
+    participant HashMap as HashMap<id, Servlet>
+    participant ClassLoader as 类加载器
+    participant HelloServlet as HelloServlet实例
+
+    Note over Tomcat: 阶段1: 首次请求处理流程
+    User->>+Tomcat: 1. GET /helloServlet
+    Tomcat->>+WebXML: 2. 查询url-pattern匹配
+    WebXML-->>-Tomcat: 3. 返回servlet-name: HelloServlet
+
+    Tomcat->>HashMap: 4. 查询实例是否存在
+    alt 实例不存在
+        HashMap-->>Tomcat: 5. 未找到实例
+        Tomcat->>+WebXML: 6. 获取servlet-class全路径
+        WebXML-->>-Tomcat: 返回: "Servlet.HelloServlet"
+        
+        Tomcat->>+ClassLoader: 7.1 反射加载类
+        ClassLoader-->>-Tomcat: 返回Class对象
+        Tomcat->>HelloServlet: 7.2 调用构造函数()
+        Tomcat->>+HelloServlet: 7.3 调用init()
+        Note right of HelloServlet: 执行初始化逻辑
+        Tomcat->>HashMap: 7.4 注册实例
+        HelloServlet-->>-Tomcat: init()完成
+    else 实例存在
+        HashMap-->>Tomcat: 直接返回实例
+    end
+
+    Tomcat->>+HelloServlet: 调用service()
+    HelloServlet-->>-Tomcat: 处理请求
+    Tomcat-->>-User: 返回HTTP响应
+
+```
+
+## Servlet 生命周期
+
+### Servlet 生命阶段
+
+- 初始化阶段：init() 方法
+- 浏览器请求阶段：service() 方法
+- 终止阶段：destory() 方法
+
+### 初始化阶段
+
+浏览器请求 Servlet，Servlet 容器加载 Servlet，创建 Servlet 实例，并调用 init 方法。
+
+### Servlet 装载时机
+
+- Servlet 容器启动时自动装载 Servlet，需要在 web.xml 中添加：
+
+  ```xml
+  <load-on-startup>1</load-on-startup>
+  ```
+
+- Servlet 容器启动后，浏览器首次请求 Servlet 时。
+
+- Servlet 重新装载时，如 Tomcat 进行 Redeploy 操作（摧毁 Servlet）后，浏览器再请求。
+
+### 浏览器请求阶段
+
+- 每收到一个 HTTP 请求，容器产生一个新的线程去处理请求。
+- 创建一个封装了，HTTP 请求消息的 ServletRequest 对象和 HTTP 响应消息的 ServletResponse 对象。
+- 调用 service 方法，请求对象和响应对象作为参数。
+
+### 终止阶段
+
+- Web 应用被终止
+- Servlet 容器被终止
+- Servlet 被重新装载
+
+## Servlet 使用方式
+
+### 注解方式
+
+```java
+@WebServlet(name = "Servlet3", urlPatterns = "/Servlet3")
+// urlPatterns 支持多个
+@WebServlet(name = "Servlet3", urlPatterns = {"/Servlet3", "/Servlet03"})
+```
+
+### web.xml 方式
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <!--web.xml用来配置Web需要用的Servlet-->
+    <servlet>
+        <servlet-name>HelloServlet</servlet-name>
+        <servlet-class>Servlet.HelloServlet</servlet-class> <!--类地址-->
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HelloServlet</servlet-name>
+        <url-pattern>/helloServlet</url-pattern> <!--URL地址-->
+    </servlet-mapping>
+</web-app>
+```
+
+## 手搓 HttpServlet
+
+```java
+@Override
+public void service(ServletRequest servletRequest, ServletResponse servletResponse) throws ServletException, IOException {
+    HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+    String method = httpServletRequest.getMethod();
+    if ("POST".equals(method)) {
+        doPost();
+    } else if ("GET".equals(method)) {
+        doGet();
+    }
+}
+
+private void doGet() {
+    System.out.println("GET");
+}
+
+private void doPost() {
+    System.out.println("POST");
+}
+```
+
+## HttpServlet
+
+在实际项目中，为了方便开发，通常让自己的 Servlet 继承 HttpServlet。
+
+```mermaid
+classDiagram
+    Serializable <|.. GenericServlet
+    ServletConfig <|.. GenericServlet
+    Servlet <|.. GenericServlet
+    GenericServlet <|-- HttpServlet
+
+    class Serializable
+    class ServletConfig
+    class Servlet
+    class GenericServlet
+    class HttpServlet
+
+```
+
+```java
+public class HttpServlet01 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("doGet");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("doPost");
+    }
+}
+
+```
+
+通过查看 HttpServlet 源码，发现浏览器每次请求，都会创建 HttpServletRequest 和 HttpServletResponse 对象传给 service() 方法。在 service 方法中根据 method 类型，传给 this 实例中对应的方法。
+
+## IDEA 创建 Servlet 模板
+
+较新版本的 IDEA 取消了 Servlet 模板的支持，需要手动添加模板：
+
+在项目任意软件包下 - 右键 - 编辑文件模板 - 添加如下模板
+
+### 注解方式
+
+```java
+#if (${PACKAGE_NAME} && ${PACKAGE_NAME} != "")package ${PACKAGE_NAME};#end
+#parse("File Header.java")
+
+#if ($JAVAEE_TYPE == "jakarta")
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.*;
+#else
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.servlet.annotation.*;
+#end
+import java.io.IOException;
+
+@WebServlet(urlPatterns="/${Entity_Name}")
+public class ${Class_Name} extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+      
+    }
+}
+```
+
+### XML 方式
+
+```java
+#if (${PACKAGE_NAME} && ${PACKAGE_NAME} != "")package ${PACKAGE_NAME};#end
+#parse("File Header.java")
+
+#if ($JAVAEE_TYPE == "jakarta")
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+#else
+import javax.servlet.*;
+import javax.servlet.http.*;
+#end
+import java.io.IOException;
+
+public class ${Class_Name} extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    }
+}
+```
+
+## Servlet 注解
+
+### 注解方式解析过程
+
+1. 浏览器向 Tomcat 发起请求。
+2. Tomcat 对软件包进行扫描，被 @WebServlet 修饰的类被认为是 Servlet。
+3. 得到 Servlet 类的全路径。
+4. 根据全路径，得到 Class 对象；根据 Class 对象，得到注解对象；根据注解对象得到 urlPatterns。
+5. 请求的 URL 与 urlPatterns 进行匹配。
+6. 匹配成功，利用反射技术，实例化 Servlet，放入 Tomcat 维护的 HashMap 中。
+
+```java
+public class TestAnnotationServlet {
+    private static final HashMap<String, Object> hm = new HashMap<>();
+    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        // 扫描软件包，路径io，得到类的全路径
+        String classPath = "Servlet/HelloServlet01";
+        // 得到 class 对象
+        Class<?> aClass = Class.forName(classPath);
+        // 得到注解
+        WebServlet annotation = aClass.getAnnotation(WebServlet.class);
+        System.out.println(annotation);
+        String[] strings = annotation.urlPatterns();
+        for(String s : strings){
+            System.out.println(s);
+        }
+        // 如果URL与请求的相匹配，创建实例，放入 HashMap
+        Object instance = aClass.newInstance();
+        hm.put("HelloServlet01", instance);
+    }
+}
+```
+
+### 注解参数
+
+| 参数名        | 参数类型       | 含义                                                         |
+| ------------- | -------------- | ------------------------------------------------------------ |
+| name          | String         | Servlet 名称（可选），默认使用类全限定名。在 `web.xml` 或 Filter 链中引用时使用。 |
+| value         | String[]       | **等价于 urlPatterns**，但只能用于单一路径（简化写法）。     |
+| urlPatterns   | String[]       | 指定 Servlet 的 URL 映射规则（支持多个路径），必须以 `/` 开头。 |
+| loadOnStartup | int            | 控制 Servlet 的加载顺序：<br/>\- `>=0` 表示容器启动时立即加载（值越小优先级越高）<br/>\- `-1`（默认）表示首次请求时加载 |
+| initParams    | WebInitParam[] | 设置 Servlet 初始化参数（类似 `web.xml` 中的 `<init-param>`）。 |
+
+```java
+@WebServlet(
+        urlPatterns = {
+                "/HttpServlet01",
+                "/HttpServlet001"},
+        initParams = {
+                @WebInitParam(name = "name", value = "zxb"),
+                @WebInitParam(name = "name", value = "zxk")
+        })
+```
+
+### URL 匹配方式
+
+- **精确匹配**：`/xxx.yyy`
+- **目录匹配**：`/xxx.*`
+- **扩展名匹配**：`/*.yyy`
+- **任意匹配**：`/*`
+
+Tomcat 有个默认 DefaultServlet，该 Servlet 用于处理静态资源。当请求的 URL 在 XML 文件中无法匹配时，该 Servlet 进行拦截静态资源，并返回。如果自定义的 Servlet 的urlPatterns 配置了 `/`，会导致静态资源被拦截，无法显示。
+
+**匹配优先级**：精确匹配 > 目录匹配 > 扩展名匹配 > 任意匹配 > `/`
+
+# HTTP
+
+## HTTP 协议介绍
+
+- HTTP: Hyper Text Transfer Protocol
+- TCP/IP 协议的一个应用层协议
+- HTTP/1.0 短连接
+- HTTP/1.1 长连接
+
+## HTTP 状态码
+
+### 状态码类别
+
+| 状态码  | 分类       | 说明                     | 常见场景                              |
+| ------- | ---------- | ------------------------ | ------------------------------------- |
+| **1xx** | 信息性     | 请求已被接收，继续处理   | `100 Continue`（大文件上传）          |
+| **2xx** | 成功       | 请求成功处理             | `200 OK`（成功）                      |
+| **3xx** | 重定向     | 需要进一步操作以完成请求 | `301 Moved Permanently`（永久重定向） |
+| **4xx** | 客户端错误 | 请求包含错误或无法完成   | `404 Not Found`（资源不存在）         |
+| **5xx** | 服务端错误 | 服务器处理请求时出错     | `500 Internal Server Error`           |
+
+### 常用状态码详解
+- **200 OK**: 请求成功，响应体中包含结果。
+- **201 Created**: 资源创建成功（如POST请求）。
+- **302 Found**：资源重定向，会产生二次请求
+- **304 Not Modified**：当浏览器未禁用缓存时，被请求资源未更改，返回 304，不返回资源。
+- **400 Bad Request**: 请求参数错误。
+- **401 Unauthorized**: 未认证（需登录）。
+- **403 Forbidden**: 无权限访问。
+- **404 Not Found**: 请求的资源不存在。
+- **500 Internal Server Error**: 服务器内部错误。
+
+## HTTP 请求次数
+
+如下所示 HTML 源码，分析 HTTP 请求次数：
+
+```html
+<h1>abc</h1>
+<img src="1.jpg"/>
+<img src="2.jpg"/>
+```
+
+1. 请求 HTML 页面
+2. 请求 1.jpg 文件
+3. 请求 2.jpg 文件
+
+## HTTP 请求包分析
+
+### 请求包结构
+
+- 请求行（第一行）
+- 请求头
+
+### GET 请求包
+
+GET 请求中，参数在请求行 URL 中
+
+```http
+GET /JavaWeb/login?username=123&password=123 HTTP/1.1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Connection: keep-alive
+Cookie: JSESSIONID=447DF0C5A75584020EBB92EA00E69417; Idea-cbb7cfcc=96fe9100-849f-4ff7-81d7-7160c7f8fdfd
+Host: localhost:8080
+Referer: http://localhost:8080/JavaWeb/06HTTP/login.html
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36
+sec-ch-ua: "Not;A=Brand";v="99", "Google Chrome";v="139", "Chromium";v="139"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "macOS"
+```
+
+### GET 请求包参数
+
+| 参数名              | 说明                            | 示例值                                 |
+| ------------------- | ------------------------------- | -------------------------------------- |
+| **请求方法**        | 定义对资源的操作类型            | `GET`, `POST`, `PUT`, `DELETE`         |
+| **URL**             | 请求的资源路径                  | `https://api.example.com/users`        |
+| **协议版本**        | HTTP协议版本                    | `HTTP/1.1`                             |
+| **Accept**          | 客户端可接受的响应类型          | `application/json`                     |
+| **Accept-Encoding** | 客户端可接受的压缩编码          | `gzip, deflate, br, zstd`              |
+| **Accept-language** | 客户端可接受的语言              | `zh-CN,zh;q=0.9,en;q=0.8`              |
+| **Connection**      | 表示客户端希望保持TCP连接持久化 | `keep-alive`                           |
+| **Cookie**          | 携带服务器先前设置的Cookie      | `-`                                    |
+| **Host**            | 目标服务器域名和端口            | `localhost:8080`                       |
+| **Referer:**        | 当前请求的发起页面              | `http://localhost:8080/.../login.html` |
+| **User-Agent**      | 客户端标识（浏览器/设备信息）   | `Mozilla/5.0`                          |
+
+### POST 请求包
+
+Post 请求中，参数在请求体中
+
+```http
+POST /JavaWeb/login HTTP/1.1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cache-Control: max-age=0
+Connection: keep-alive
+Content-Length: 25
+Content-Type: application/x-www-form-urlencoded
+Cookie: JSESSIONID=447DF0C5A75584020EBB92EA00E69417; Idea-cbb7cfcc=96fe9100-849f-4ff7-81d7-7160c7f8fdfd
+Host: localhost:8080
+Origin: http://localhost:8080
+Referer: http://localhost:8080/JavaWeb/06HTTP/login.html
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36
+sec-ch-ua: "Not;A=Brand";v="99", "Google Chrome";v="139", "Chromium";v="139"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "macOS"
+
+username=123&password=456
+```
+
+### POST 请求包参数
+
+| 参数名             | 说明                     | 示例值                              |
+| ------------------ | ------------------------ | ----------------------------------- |
+| **Content-Length** | 请求体（Body）的字节长度 | `25`                                |
+| **Content-Type**   | 声明请求体的编码格式     | `application/x-www-form-urlencoded` |
+| **Origin**         | 请求来源的协议+域名+端口 | `http://localhost:8080`             |
+
+> 注意：当请求参数出现中文时，会使用 URL 编码对中文数据进行编码
+
+## HTTP 响应包分析
+
+### 响应包结构
+
+- 响应行
+- 响应头
+- 响应体
+
+### 响应包源码
+
+```http
+HTTP/1.1 200 OK
+accept-ranges: bytes
+content-length: 310
+content-type: text/html
+date: Wed, 20 Aug 2025 16:10:16 GMT
+etag: W/"310-1755703462855"
+last-modified: Wed, 20 Aug 2025 15:24:22 GMT
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆界面</title>
+</head>
+<body>
+<form action="../login" method="post">
+  <input type="text" name="username">
+  <br>
+  <input type="password" name="password">
+  <br>
+  <button type="submit">登陆</button>
+</form>
+</body>
+</html>
+```
+
+### 响应包参数
+
+| 参数名             | 说明                                            | 示例值                          |
+| ------------------ | ----------------------------------------------- | ------------------------------- |
+| **协议版本**       | HTTP协议版本                                    | `HTTP/1.1`                      |
+| **状态码**         | 服务器返回的状态（见下方状态码表）              | `200`, `404`                    |
+| **Accept-range**   | 服务器是否支持**范围请求**（断点续传/分块下载） | `bytes`, `none`                 |
+| **Content-length** | 响应体字节长度                                  | `310`                           |
+| **Content-type**   | 响应体媒体类型 + 编码类型                       | `text/html`                     |
+| **Date**           | 响应时间                                        | `Wed, 20 Aug 2025 16:10:16 GMT` |
+| **Etag**           | 资源唯一标识符，用于缓存验证                    | `W/"310-1755703462855"`         |
+| **Last-modified**  | 最后修改时间，用于缓存控制                      | `Wed, 20 Aug 2025 15:24:22 GMT` |
+
+## GET 与 POST
+
+### 常见 GET 请求
+
+1. form 标签指定 GET
+2. a 标签
+3. link 标签引入 CSS
+4. script 标签引入 JS 文件
+5. img 标签引入图片
+6. iframe 引入 HTML 页面
+7. 在浏览器地址栏输入地址按回车
+
+### 常见 POST 请求
+
+- from 标签指定 POST
+
+### 请求类型选择
+
+- 请求参数数据敏感的场景，如登陆选 POST。
+- 数据传输量比较大时，选 POST。
+- 页面间跳转展示，选 GET。
+- 查询选 GET，增、删、改选 POST。
+
+### 请求类型区别
+
+- GET ：不安全、数据大小有限制
+- POST：安全、数据大小无限制
+
+## MIME 类型
+
+ MIME（Multipurpose Internet Mail Extensions）类型是标识文件格式的标准。
+
+### 作用
+
+- 浏览器通过 `Content-Type` 头识别如何处理响应内容
+- 服务端通过 `Accept` 头了解客户端能接收的格式
+
+### 常见 MIME 类型分类表
+
+| MIME类型                            | 说明                         | 文件扩展名示例 |
+| ----------------------------------- | ---------------------------- | -------------- |
+| `text/plain`                        | 纯文本                       | .txt           |
+| `text/html`                         | HTML文档                     | .html, .htm    |
+| `text/css`                          | CSS样式表                    | .css           |
+| `text/javascript`                   | JavaScript代码               | .js            |
+| `text/csv`                          | CSV数据                      | .csv           |
+| `text/xml`                          | XML数据                      | .xml           |
+|                                     |                              |                |
+| `image/jpeg`                        | JPEG图像                     | .jpg, .jpeg    |
+| `image/png`                         | PNG图像                      | .png           |
+| `image/gif`                         | GIF图像                      | .gif           |
+| `image/svg+xml`                     | SVG矢量图                    | .svg           |
+| `image/webp`                        | WebP图像                     | .webp          |
+|                                     |                              |                |
+| `application/json`                  | JSON数据                     | .json          |
+| `application/pdf`                   | PDF文档                      | .pdf           |
+| `application/zip`                   | ZIP压缩包                    | .zip           |
+| `application/x-www-form-urlencoded` | 表单编码数据                 | -              |
+| `application/octet-stream`          | 二进制流（默认下载）         | .bin, .exe     |
+|                                     |                              |                |
+| `audio/mpeg`                        | MP3音频                      | .mp3           |
+| `video/mp4`                         | MP4视频                      | .mp4           |
+| `video/webm`                        | WebM视频                     | .webm          |
+|                                     |                              |                |
+| `multipart/form-data`               | 文件上传表单（含二进制数据） |                |
+| `application/xhtml+xml`             | XHTML文档                    |                |
+| `font/woff2`                        | WOFF2字体文件                |                |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
