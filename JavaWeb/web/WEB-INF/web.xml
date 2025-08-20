@@ -15,7 +15,7 @@
 
     <servlet>
         <servlet-name>Login</servlet-name>
-        <servlet-class>Servlet.Login</servlet-class> <!--类地址-->
+        <servlet-class>HTTP.Login</servlet-class> <!--类地址-->
     </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>

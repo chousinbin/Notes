@@ -1,10 +1,10 @@
-package Servlet;
+package HTTP;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class Login implements Servlet {
 
@@ -22,19 +22,25 @@ public class Login implements Servlet {
     public void service(ServletRequest servletRequest, ServletResponse servletResponse) throws ServletException, IOException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String method = httpServletRequest.getMethod();
+        HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
         if ("POST".equals(method)) {
-            doPost();
+            doPost(httpServletRequest, httpServletResponse);
         } else if ("GET".equals(method)) {
-            doGet();
+            doGet(httpServletRequest, httpServletResponse);
         }
     }
 
-    private void doGet() {
+    private void doGet(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         System.out.println("GET");
     }
 
-    private void doPost() {
+    private void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         System.out.println("POST");
+        httpServletResponse.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = httpServletResponse.getWriter();
+        writer.print("<h1>登录成功~</h1>");
+        writer.flush();
+        writer.close();
     }
 
     @Override
