@@ -1726,6 +1726,231 @@ Tomcat 有个默认 DefaultServlet，该 Servlet 用于处理静态资源。当�
 
 **匹配优先级**：精确匹配 > 目录匹配 > 扩展名匹配 > 任意匹配 > `/`
 
+## ServletConfig
+
+- ServletConfig 类作为 Servlet 类的配置信息。
+- 在实例 Servlet 时，Tomcat 自动实例化一个与之对应的 ServletConfig 对象。
+
+### 作用
+
+- 获取 Servlet 的 servlet-name
+- 获取 Servlet 的初始化参数 init-param
+- 获取 ServletContext 对象
+
+```java
+public class DBServlet extends HttpServlet {
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        System.out.println(config);
+        // 传给 GenericServlet
+        super.init(config);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ServletConfig servletConfig = getServletConfig();
+        String username = servletConfig.getInitParameter("username");
+        String password = servletConfig.getInitParameter("password");
+        System.out.println(username);
+        System.out.println(password);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
+    }
+}
+```
+
+> ServletConfig 作为 GenericServlet 的成员属性，被 transient 修饰，表示不能被序列化。
+
+### 初始化流程
+
+1. 初始化 Servlet 时，Tomcat 创建一个 ServletConfig 对象，传给 Servlet 的 `init()` 方法。
+2. 如果重写了 `init` 方法，就要把 config 对象用 `super.init(config)` 传递给 GenericServlet。
+3. 再把 config 赋值给 GenericServlet 的 servletConfig 变量。
+
+## ServletContext
+
+ServletContext 是一个接口，是一个全局的资源空间，与 Tomcat 同生命周期。
+
+1. 可以被多个 Servlet 共享，一个 Web 工程只有一个实例
+2. K-V 数据存储方式
+3. 可以实现多个 Servlet 通信
+
+### 作用
+
+- 获取 `web.xml` 中配置的上下文参数 `context-param`（属于整个 Web 项目）
+- 获取当前工程路径（项目目录名）
+- 获取工程部署之后在服务器上的绝对路径
+- 像 Map 一样存取数据，用于多个 Servlet 间共享
+
+### 示例代码
+
+```java
+@WebServlet(urlPatterns = "/ServletContext01")
+public class ServletContext01 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // 0. 获取 ServletContext 对象
+        ServletContext servletContext = this.getServletContext();
+        // 1. 获取上下文参数
+        String website = servletContext.getInitParameter("website");
+        System.out.println(website);
+        // 2. 获取工程路径
+        String contextPath = servletContext.getContextPath();
+        System.out.println(contextPath);
+        // 3. 获取项目资源实际位置
+        String realPath = servletContext.getRealPath("/");
+        System.out.println(realPath);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
+    }
+}
+```
+
+### 网页计数器
+
+```java
+public class Util {
+    public static Integer counter(ServletContext servletContext) {
+        Object counter = servletContext.getAttribute("counter");
+        if (counter == null) {
+            servletContext.setAttribute("counter", 1);
+        } else {
+            servletContext.setAttribute("counter", (Integer)counter + 1);
+        }
+        return (Integer) servletContext.getAttribute("counter");
+    }
+}
+
+@WebServlet(urlPatterns = "/ServletOrder")
+public class ServletOrder extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Integer counter = counter(getServletContext());
+
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print("<h1>被访问的次数是" + counter + "</h1>");
+        out.flush();
+        out.close();
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
+    }
+}
+```
+
+## HttpServletRequest
+
+HttpServletRequest 对象代表客户端请求，封装了 HTTP 请求包的所有信息。
+
+### 乱码解决
+
+首行加入以下代码：
+
+```java
+request.setCharacterEncoding("utf-8");
+```
+
+### 常用方法
+
+| 方法名                   | 返回类型             | 方法作用                                                  |
+| ------------------------ | -------------------- | --------------------------------------------------------- |
+| getMethod()              | Stirng               | 获取请求的方式 GET POST                                   |
+| getRequestURI()          | String               | 获取请求资源的相对路径                                    |
+| getRequestURL()          | StringBuffer         | 获取请求资源的绝对路径                                    |
+| getProtocol()            | String               | 获取请求协议类型                                          |
+| getHeader(String)        | String               | 获取请求头，参数填请求包的字段名                          |
+| getRemoteAddr()          | String               | 获取客户端**IP地址**                                      |
+| getRemoteHost()          | Stirng               | 获取客户端**主机名**（需DNS反向解析，性能差，通常返回IP） |
+| getParameter()           | String               | 获取请求的参数                                            |
+| getParameterValues()     | String[]             | 获取请求的多个参数，如复选框                              |
+| setAttribute(key, value) | void                 | 设置域数据                                                |
+| getAttribute(key)        | Object               | 获取域数据                                                |
+| removeAttribute(key)     | void                 | 删除域数据                                                |
+| getAttributeNames()      | Enumeration\<String> | 获取所有域数据的 key                                      |
+| getRequestDispatcher()   | RequestDispatcher    | 获取请求转发对象                                          |
+
+### 请求转发
+
+**请求转发**：指一个 Web 资源收到客户端请求后， 通知**服务器**去调用另外一个 Web 资源进行处理。
+
+**请求转发语法：**
+
+```java
+// URL 是相对路径，不需要带项目名
+RequestDispatcher requestDispatcher = request.getRequestDispatcher("/URL");
+requestDispatcher.forward(request, response);
+```
+
+> 注意：
+>
+> 1. 无论请求转发多少次，都只有一次 HTTP 请求和响应，因为转发发生在服务器端。
+> 2. 请求转发过程中浏览器的 URL 保持不变，如果刷新页面，会再次发出请求，所以支付页面不使用转发。
+> 3. 在不同的 Servlet 中可以**共享 request 对象和域数据**。
+> 4. 可以转发到 `WEB-INF` 目录下，不能访问当前项目之外的的资源。
+
+## HttpServletResponse
+
+HttpServletResponse 对象代表服务器端的响应信息。
+
+### 乱码解决
+
+首行加入以下代码：
+
+```java
+response.setContentType("text/html;charset=utf-8");
+```
+
+### 返回数据方法
+
+| 方法名            | 作用                     |
+| ----------------- | ------------------------ |
+| getOutputStream() | 用于下载，处理二进制数据 |
+| getWriter()       | 用于回传字符串           |
+
+在同一个 Servlet 中只能使用一种流。
+
+### getWriter()
+
+```java
+response.setContentType("text/html;charset=utf-8");
+PrintWriter out = response.getWriter();
+out.print("name=" + request.getParameter("name"));
+out.print("password=" + request.getParameter("password"));
+out.flush();
+out.close();
+```
+
+### 响应重定向
+
+**响应重定向**：指一个 Web 资源收到请求之后，通知客户端去访问另一个 Web 资源。
+
+- 浏览器地址会发生变化，本质是两次 HTTP 请求。
+- 产生两个 HttpServletRequest 对象，不能共享 Request 域中的数据。
+- 不能重定向到 `WEB-INF` 下的资源，可以重定向到 Web 项目之外的资源。
+
+**响应重定向语法：**
+
+```java
+response.setContentType("text/html;charset=utf-8");
+// 动态获取项目名称
+String contextPath = getServletContext().getContextPath();
+// 组合 项目名 和 资源名
+response.sendRedirect(contextPath + "/ServletNew");
+```
+
 # HTTP
 
 ## HTTP 协议介绍
