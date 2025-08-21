@@ -3,6 +3,11 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+    <!--配置 contest-param-->
+    <context-param>
+        <param-name>website</param-name>
+        <param-value>jd.com</param-value>
+    </context-param>
     <!--web.xml用来配置Web需要用的Servlet-->
     <servlet>
         <servlet-name>HelloServlet</servlet-name>
@@ -36,6 +41,22 @@
     <servlet-mapping>
         <servlet-name>ServletDog</servlet-name>
         <url-pattern>/dog</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DBServlet</servlet-name>
+        <servlet-class>ServletConfig.DBServlet</servlet-class>
+        <init-param>
+            <param-name>username</param-name>
+            <param-value>zxb</param-value>
+        </init-param>
+        <init-param>
+            <param-name>password</param-name>
+            <param-value>123456</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DBServlet</servlet-name>
+        <url-pattern>/DBServlet</url-pattern>
     </servlet-mapping>
 </web-app>
 
