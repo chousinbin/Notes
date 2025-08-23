@@ -4,4 +4,12 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+    <servlet-name>MyCalServlet</servlet-name>
+    <servlet-class>com.zhouxinbin.tomcat.servlet.MyCalServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MyCalServlet</servlet-name>
+    <url-pattern>/myCalServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
