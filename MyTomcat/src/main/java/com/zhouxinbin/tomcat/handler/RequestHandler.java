@@ -1,5 +1,8 @@
 package com.zhouxinbin.tomcat.handler;
 
+import com.zhouxinbin.tomcat.http.MyRequest;
+import com.zhouxinbin.tomcat.http.MyResponse;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -15,28 +18,14 @@ public class RequestHandler implements Runnable{
     public void run() {
         try {
             // 读取 Socket 上的请求
-             InputStream inputStream = socket.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-            System.out.println("=== HTTP 请求数据 ===");
-            String line = null;
-            while ((line = bufferedReader.readLine()) != null) {
-                if (line.isEmpty()) {
-                    break;
-                }
-                System.out.println(line);
-            }
+            InputStream inputStream = socket.getInputStream();
+            MyRequest myRequest = new MyRequest(inputStream);
+            System.out.println(myRequest.toString());
             // 通过 Socket 把响应返回到浏览器
-            String responseHeader =
-                    "HTTP/1.1 200 OK\r\n" +
-                    "Content-Type: text/html;charset=utf-8\r\n\r\n";
-            responseHeader = responseHeader + "<h1>Hello World</h1>";
-
-            System.out.println("=== HTTP 响应数据 ===");
-            System.out.println(responseHeader);
-
             OutputStream outputStream = socket.getOutputStream();
-            outputStream.write(responseHeader.getBytes(StandardCharsets.UTF_8));
+            MyResponse myResponse = new MyResponse(outputStream);
+            String s = myResponse.responseHeader + "<h1>Hello World~</h1>";
+            outputStream.write(s.getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
             // 关流
             inputStream.close();
