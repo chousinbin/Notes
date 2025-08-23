@@ -9,14 +9,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a44a1a7e-ee57-459f-a275-61d8fcd2fe96" name="更改" comment="MyTomcat 实现多线程处理请求">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhouxinbin/tomcat/http/MyRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhouxinbin/tomcat/http/MyResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhouxinbin/tomcat/servlet/MyCalServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhouxinbin/tomcat/servlet/MyHttpServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhouxinbin/tomcat/servlet/MyServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="a44a1a7e-ee57-459f-a275-61d8fcd2fe96" name="更改" comment="MyTomcat 实现 HTTP request 和 response">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/zhouxinbin/tomcat/handler/RequestHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhouxinbin/tomcat/handler/RequestHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhouxinbin/tomcat/servlet/MyCalServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhouxinbin/tomcat/servlet/MyCalServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhouxinbin/tomcat/servlet/MyHttpServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhouxinbin/tomcat/servlet/MyHttpServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhouxinbin/tomcat/servlet/MyServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhouxinbin/tomcat/servlet/MyServlet.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -219,7 +216,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1755839191171</updated>
-      <workItem from="1755839192164" duration="15176000" />
+      <workItem from="1755839192164" duration="16437000" />
     </task>
     <task id="LOCAL-00001" summary="MyTomcat 实现监听和返回消息">
       <option name="closed" value="true" />
@@ -237,7 +234,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755935243596</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="MyTomcat 实现 HTTP request 和 response">
+      <option name="closed" value="true" />
+      <created>1755964124180</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1755964124180</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -257,6 +262,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="MyTomcat 实现监听和返回消息" />
     <MESSAGE value="MyTomcat 实现多线程处理请求" />
-    <option name="LAST_COMMIT_MESSAGE" value="MyTomcat 实现多线程处理请求" />
+    <MESSAGE value="MyTomcat 实现 HTTP request 和 response" />
+    <option name="LAST_COMMIT_MESSAGE" value="MyTomcat 实现 HTTP request 和 response" />
   </component>
 </project>

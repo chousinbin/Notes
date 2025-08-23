@@ -2,6 +2,7 @@ package com.zhouxinbin.tomcat.handler;
 
 import com.zhouxinbin.tomcat.http.MyRequest;
 import com.zhouxinbin.tomcat.http.MyResponse;
+import com.zhouxinbin.tomcat.servlet.MyCalServlet;
 
 import java.io.*;
 import java.net.Socket;
@@ -17,19 +18,15 @@ public class RequestHandler implements Runnable{
     @Override
     public void run() {
         try {
-            // 读取 Socket 上的请求
+            // 创建 HttpRequest 对象读取 Socket 上的请求
             InputStream inputStream = socket.getInputStream();
-            MyRequest myRequest = new MyRequest(inputStream);
-            System.out.println(myRequest.toString());
-            // 通过 Socket 把响应返回到浏览器
-            OutputStream outputStream = socket.getOutputStream();
-            MyResponse myResponse = new MyResponse(outputStream);
-            String s = myResponse.responseHeader + "<h1>Hello World~</h1>";
-            outputStream.write(s.getBytes(StandardCharsets.UTF_8));
-            outputStream.flush();
+            MyRequest myRequest = new MyRequest(socket.getInputStream());
+            // 创建 HttpResponse 对象把响应返回到浏览器
+            MyResponse myResponse = new MyResponse(socket.getOutputStream());
+            // 创建 Servlet
+            new MyCalServlet().doGet(myRequest, myResponse);
             // 关流
             inputStream.close();
-            outputStream.close();
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
