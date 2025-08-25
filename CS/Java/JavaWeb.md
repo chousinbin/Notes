@@ -2202,19 +2202,107 @@ last-modified: Wed, 20 Aug 2025 15:24:22 GMT
 | `application/xhtml+xml`             | XHTML文档                    |                |
 | `font/woff2`                        | WOFF2字体文件                |                |
 
+# BIO 模拟 Tomcat 
 
+## Tomcat 架构分析
 
+### 运行模式
 
+1. BIO：BIO 是 Blocking I/O（阻塞式 I/O）的缩写，是 Java 中传统的同步阻塞网络通信模型。它的核心特点是：当线程执行 I/O 操作时，会一直阻塞等待，直到数据就绪或操作完成。
+2. NIO: 基于事件驱动和多路复用，单线程可处理多个连接，适合高并发场景。
+3. APR: 使用本地方法提高性能，需要额外安装本地库。
 
+### 运行流程
 
+1. 启动 BIO Tomcat
+2. 遍历 web.xml 文件，维护 Servlet 的名字、类地址和 URL 信息
+3. BIO Server Socket 等待连接，创建线程处理连接
+4. 解析 URL，判断请求资源类型，执行对应逻辑
+   - 静态资源：返回静态资源
+   - 动态资源：调用对应 Servlet 完成业务
 
+### 技术实现
 
+1. HTTP 协议
+2. Socket 网络编程
+3. IO 流
+4. 多线程
+5. 反射
+6. DOM4J
+7. 自定义 Servlet 规范
 
+# Maven 入门
 
+## Maven 介绍
 
+- Maven 是一个包管理软件，方便项目的包管理。
+- Maven Hub: 包的远程仓库。
+- Maven Repository: 包的本地存放地址，从 Hub 下载。
+- pom.xml 项目的 Maven 配置文件，里面包含项目所需的包名和版本信息。
+- 项目所用的本地包，从 Repository 调用。
 
+## IDEA 创建 Maven Web 项目
 
+![image-20250825214435382](https://cdn.jsdelivr.net/gh/chousinbin/Image/202508252144437.png)
 
+高级设置的三个参数为 Maven 项目的三要素，起唯一标识的作用。换句话说，我们自己的项目也有机会上传到 MavenHub 供其他开发者调用。
+
+## Maven Web 项目目录
+
+```shell
+MavenWeb
+├── pom.xml # Maven 配置文件
+└── src
+    └── main
+        ├── java # 存放 Java 代码
+        ├── resources
+        └── webapp # web 目录
+            ├── index.jsp
+            └── WEB-INF
+                └── web.xml
+```
+
+## pom.xml
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.zhouxinbin</groupId>
+  <artifactId>MyTomcat</artifactId>
+  <packaging>war</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>MyTomcat Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!-- 源码编码 -->
+    <maven.compiler.source>1.8</maven.compiler.source> <!-- JDK 版本 -->
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+  <dependencies> <!-- 依赖列表 -->
+    <dependency> <!-- 依赖1 --> 
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency> <!-- 依赖2 --> 
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency> <!-- 依赖3 --> 
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.1</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <finalName>MyTomcat</finalName>
+  </build>
+</project>
+```
 
 
 
