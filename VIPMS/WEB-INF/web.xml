@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<web-app>
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>controller.Login</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+	
+    <servlet>
+        <servlet-name>MemberAdd</servlet-name>
+        <servlet-class>controller.MemberAdd</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MemberAdd</servlet-name>
+        <url-pattern>/MemberAdd</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>MemberQuery</servlet-name>
+        <servlet-class>controller.MemberQuery</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MemberQuery</servlet-name>
+        <url-pattern>/MemberQuery</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RewardRecord</servlet-name>
+        <servlet-class>controller.RewardRecord</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RewardRecord</servlet-name>
+        <url-pattern>/RewardRecord</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>MemberDelete</servlet-name>
+        <servlet-class>controller.MemberDelete</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MemberDelete</servlet-name>
+        <url-pattern>/MemberDelete</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>MemberUpdate</servlet-name>
+        <servlet-class>controller.MemberUpdate</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MemberUpdate</servlet-name>
+        <url-pattern>/MemberUpdate</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RewardRecordQuery</servlet-name>
+        <servlet-class>controller.RewardRecordQuery</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RewardRecordQuery</servlet-name>
+        <url-pattern>/RewardRecordQuery</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>GiftQuery</servlet-name>
+        <servlet-class>controller.GiftQuery</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GiftQuery</servlet-name>
+        <url-pattern>/GiftQuery</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>GiftAdd</servlet-name>
+        <servlet-class>controller.GiftAdd</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GiftAdd</servlet-name>
+        <url-pattern>/GiftAdd</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>GiftDelete</servlet-name>
+        <servlet-class>controller.GiftDelete</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GiftDelete</servlet-name>
+        <url-pattern>/GiftDelete</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>GiftConvert</servlet-name>
+        <servlet-class>controller.GiftConvert</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GiftConvert</servlet-name>
+        <url-pattern>/GiftConvert</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>GiftConvertRecordQuery</servlet-name>
+        <servlet-class>controller.GiftConvertRecordQuery</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GiftConvertRecordQuery</servlet-name>
+        <url-pattern>/GiftConvertRecordQuery</url-pattern>
+    </servlet-mapping>
+</web-app>
