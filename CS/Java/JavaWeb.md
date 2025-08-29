@@ -1798,7 +1798,7 @@ public class ServletContext01 extends HttpServlet {
         // 1. 获取上下文参数
         String website = servletContext.getInitParameter("website");
         System.out.println(website);
-        // 2. 获取工程路径
+        // 2. 获取工程路径名
         String contextPath = servletContext.getContextPath();
         System.out.println(contextPath);
         // 3. 获取项目资源实际位置
@@ -2304,17 +2304,81 @@ MavenWeb
 </project>
 ```
 
+# Web 路径问题
 
+> 题外话：结构化思维，是指对未知问题、未知领域的内容框架进行整体了解，再局部精进。
 
+## 路径问题引入
 
+在工程当中，绝对路径是一个隐患。绝对路径包含域名或IP、端口号、应用名、文件目录等信息，一旦写死在代码中，不方便后期更新和维护。为了符合**低耦合**的软件工程理念，在 Web 工程中，尽可能使用相对路径。
 
+当然相对路径也有局限性，相对路径的起始位置是当前代码文件的所在位置。
 
+比如在 `http://localhost:8080/projectName/index.html` 中调用 `action: ok` Servlet 等于 `http://localhost:8080/projectName/ok`。
 
+如果涉及多级目录，则需要先定位到两个资源的最近公共祖先，再向下定位目标资源。还是有些费事。
 
+所以引入了 **Base** 标签，可以指定相对路径的起始路径，提高相对路径的便捷性。
 
+## Base 标签介绍
 
+- 是 HTML 的单标签元素，位于 head 标签内
+- 一个页面只能指定 1 个 base 标签
 
+## Base 标签使用
 
+```html
+<base href="http://localhost:8080/ContextPath/"
+```
+
+浏览器解析 base 标签的时候，会把第一个 `/` 解析成 `http://localhost:8080/`，所以上面 base 的 href 还可以简化如下：
+
+```html
+<base href="/ContextPath/"
+```
+
+此时浏览器会把 base 解析为：`http://localhost:8080/ContextPath/`
+
+## 斜杠的解析 
+
+| 斜杠的位置 | 解析的位置    | 解析的结果                           |
+| ---------- | ------------- | ------------------------------------ |
+| 前端代码中 | 浏览器/客户端 | `http://localhost:8080/`             |
+| 后端代码中 | 服务器        | `http://localhost:8080/ContextPath/` |
+
+后端 路径无斜杠前缀 `http://localhost:8080/ContextPath/`
+
+前端 路径无斜杠前缀 代表当前页面所在目录。
+
+在 XML 文件中 `/` 代表 `http://localhost:8080/ApplicationContext/`
+
+servletContext.getRealPath("/") 项目真实工作根目录
+
+## forward 转发 
+
+转发语句写在 Servlet 中，被服务端 Tomcat 执行，/ 代表 `http://localhost:8080/ApplicationContext/`
+
+servlet 的相对路径起始点是当前请求中前端页面所在位置
+
+## redirect 重定向
+
+重定向语句虽然写在 Servlet 中，被 Servlet 执行，但路径由浏览器解析，所以 / 代表 `http://localhost:8080/`
+
+最优写法 ContextPath + 相对路径
+
+## 路径问题思路
+
+1. 判断路径有没有前缀 /
+2. 判断路径解析位置
+3. 判断路径结尾有无 /
+
+## 前端动态获取 ApplicationContext
+
+使用 JSP 替换 HTML 页面
+
+```jsp
+<base href="<%=request.getContentPath()=>/">
+```
 
 
 
