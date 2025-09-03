@@ -2380,6 +2380,192 @@ servlet 的相对路径起始点是当前请求中前端页面所在位置
 <base href="<%=request.getContentPath()=>/">
 ```
 
+# 会话技术
+
+## Cookie
+
+### Cookie 简介
+
+- Cookie 是客户端技术，是服务器在客户端保存用户的信息。
+- Cookie 数据量不大，在服务端需要的时候，从客户端获取(HTTP)。
+- 浏览器发送请求时，请求头中携带自己的 Cookie。
+- Cookie 总数没有限制，每个域名的 Cookie 数量和每个 Cookie 的大小是又限制的，不适合存储数据量大的信息。
+
+![image-20250901204559232](https://cdn.jsdelivr.net/gh/chousinbin/Image/202509012045275.png)
+
+### Cookie 作用
+
+1. 保存上次登陆时间
+2. 保存用户名和密码（短期内免登陆，比较危险）
+3. 网站的个性化配置：主题、语言、用户偏好
+
+### Cookie 创建
+
+创建 Cookie: 
+
+```java
+Cookie c = new Cookie(String name, String value);
+c.setMaxAge(); // 保存时间
+```
+
+将 Cookie 添加到客户端：
+
+```java
+response.addCookie(c);
+// 在响应头添加一个字段 set-cookie
+```
+
+### Cookie 读取
+
+在浏览器向指定目标发送请求时，会带上本地所有**与请求目标 (domain) 有关的** Cookie。
+
+在服务端读取请求中所有的 Cookie: 
+
+```java
+Cookie[] cookies = request.getCookies();
+if (cookies != null) {
+    for (Cookie cookie : cookies) {
+        System.out.println(
+          cookie.getName() + ": " + cookie.getValue());
+    }
+}
+
+/**
+name: zxb
+JSESSIONID: CBC7A2E5DE47851BEA68B68B61456562
+*/
+```
+
+### JSESSIONID
+
+JSESSIONID 用于服务器端区分客户端会话，用于唯一标识不同浏览器的会话。
+
+用不同浏览器访问同一 Servlet 验证具有不同 JSESSIONID。
+
+### Cookie 修改
+
+1. 根据 name 找到对应的 cookie 再通过 setValue 方法修改值
+2. 创建一个同 name 新的 cookie 覆盖旧 cookie
+
+### Cookie 生命周期
+
+cookie 可以通过方法设置自己的存活时间，单位为秒：
+
+1. -1 为默认存活时间，与浏览器共存，浏览器关闭的时候，销毁 Cookie
+2. 0 为浏览器立即删除 Cookie
+3. 当存活时间已过，失效的 Cookie 还存在于浏览器本地，但发送请求时不再携带此 Cookie
+
+```java
+cookie.setMaxAge(int)
+```
+
+### Cookie 有效路径
+
+Cookie 的属性 Path 用于指定哪些路径可以访问该 Cookie。它控制 Cookie 的作用范围，确保 Cookie 仅在特定路径及其子路径下被发送到服务器。
+
+默认有效路径是工程路径 `http://localhost:8080/ApplicationContext/`
+
+删除 Cookie 必须在有效路径 Path 内，否则删除无效。
+
+### Cookie 中文乱码
+
+不建议存放中文，需要使用 URL 编码和解码来解决。
+
+## Session
+
+### Session 简介
+
+- Session 是服务端技术，为每个用户的浏览器创建一个独享的 Session 对象（集合）
+- 因为是用户独享的，因此用户在访问不同页面时，都可以读写自己的 Session 对象
+
+### Session 用途
+
+- 用户信息（比 Cookie 安全）
+- 存储较大数据，如购物车
+- 供用户跨页面访问数据
+- 防止用户非法登陆到某个页面
+
+### Session 原理
+
+1. 用户打开浏览器，访问网站，操作 Session 时，服务器在内存为该浏览器分配一个 Session 对象，由该浏览器独享，靠 JSESSIONID 唯一标识。
+2. Session 对象可以看做一个集合，默认存活 30 min
+
+默认存活时间在 Tomcat/conf/web.xml 下配置：
+
+```xml
+<session-config>
+    <session-timeout>30</session-timeout>
+</session-config>
+```
+
+### Session 存储结构
+
+- Session 类似容器 HashMap，有两列分别为 K-V，每行是 Session 的一个属性
+- K 为 String 类型，V 为 Object 类型
+
+### Session 常用方法
+
+| 方法名                                | 返回类型    | 备注                          |
+| ------------------------------------- | ----------- | ----------------------------- |
+| request.getSession()                  | HttpSession | 第一次调用是创建 Session 对象 |
+| setAttribute(String name, Object val) | void        | 添加一个属性                  |
+| getAttribute(String name)             | Object      | 得到一个属性                  |
+| removeAttribute(String name)          | void        | 删除一个属性                  |
+| isNew()                               | boolean     | 判断是否刚创建                |
+| getId()                               | String      | 获取 Session 的唯一标识       |
+| invalidate()                          | void        | 销毁该 Session 对象           |
+
+### Session 底层机制
+
+1. 浏览器向服务器发起 HTTP 请求，访问 Session 对象
+2. 服务端调用 `request.getSession()`，判断浏览器是否带有 JSESSIONID 的Cookie
+   - 无 JSESSIONID，是首次调用：创建一个与**当前浏览器本次会话**关联的 Session 对象，生成唯一的 JSESSIONID，通过 `Set-Cookie` 返回给浏览器。同时服务器维护一个 Map，K 为 JSESSIONID，V 为 Session 对象。
+   - 有 JESESSIONID，拿它查询 Map，看是否已经存在 Session 对象
+     - 如不存在：生成唯一的 JSESSIONID，创建 Session 对象，加入 Map，返回 Cookie
+     - 如果存在：得到一个与**当前浏览器本次会话**关联（JSESSIONID）的 Session 对象
+3. 读/写 Session 对象
+
+### Session 生命周期
+
+Session 对象可以调用 `setMaxInactiveInterval(int interval)` 设置 Session 的超时时间（秒），超过指定时长，Session 从 Map 中销毁。
+
+- 正数：设定超时秒数
+- 负数：用不超时
+
+`getMaxInactiveInterval()` 获取 Session 对象超时时长。
+
+如果 Session 对象没有指定超时时长，Tomcat 会以` /conf/web.xml` 配置文件为默认时长
+
+Session 的生命周期不是从创建 Session 对象开始计算的，而是最长不活跃时长，当 Session 对象被访问，会重新倒数时长。
+
+Tomcat 用一个线程轮询会话状态，如果某一个会话空闲时间超过最大值，则该会话被销毁。
+
+Session 对象调用 `invalidate()` 可以立即销毁自己。
+
+## Cookie VS Session
+
+| **特性** | **Cookie**         | **Session**              |
+| -------- | ------------------ | ------------------------ |
+| 存储位置 | 客户端（浏览器）   | 服务端（内存/数据库）    |
+| 安全性   | 较低（需额外防护） | 较高（数据不暴露）       |
+| 生命周期 | 可持久化或会话级   | 通常会话级或自定义过期   |
+| 存储容量 | 小（约 4KB）       | 大（受服务器限制）       |
+| 性能影响 | 增加请求头大小     | 增加服务端查询开销       |
+| 跨域支持 | 受限（同源策略）   | 依赖 Session ID 传递方式 |
+| 典型用途 | 用户偏好、跟踪     | 登录状态、敏感数据       |
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
