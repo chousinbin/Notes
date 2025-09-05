@@ -2377,7 +2377,7 @@ servlet 的相对路径起始点是当前请求中前端页面所在位置
 使用 JSP 替换 HTML 页面
 
 ```jsp
-<base href="<%=request.getContentPath()=>/">
+<base href="<%=request.getContentPath()%>/">
 ```
 
 # 会话技术
@@ -2554,13 +2554,431 @@ Session 对象调用 `invalidate()` 可以立即销毁自己。
 | 跨域支持 | 受限（同源策略）   | 依赖 Session ID 传递方式 |
 | 典型用途 | 用户偏好、跟踪     | 登录状态、敏感数据       |
 
+# JSP
 
+## JSP 简介
 
+JSP (Java Server Page) 解决了 Servlet 排版不方便的问题，又解决了 HTML 页面无法动态获取数据的问题。
 
+JSP = HTML + Java + 标签 + JavaScript + CSS
 
+JSP 在业界虽然已经过时，但是对后端程序员测试数据渲染效果时，JSP 相比 Vue 更便捷。
 
+## JSP 运行原理
 
+JSP 技术基于 Servlet，本质是 Servlet。
 
+第一次访问 JSP 页面时，Tomcat 服务器把 JSP 页面解析称为一个 .java 源文件，对他进行编译成 .class 字节码程序。两个源文件在 Tomcat 启动时终端上的 `CATALINA_BASE` 目录下。
+
+发现 .java 源文件继承了 HttpJspBase 类，HttpJspBase 又继承了 HttpServlet，所以 JSP 是一个 Servlet。
+
+又因为 HttpJspBase 又实现了 HttpJspPage 接口，所以 JSP 页面有比 Servlet 更强大的功能（内置类）。
+
+```mermaid
+classDiagram
+direction BT
+class GenericServlet
+class HttpJspBase
+class HttpJspPage {
+<<Interface>>
+
+}
+class HttpServlet
+class JspPage {
+<<Interface>>
+
+}
+class Serializable {
+<<Interface>>
+
+}
+class Servlet {
+<<Interface>>
+
+}
+class ServletConfig {
+<<Interface>>
+
+}
+
+GenericServlet  ..>  Serializable 
+GenericServlet  ..>  Servlet 
+GenericServlet  ..>  ServletConfig 
+HttpJspBase  ..>  HttpJspPage 
+HttpJspBase  -->  HttpServlet 
+HttpJspPage  -->  JspPage 
+HttpServlet  -->  GenericServlet 
+JspPage  -->  Servlet 
+
+```
+
+## Page 指令
+
+```jsp
+<%@ page import="org.apache.jasper.runtime.HttpJspBase" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+```
+
+- contentType 代表 JSP 返回的数据类型
+- language 代表 JSP 翻译后的语言，只支持 Java
+- pageEncoding 代表 JSP 页面文件本身的字符集
+- import 代表 导入包/类
+
+## JSP 常用脚本
+
+### 声明脚本
+
+声明 JSP 需要使用的属性、方法、静态代码块、内部类。statement.jsp 如下：
+
+```jsp
+<%!
+    // 声明 JSP 需要使用的属性、方法、静态代码块、内部类
+    private String name = "zxb";
+    private static String company;
+
+    public String getName() {
+        return name;
+    }
+
+    static {
+        company = "ByteDance";
+    }
+%>
+```
+
+摘录 statement_jsp.java 如下：
+
+```java
+public final class statement_jsp extends org.apache.jasper.runtime.HttpJspBase
+    implements org.apache.jasper.runtime.JspSourceDependent,
+                 org.apache.jasper.runtime.JspSourceImports {
+                   
+    // 声明 JSP 需要使用的属性、方法、静态代码块、内部类
+    private String name = "zxb";
+    private static String company;
+
+    public String getName() {
+        return name;
+    }
+
+    static {
+        company = "ByteDance";
+    }
+ }
+```
+
+### 表达式脚本
+
+表达式脚本用于在 JSP 页面输出数据。
+
+```jsp
+<%=表达式%>
+```
+
+### Java 代码脚本
+
+代码脚本用于在页面编写 Java 语句。
+
+```java
+<%
+  	Java Code
+%>
+```
+
+## JSP 注释
+
+JSP 文件中可以有三种注释：
+
+1. HTML 注释（在浏览器查看源代码是可以看到）
+2. Java 注释
+3. JSP 注释
+
+```jsp
+<%-- JSP 注释内容 --%>
+<!-- HTML 注释 -->
+<%
+		// Java 注释
+%>
+```
+
+## JSP 内置对象
+
+Tomcat 把 jsp 页面转换成 java 源文件后，内部提供 9 个对象，称为内置对象。
+
+| 对象名      | 作用                                                         |
+| ----------- | ------------------------------------------------------------ |
+| out         | 向客户端输出数据                                             |
+| request     | 客户端的 HTTP 请求对象                                       |
+| response    | 客户端的 HTTP 响应对象                                       |
+| session     | 会话对象                                                     |
+| application | 本质是 ServletContext，作用域为整个工程，与 Tomcat 同生命周期 |
+| pageContext | 域对象，作用范围是本 JSP 页面，可以存放 KV 数据              |
+| exception   | 异常对象                                                     |
+| page        | 此 JSP 实例本身，类似 this                                   |
+| config      | 本质是 ServletConfig                                         |
+
+## JSP 域对象
+
+| 对象名      | 作用范围                                              |
+| ----------- | ----------------------------------------------------- |
+| pageContext | 当前页面                                              |
+| request     | 当前 request 请求内                                   |
+| session     | 当前用户的当前会话，跨页面和请求                      |
+| application | 整个 Web 应用运行期间，所有用户、页面、请求范围内共享 |
+
+## JSP 请求转发
+
+jsp 请求转发相当于 `request.getDispatcher().forward("")`，转发之后浏览器 URL 不变。
+
+```jsp
+<jsp:forward page="sum.jsp"></jsp:forward>
+```
+
+## EL 表达式
+
+EL 全称为 Expression Language，是表达式语言。比 JSP 页面的表达式脚本更简洁。
+
+### EL 语法
+
+```jsp
+<body>
+<%
+    request.setAttribute("name", "zxb");
+%>
+<%=request.getAttribute("name")%>
+${name}
+<%=request.getAttribute("name") == null ? "" : request.getAttribute("name")%>
+</body>
+```
+
+如果 `key` 为 `null`: 
+
+- `requset.getAttribute()` 返回 `null` 字符串
+- EL 表达式返回 `“”`
+
+### EL 输出
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<%
+    Book book = new Book();
+    book.setName("活着");
+    book.setAuthor(new String[]{"余华", "余hua"});
+    ArrayList<String> reader = new ArrayList<>();
+    reader.add("zxb");
+    reader.add("xb");
+    book.setReader(reader);
+
+    HashMap<String, String> comments = new HashMap<>();
+    comments.put("1", "good");
+    comments.put("2", "nice");
+    book.setComment(comments);
+
+    request.setAttribute("book", book);
+%>
+book对象: ${book}
+<br>
+book_name = ${book.name}
+<br>
+book_authors = ${book.author}
+<br>
+book_author = ${book.author[0]}
+<br>
+book_readers = ${book.reader}
+<br>
+book_reader = ${book.reader.get(1)}
+<br>
+book_comments = ${book.comment}
+<br>
+book_comment = ${book.comment.get("1")}
+</body>
+</html>
+```
+
+### EL 运算
+
+```jsp
+${运算表达式}
+```
+
+### EL empty
+
+empty 用于判断数据是否为空，以下情况返回空：
+
+- null
+- "" 空串
+- 长度为 0 的 Object 类型的数组
+- 元素个数为 0 的 List 集合
+- 元素个数为 0 的 Map 集合
+
+```jsp
+${empty key}
+```
+
+### EL 隐含对象
+
+EL 有 11 个隐含对象，可以直接使用。
+
+| 变量             | 类型                 | 说明                                               |
+| ---------------- | -------------------- | -------------------------------------------------- |
+| pageContext      | PageContextImpl      | 获取 jsp 中的九大内置对象                          |
+| pageScope        | Map<String,Object>   | 获取 pageContext 域中的数据                        |
+| requestScope     | Map<String,Object>   | 获取 Request 域中的数据                            |
+| sessionScope     | Map<String,Object>   | 获取 Session 域中的数据                            |
+| applicationScope | Map<String,Object>   | 获取 ServletContext 域中的数据                     |
+| param            | Map<String,String>   | 获取请求参数的值                                   |
+| paramValues      | Map<String,String[]> | 获取多个值                                         |
+| header           | Map<String,String>   | 获取请求头的信息                                   |
+| headerValues     | Map<String,String[]> | 获取请求头的多个信息                               |
+| cookie           | Map<String,Cookie>   | 获取当前请求的 Cookie 信息                         |
+| initParam        | Map<String,String>   | 获取在 web.xml 中配置的 <context-param> 上下文参数 |
+
+### pageContext
+
+```jsp
+<body>
+<h1>pageContext 对象的使用</h1>
+<%--
+//通过 request 对象来获取和 HTTP 协议相关的数据
+request.getScheme() 它可以获取请求的协议
+request.getServerName() 获取请求的服务器 ip 或域名
+request.getServerPort() 获取请求的服务器端口号
+getContextPath() 获取当前工程路径
+request.getMethod() 获取请求的方式（GET 或 POST）
+request.getRemoteHost() 获取客户端的 ip 地址
+session.getId() 获取会话的唯一标识韩顺平 Java 工程师
+--%>
+<hr/>
+协议： ${ pageContext.request.scheme }<br>
+服务器 ip：${ pageContext.request.serverName }<br>
+服务器端口：${ pageContext.request.serverPort }<br>
+工程路径：${ pageContext.request.contextPath }<br>
+请求方法：${ pageContext.request.method }<br>
+客户端 ip 地址：${ pageContext.request.remoteHost }<br>
+会话 id ：${ pageContext.session.id }<br>
+<h1>使用 jsp 表达式脚本获取如上信息</h1>
+ip 地址: <%=request.getRemoteHost() %> <br>
+<h1>使用 el 表达式形式获取信息</h1>
+<%
+    pageContext.setAttribute("req", request);
+%>
+ip 地址: ${req.remoteHost} <br>
+获取请求方法: ${req.method} <br>
+</body>
+```
+
+> 如果使用 EL 表达式获取域对象的属性值时，未标明所在域对象，会从小到大获取。
+
+## JSTL
+
+JSTL 全称 JSP Standard Tag Library，JSP 标准标签库。JSTL 为了替换代码脚本。
+
+JSTL 标签里面可以嵌套 HTML 标签，而 JSP 代码脚本里面不能嵌套 HTML 标签。
+
+使用 JSTL 需要导入 jar 包：impl 和 spec
+
+### JSTL 标签库
+
+| 功能范围              | URI                                    | 前缀 |
+| --------------------- | -------------------------------------- | ---- |
+| 核心标签库 $\bigstar$ | http://java.sun.com/jsp/jstl/core      | c    |
+| 格式化                | http://java.sun.com/jsp/jstl/fmt       | fmt  |
+| 函数                  | http://java.sun.com/jsp/jstl/functions | fn   |
+| 数据库                | http://java.sun.com/jsp/jstl/sql       | sql  |
+| XML                   | http://java.sun.com/jsp/jstl/xml       | x    |
+
+### JSTL Quick Start
+
+taglib 需要放在行首
+
+```jsp
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<c:if test="${10 > 2}">
+    <h1> 10 > 2 成立</h1>
+</c:if>
+</body>
+</html>
+```
+
+### \<c:set/>
+
+等价于 `域对象.setAttribute()`：
+
+- scope 代表保存到哪个域对象
+- var 代表属性的 Key
+- value 代表属性的 值
+
+```jsp
+<%
+    request.setAttribute("name", "zxb");
+%>
+
+<c:set scope="request" var="name" value="zxb"></c:set>
+```
+
+### \<c:if/>
+
+用于判断
+
+```jsp
+<%
+    if (10 > 2) {
+        out.print("<h1> 10 > 2 成立</h1>");
+    }
+%>
+
+<c:if test="${10 > 2}">
+    <h1> 10 > 2 成立</h1>
+</c:if>
+```
+
+### \<c:choose/>
+
+多路判断，类似 switch case default
+
+```jsp
+<c:set scope="request" var="scope" value="90"></c:set>
+<c:choose>
+    <c:when test="${scope > 80}">
+        <h1>优秀</h1>
+    </c:when>
+    <c:when test="${scope > 60}">
+        <h1>及格</h1>
+    </c:when>
+    <c:otherwise>
+        <h1>不及格</h1>
+    </c:otherwise>
+</c:choose>
+```
+
+### \<c:ForEach/>
+
+```jsp
+<%--遍历 fori--%>
+<c:forEach begin="1" step="1" end="5" var="i">
+
+</c:forEach>
+
+<%--遍历 数组--%>
+<c:forEach items="${items}" var="item">
+
+</c:forEach>
+<%--遍历 Map--%>
+<c:forEach items="${items}" var="item">
+
+</c:forEach>
+```
 
 
 
