@@ -58,6 +58,10 @@
         <servlet-name>DBServlet</servlet-name>
         <url-pattern>/DBServlet</url-pattern>
     </servlet-mapping>
+    
+    <listener>
+        <listener-class>Listener.ServletContextListenerCase</listener-class>
+    </listener>
 </web-app>
 
 
