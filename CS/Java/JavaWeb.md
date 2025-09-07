@@ -2980,6 +2980,353 @@ taglib 需要放在行首
 </c:forEach>
 ```
 
+# Listener
+
+> JavaWeb 三大组件：Servlet 程序 Listener 监听器 Filter 过滤器
+
+Listener 是一个接口，也是属于 Servlet，作用是监听某种变化，触发对应的操作。
+
+## 配置监听器
+
+除了指定 Servlet 实现接口，还要在 web.xml 文件中编写配置信息：
+
+```xml
+<listener>
+        <listener-class>Listener.ServletContextListenerCase</listener-class>
+    </listener>
+```
+
+## ServletContextListener
+
+监听 ServletContext 的创建或销毁，也就是 Web 工程的启动和结束。
+
+### 应用场景
+
+1. 加载初始化的配置文件：如 Spring 的配置文件
+2. 任务调度：配合定时器 Timer 或 TimterTask
+
+### 相关方法
+
+| 方法名             | 参数                    | 返回值 | 作用                         |
+| ------------------ | ----------------------- | ------ | ---------------------------- |
+| contextInitialized | ServletContextEvent sce | void   | 创建 `ServletContext` 时触发 |
+| contextDestroyed   | ServletContextEvent sce | void   | 销毁 `ServletContext` 时触发 |
+
+## ServletContextAttributeListener
+
+监听 ServletContext 属性的变化，可以得到属性最新名称和值。
+
+### 相关方法
+
+| 方法名            | 参数                                 | 返回值 | 作用           |
+| ----------------- | ------------------------------------ | ------ | -------------- |
+| attributeAdded    | (ServletContextAttributeEvent event) | void   | 添加属性时调用 |
+| attributeReplaced | (ServletContextAttributeEvent event) | void   | 替换属性时调用 |
+| attributeRemoved  | (ServletContextAttributeEvent event) | void   | 移除属性时调用 |
+
+### 代码举例
+
+```java
+public class ServletContextAttributeListenerCase implements ServletContextAttributeListener {
+    public void attributeAdded(ServletContextAttributeEvent event) {
+        System.out.println("添加的属性：" + event.getName() + event.getValue());
+    }
+    public void attributeRemoved(ServletContextAttributeEvent event) {
+        System.out.println("删除的属性：" + event.getName() + event.getValue());
+    }
+    public void attributeReplaced(ServletContextAttributeEvent event) {
+        System.out.println("改前的属性：" + event.getName() + event.getValue());
+    }
+}
+```
+
+## HttpSessionListener
+
+监听 Session 的创建或销毁，可以监控用户的上线和离线。
+
+```java
+public class HttpSessionListenerCase implements HttpSessionListener {
+    public void sessionCreated(HttpSessionEvent se) {
+        System.out.println(se.getSession().getId() + " session created");
+    }
+    public void sessionDestroyed(HttpSessionEvent se) {
+        System.out.println(se.getSession().getId() + " session destroyed");
+    }
+}
+```
+
+## HttpSessionAttributeListener
+
+监听 Session 的属性的变化
+
+```java
+public class HttpSessionAttributeListenerCase implements HttpSessionAttributeListener {
+    public void attributeAdded(HttpSessionBindingEvent event) {
+        System.out.println("session added" + event.getName() + " " + event.getValue());
+    }
+    public void attributeRemoved(HttpSessionBindingEvent event) {
+        System.out.println("session removed" + event.getName() + " " + event.getValue());
+    }
+    public void attributeReplaced(HttpSessionBindingEvent event) {
+        System.out.println("session replaced" + event.getName() + " " + event.getValue());
+    }
+}
+```
+
+## ServletRequestListener
+
+监听 Request 的创建和销毁，可以用来监控某个 IP 访问网站的频率、日志记录、访问资源的情况。
+
+```java
+public class ServletRequestListenerCase implements ServletRequestListener {
+    public void requestDestroyed(ServletRequestEvent arg0) {
+
+    }
+    public void requestInitialized(ServletRequestEvent arg0) {
+        ServletRequest servletRequest = arg0.getServletRequest();
+        System.out.println(servletRequest.getRemoteAddr());
+        System.out.println(((HttpServletRequest)servletRequest).getRequestURL());
+    }
+}
+```
+
+## ServletRequestAttributeListener
+
+监听 Request 属性变化
+
+```java
+public class ServletRequestAttributeListenerCase implements ServletRequestAttributeListener {
+    @Override
+    public void attributeAdded(ServletRequestAttributeEvent srae) {
+    
+    }
+
+    @Override
+    public void attributeReplaced(ServletRequestAttributeEvent srae) {
+    
+    }
+
+    @Override
+    public void attributeRemoved(ServletRequestAttributeEvent srae) {
+        
+    }
+}
+```
+
+## HttpSessionBindingListener
+
+监听对象**绑定（bind）**或**解绑（unbind）**到 `HttpSession` 的事件。
+
+```java
+void valueBound(HttpSessionBindingEvent event)  // 对象被绑定到Session时触发
+void valueUnbound(HttpSessionBindingEvent event) // 对象从Session移除时触发
+```
+
+## HttpSessionActivationListener
+
+监听Session的**钝化（passivation）**和**活化（activation）**事件，用于分布式环境或服务器内存管理。
+
+```java
+void sessionWillPassivate(HttpSessionEvent event)  // Session钝化前触发（序列化到磁盘）
+void sessionDidActivate(HttpSessionEvent event)    // Session活化后触发（从磁盘反序列化）
+
+```
+
+# Filter
+
+## Filter 简介
+
+在每个前端页面使用传统的方式进行 Session 验证权限，造成代码冗余，比较麻烦。
+
+此时，引出过滤器进行权限、身份、日志、事务的验证。
+
+Filter 过滤器时 JavaEE 的规范，是一个接口。作用是拦截请求，过滤响应。
+
+应用场景：权限检查、日志操作、事务管理
+
+## Filter 架构
+
+![image-20250907110101863](https://cdn.jsdelivr.net/gh/chousinbin/Image/202509071101905.png)
+
+## Filter QS
+
+### web.xml 配置
+
+```xml
+<!--Filter 的配置需要写在 Servlet 之前-->
+<filter>
+    <filter-name>MyFilter</filter-name>
+    <filter-class>filter.MyFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>MyFilter</filter-name>
+    <url-pattern>/10Filter/*</url-pattern>
+</filter-mapping>
+
+```
+
+url-pattern 是指要被 MyFilter 拦截的目录。可以进行精准匹配、目录匹配、后缀名匹配。
+
+Filter 过滤器只关心 URL 是否匹配，不关心资源是否存在。 
+
+### MyFilter
+
+```java
+public class MyFilter implements Filter {
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        Filter.super.init(filterConfig);
+        System.out.println("MyFilter init");
+    }
+
+    @Override
+    public void doFilter(ServletRequest servletRequest,
+                         ServletResponse servletResponse,
+                         FilterChain filterChain) throws IOException, ServletException {
+        System.out.println("MyFilter doFilter");
+        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+        HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+
+        HttpSession session = httpServletRequest.getSession();
+        // 判断 Session 放行
+        if (session.getAttribute("username") != null) {
+            // servletRequest 和 servletResponse 传递给目标资源
+            filterChain.doFilter(servletRequest, servletResponse);
+        } else { // 回到登陆界面
+            httpServletResponse.sendRedirect(
+                    httpServletRequest.getContextPath() + "/10Filter/login.jsp");
+        }
+    }
+
+    @Override
+    public void destroy() {
+        Filter.super.destroy();
+    }
+}
+```
+
+## Filter 生命周期
+
+- 当 Web 工程启动时，创建 Filter 实例，同时进行 Filter 初始化
+- 当 Web 工程停止时，Filter 被销毁
+- 当路径匹配，调用 doFilter 方法，创建 servletRequest servletResponse filterChain 对象
+
+不同浏览器访问同一个拦截目录下的资源，被同一个 Filter 实例拦截
+
+## FilterConfig
+
+初始化创建一个 FilterConfig 对象，传入 `init()` 方法
+
+### 方法
+
+| 方法名                | 参数   | 返回类型             | 说明                     |
+| --------------------- | ------ | -------------------- | ------------------------ |
+| getInitParameter      | String | String               | 获取指定参数值           |
+| getInitParameterNames | void   | Enumeration\<String> | 获取全部参数名           |
+| getServletContext     | void   | ServletContext       | 获取 ServletContext 对象 |
+| getFilterName         | void   | String               | 获取 Filter 名称         |
+
+### 代码
+
+```java
+public void init(FilterConfig filterConfig) throws ServletException {
+    String filterName = filterConfig.getFilterName();
+    System.out.println(filterName);
+
+    ServletContext servletContext = filterConfig.getServletContext();
+    System.out.println(servletContext);
+
+    Enumeration<String> initParameterNames = filterConfig.getInitParameterNames();
+    while (initParameterNames.hasMoreElements()) {
+        String initParameterName = initParameterNames.nextElement();
+        System.out.println(initParameterName);
+    }
+
+    String ip = filterConfig.getInitParameter("ip");
+    System.out.println(ip);
+}
+```
+
+## FilterChain
+
+在处理复杂业务时，一个过滤器无法满足业务需求，往往使用多个过滤器**递归**完成任务，形成过滤器链。
+
+过滤器链顺序要与 web.xml 文件配置的顺序一致。
+
+### 执行细节
+
+1. 多个 Filter 和目标资源在一次 HTTP 请求，在同一个线程中。
+2. 当一个请求 URL 和 Filter 的 `url-pattern` 匹配时，才会被执行，如果有多个匹配上，就会顺序执行，形成一个 Filter 调用链（底层可以使用 LinkedHashMap）
+3. 多个 Filter 共同执行时, 因为是一次 HTTP 请求, 使用同一个Request 对象。
+4. 多个 Filter 执行顺序，和 `web.xml` 配置顺序保持一致。
+5. `chain.doFilter(req, resp)` 方法将执行下一个过滤器的 `doFilter` 方法，如果后面没有过滤器，则执行目标资源。
+6. 注意执行过滤器链时，顺序是(用前面的案例分析) Http请求 -> A过滤器 dofilter() -> A过滤器前置代码 -> A过滤器 chain.doFilter() -> B过滤器 dofilter() -> B过滤器前置代码 -> B过滤器 chain.doFilter() -> 目标文件 -> B过滤器后置代码 -> A过滤器后置代码 -> 返回给浏览器页面/数据
+
+### 代码案例
+
+web.xml
+
+```xml
+<filter>
+        <filter-name>FilterA</filter-name>
+        <filter-class>filter.FilterA</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>FilterA</filter-name>
+        <url-pattern>/10Filter/abc/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>FilterB</filter-name>
+        <filter-class>filter.FilterB</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>FilterB</filter-name>
+        <url-pattern>/10Filter/abc/*</url-pattern>
+    </filter-mapping>
+```
+
+FilterA
+
+```java
+public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    System.out.println("FilterA 前置代码");
+    System.out.println("FilterA 执行");
+    filterChain.doFilter(servletRequest, servletResponse);
+    System.out.println("FilterA 后置代码");
+}
+```
+
+FilterB
+
+```java
+public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    System.out.println("FilterB 前置代码");
+    System.out.println("FilterB 执行");
+    filterChain.doFilter(servletRequest, servletResponse);
+    System.out.println("FilterB 后置代码");
+}
+```
+
+输出结果
+
+```
+FilterA 前置代码
+FilterA 执行
+FilterB 前置代码
+FilterB 执行
+FilterB 后置代码
+FilterA 后置代码
+```
+
+
+
+
+
+
+
+
+
 
 
 
