@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            let btn01 = document.getElementById("btn01");
+            btn01.onclick = function () {
+                alert("hello, js")
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        $(function (){
+            // JQuery 对象是数组对象
+            let $btn02 = $("#btn02");
+            $btn02.click(function () {
+                alert("hello, jQuery")
+            });
+        });
+    </script>
+</head>
+<body>
+
+<button type="button" id="btn01">JS</button>
+<button type="button" id="btn02">JQuery</button>
+</body>
+</html>
