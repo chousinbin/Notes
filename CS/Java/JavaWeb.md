@@ -695,6 +695,13 @@ span {
 
 ![image-20250812140910255](https://cdn.jsdelivr.net/gh/chousinbin/Image/202508121409280.png)
 
+## 调试代码
+
+JS 代码中可以使用 `console.log()` 方法在浏览器后台输出调试信息：
+
+- 逗号分隔：同时输出多个独立的值，保留各自的数据类型和格式
+- 加号连接：先将所有值转换为字符串，然后连接成一个字符串输出
+
 ## 数据类型
 
 ### 数据类型
@@ -3319,11 +3326,328 @@ FilterB 后置代码
 FilterA 后置代码
 ```
 
+# jQuery
 
+jQuery 是一个 JavaScript 库。
 
+jQuery 极大地简化了 JavaScript 编程。
 
+解决了浏览器的兼容问题。
 
+提供方法、events、选择器，方便的为网站提供 AJAX 交互。
 
+## jQuery 与 DOM
+
+- jQuery 对象是对 DOM 对象进行包装后产生的对象
+- jQuery 对象是 jQuery 独有的，可以使用 jQuery 里面的全部方法
+- jQuery 对象变量名前要加美元符号 \$
+
+### DOM2jQuery
+
+```js
+let jQueryName = $(domObjectName);
+```
+
+### jQuery2DOM
+
+jQuery 对象是一个数组对象：
+
+1. 可以通过 [index] 得到 DOM 对象
+2. jQuery 对象本身提供 `.get(index)` 方法得到 DOM 对象
+
+```js
+let domName1 = $jQueryName[0];
+let domName2 = $jQueryName.get(0);
+```
+
+## jQuery 选择器
+
+选择器简化了 DOM 获取元素：
+
+- `$("#id")` 等价于 `document.getElementById("id")`
+- `$("tagName")` 等价于 `document.getElementByTagName("TagName")`
+
+jQuery 兼容性更强，比如遇到 null 对象，不会报错。
+
+### 基本选择器
+
+| 选择器       | 实例             | 选取                                          |
+| :----------- | :--------------- | :-------------------------------------------- |
+| *            | $("*")           | 所有元素                                      |
+| #id          | $("#lastname")   | `id="lastname"` 的元素                        |
+| .class       | $(".intro")      | 所有 `class="intro"` 的元素                   |
+| element      | $("p")           | 所有 `<p>` 元素                               |
+| .class.class | $(".intro.demo") | 所有 `class="intro"` 且 `class="demo"` 的元素 |
+
+### 层级选择器
+
+| 选择器语法                  | 说明                                                         |
+| --------------------------- | ------------------------------------------------------------ |
+| `$("form input")`           | **后代选择器**：匹配 form 内部所有层级的 input 元素（包括子、孙等） |
+| `$("form > input")`         | **子元素选择器**：仅匹配 form 的直接子元素 input（不包含孙辈） |
+| `$("label + input")`        | **相邻兄弟选择器**：匹配紧跟在 label 后面的第一个 input 元素 |
+| `$("form ~ input")`         | **通用兄弟选择器**：匹配 form 之后的所有同层级 input 元素    |
+| `$("#two").siblings("div")` | **兄弟遍历方法**：匹配 `#two` 的所有 `<div>` 兄弟元素（不含自身） |
+
+### 基础过滤选择器
+
+| 选择器           | 代码示例                 | 说明                                       |
+| ---------------- | ------------------------ | ------------------------------------------ |
+| `:first`         | `$("p:first")`           | 选择第一个 `<p>` 元素                      |
+| `:last`          | `$("p:last")`            | 选择最后一个 `<p>` 元素                    |
+| `:even`          | `$("tr:even")`           | 选择所有偶数位置的 `<tr>` 元素             |
+| `:odd`           | `$("tr:odd")`            | 选择所有奇数位置的 `<tr>` 元素             |
+| `:eq(index)`     | `$("ul li:eq(3)")`       | 选择索引等于 3 的元素（第四个元素）        |
+| `:gt(index)`     | `$("ul li:gt(3)")`       | 选择索引大于 3 的所有元素                  |
+| `:lt(index)`     | `$("ul li:lt(3)")`       | 选择索引小于 3 的所有元素                  |
+| `:not(selector)` | `$("input:not(:empty)")` | 排除匹配选择器的元素（本例选择非空 input） |
+
+### 内容过滤选择器
+
+| 选择器          | 代码示例                         | 说明                             |
+| --------------- | -------------------------------- | -------------------------------- |
+| :contains(text) | $(":contains('W3School')")       | 包含指定字符串的所有元素         |
+| :empty          | $(":empty")                      | 无子（元素）节点的所有元素       |
+| :has(selector)  | $("div:has(p)").addClass("test") | 匹配含有选择器所匹配的元素的元素 |
+| :parent         | $("td:parent")                   | 匹配含有子元素或者文本的元素     |
+
+### 可见度过滤选择器
+
+| 选择器   | 代码示例           | 说明                 |
+| -------- | ------------------ | -------------------- |
+| :hidden  | $("p:hidden")      | 所有隐藏的 \<p> 元素 |
+| :visible | $("table:visible") | 所有可见的表格       |
+
+### 属性过滤选择器
+
+| 选择器                                                   | 代码示例                      | 说明                                                   |
+| -------------------------------------------------------- | ----------------------------- | ------------------------------------------------------ |
+| [attribute\]                                             | $("[href]")                   | 所有带有 href 属性的元素                               |
+| [attribute=value\]                                       | $("[href='#']")               | 所有 href 属性的值等于 "#" 的元素                      |
+| [*attribute*!=value]                                     | $("[href!='#']")              | 所有 href 属性的值不等于 "#" 的元素                    |
+| [attribute$=value]                                       | $("[href\$='.jpg']")          | 所有 href 属性的值包含以 ".jpg" 结尾的元素             |
+| [attribute^=value]                                       | $("[href^='.jpg']")           | 所有 href 属性的值包含以 ".jpg" 开头的元素             |
+| [attribute*=value]                                       | $("[href*='.jpg']")           | 所有 href 属性的值包含 ".jpg" 的元素                   |
+| \[attributeFilter1]\[attributeFilter2][attributeFilterN] | $("input[id]\[name\$='man']") | 所有含有 id 属性,并且它的 name 属性是以 man 结尾的元素 |
+
+### 子元素过滤选择器
+
+| 选择器                                        | 代码示例                   | 说明                                                         |
+| --------------------------------------------- | -------------------------- | ------------------------------------------------------------ |
+| **:nth-child<br />(index/even/odd/equation)** | `$("ul li:nth-child(2)")`  | 匹配父元素下第N个子元素（从1开始计数）：<br>- `:nth-child(2)` 第2个子元素<br>- `:nth-child(even)` 偶数位子元素<br>- `:nth-child(3n+1)` 符合3n+1公式的子元素 |
+| **:first-child**                              | `$("div p:first-child")`   | 匹配父元素下的**第一个子元素**，且必须符合选择器条件（如示例中需是`<p>`标签） |
+| **:last-child**                               | `$(".list li:last-child")` | 匹配父元素下的**最后一个子元素**，且必须符合选择器条件       |
+| **:only-child**                               | `$("div span:only-child")` | 匹配父元素下**唯一的子元素**（没有兄弟节点），且必须符合选择器条件 |
+
+### 表单属性过滤选择器
+
+| 选择器                                                       | 代码示例       | 说明                    |
+| ------------------------------------------------------------ | -------------- | ----------------------- |
+| [:enabled](https://www.w3school.com.cn/jquery/selector_input_enabled.asp) | $(":enabled")  | 所有激活的 input 元素   |
+| [:disabled](https://www.w3school.com.cn/jquery/selector_input_disabled.asp) | $(":disabled") | 所有禁用的 input 元素   |
+| [:selected](https://www.w3school.com.cn/jquery/selector_input_selected.asp) | $(":selected") | 所有被选取的 input 元素 |
+| [:checked](https://www.w3school.com.cn/jquery/selector_input_checked.asp) | $(":checked")  | 所有被选中的 input 元素 |
+
+### 表单选择器
+
+| 选择器                                                       | 代码示例       | 说明                                 |
+| ------------------------------------------------------------ | -------------- | ------------------------------------ |
+| [:input](https://www.w3school.com.cn/jquery/selector_input.asp) | $(":input")    | 所有 <input> 元素                    |
+| [:text](https://www.w3school.com.cn/jquery/selector_input_text.asp) | $(":text")     | 所有 type="text" 的 <input> 元素     |
+| [:password](https://www.w3school.com.cn/jquery/selector_input_password.asp) | $(":password") | 所有 type="password" 的 <input> 元素 |
+| [:radio](https://www.w3school.com.cn/jquery/selector_input_radio.asp) | $(":radio")    | 所有 type="radio" 的 <input> 元素    |
+| [:checkbox](https://www.w3school.com.cn/jquery/selector_input_checkbox.asp) | $(":checkbox") | 所有 type="checkbox" 的 <input> 元素 |
+| [:submit](https://www.w3school.com.cn/jquery/selector_input_submit.asp) | $(":submit")   | 所有 type="submit" 的 <input> 元素   |
+| [:reset](https://www.w3school.com.cn/jquery/selector_input_reset.asp) | $(":reset")    | 所有 type="reset" 的 <input> 元素    |
+| [:button](https://www.w3school.com.cn/jquery/selector_input_button.asp) | $(":button")   | 所有 type="button" 的 <input> 元素   |
+| [:image](https://www.w3school.com.cn/jquery/selector_input_image.asp) | $(":image")    | 所有 type="image" 的 <input> 元素    |
+| [:file](https://www.w3school.com.cn/jquery/selector_input_file.asp) | $(":file")     | 所有 type="file" 的 <input> 元素     |
+
+## jQuery 遍历
+
+选择器返回的是 jQuery对象集合，使用 `each()` 方法进行遍历
+
+```js
+$("p").each(function (){
+    $(this).click(function (){
+        alert("hello: " + $(this).text())
+    })
+})
+```
+
+## JQuery DOM 操作
+
+### 获取内容
+
+| 语法   | 作用                                       |
+| ------ | ------------------------------------------ |
+| text() | 设置或返回所选元素的文本内容               |
+| html() | 设置或返回所选元素的内容（包括 HTML 标记） |
+| val()  | 设置或返回表单字段的值                     |
+
+### 节点操作
+
+| 语法              | 作用                     | 说明                             |
+| ----------------- | ------------------------ | -------------------------------- |
+| $("HTML 代码")    | 创建 HTML 的 jQuery 对象 | 创建不等于生效，还需添加到文档   |
+|                   |                          |                                  |
+| A.append(B)       | 向 A 内部结尾追加 B      |                                  |
+| A.appendTo(B)     | 向 B 内部结尾追加 A      |                                  |
+| A.prepend(B)      | 向 A 内部开头追加 B      |                                  |
+| A.prependTo(B)    | 向 B 内部开头追加 A      |                                  |
+|                   |                          |                                  |
+| A.after(B)        | B 插入到 A 之后          |                                  |
+| A.before(B)       | B 插入到 A 之前          |                                  |
+| A.insertAfter(B)  | A 插入到 B 之后          |                                  |
+| A.insertBefore(B) | A 插入到 B 之前          | 以上 8 种适用于新旧 jQuery 对象  |
+|                   |                          |                                  |
+| remove()          | 删除指定节点             | 同时删除后代节点（参数可以过滤） |
+| empty()           | 清空指定节点             | 同时清空后代节点，不包含属性     |
+|                   |                          |                                  |
+| clone()           | 克隆节点，返回克隆后对象 |                                  |
+| clone(true)       | 同时复制节点的事件       |                                  |
+|                   |                          |                                  |
+| A.replaceWith(B)  | B 替换 A                 |                                  |
+| A.replaceAll(B)   | A 替换 B                 |                                  |
+
+### 属性操作
+
+jQuery 中的很多方法都是重载的，单参数时一般为获取属性，双参数时一般为设置属性。如：
+
+- attr()
+- html()
+- text()
+- val()
+- height()
+- weight()
+- css()
+
+| 语法         | 作用                 | 备注                           |
+| ------------ | -------------------- | ------------------------------ |
+| attr()       | 获取属性 或 设置属性 | 单参数获取属性，双参数设置属性 |
+| removeAttr() | 删除指定属性         |                                |
+
+### 样式操作
+
+| 语法          | 作用                 | 备注                                   |
+| ------------- | -------------------- | -------------------------------------- |
+| class()       | 获取样式 或 设置样式 |                                        |
+| addClass()    | 追加样式             |                                        |
+| removeClass() | 删除全部 或 指定样式 |                                        |
+| toggleClass() | 控制样式的开闭       | 如果没有指定样式，则设置。反之，取消。 |
+| hasClass()    | 判断有误指定 class   |                                        |
+|               |                      |                                        |
+| height()      | 设置高度             |                                        |
+| width()       | 设置宽度             |                                        |
+| offset()      | 获取节点相对位移     | 提供两个属性 top 和 left               |
+
+### 节点遍历
+
+| 方法                       | 描述                                                         |
+| -------------------------- | ------------------------------------------------------------ |
+| `children()`               | 取得匹配元素的所有子元素组成的集合（只考虑子元素，不考虑任何后代元素） |
+| `next()` / `nextAll()`     | 取得匹配元素后面的同辈元素的集合                             |
+| `prev()` / `prevAll()`     | 取得匹配元素前面的同辈元素的集合                             |
+| `siblings()`               | 取得匹配元素前后所有的同辈元素                               |
+| `nextAll().eq(index)`      | 获取指定的第几个元素                                         |
+| `nextAll().filter("标签")` | 对获取到的同辈元素进行过滤                                   |
+
+## 页面加载完毕触发
+
+```js
+$(document).ready(function() {
+  	
+})
+// 简化后
+$(function() {
+  	
+})
+```
+
+# JSON
+
+Java Script Object Notation，自描述，独立于语言，轻量级的数据交换格式。
+
+## JSON in JS
+
+```js
+var json = {
+  "k1": 123, // Number
+  "k2": "123", // 字符串
+  "k3": [1, 2.0, "3"], // 数组
+  "k4": {"age": 12, "name": "tom"}, // JSON对象
+  "k5": [{}, {}] // JSON 数组
+};
+```
+
+### JSON2String
+
+```js
+JSON.stringify(json);
+```
+
+### String2JSON
+
+```js
+JSON.parse(jsonString)
+```
+
+### 注意
+
+定义 JSON 对象时可以使用单引号，但是字符串转 JSON 对象时，必须使用双引号。
+
+## JSON in Java
+
+在 Java 中使用 JSON 需要引入 Google 的包 `gson.jar`，用于 Java 对象和 JSON 数据映射。
+
+### Javabean & JSON 字符串
+
+```java
+Gson gson = new Gson();
+Book book = new Book(1, "zxb");
+
+String strBook = gson.toJson(book);
+System.out.println("strBook: " + strBook);
+
+Book book1 = gson.fromJson(strBook, Book.class);
+System.out.println("book1: " + book1);
+```
+
+### List & JSON 字符串
+
+```java
+ArrayList<Book> bookList = new ArrayList<>();
+bookList.add(new Book(1, "zxb"));
+bookList.add(new Book(2, "xbb"));
+
+String strBookList = gson.toJson(bookList);
+System.out.println("strBookList: " + strBookList);
+// 得到完整的 List 路径，然后进行底层反射
+// Typetoken 的无参构造器是 protected，加上大括号变成匿名内部类，变成了其子类
+// 匿名内部类有自己的无参构造器（隐式），执行子类无参构造器，默认 super() 到 TypeToken
+Type type = new TypeToken<ArrayList<Book>>() {
+}.getType();
+System.out.println("type: " + type);
+ArrayList<Book> bookList2 = gson.fromJson(strBookList, type);
+System.out.println("bookList2: " + bookList2);
+```
+
+### Map & JSON 字符串
+
+```java
+HashMap<String, Book> bookMap = new HashMap<>();
+bookMap.put("b1", new Book(1, "zxb"));
+bookMap.put("b2", new Book(2, "xbb"));
+
+String strBookMap = gson.toJson(bookMap);
+System.out.println("strBookMap: " + strBookMap);
+
+Type type2 = new TypeToken<HashMap<String, Book>>() {
+}.getType();
+System.out.println("type2: " + type2);
+HashMap<String, Book> bookMap2 = gson.fromJson(strBookMap, type2);
+System.out.println("bookMap2: " + bookMap2);
+```
 
 
 
