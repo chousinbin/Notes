@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">
+        window.onload = function () {
+            document.getElementById("checkButton").onclick = function () {
+                // 得到 XMLHttpRequest 对象
+                let xmlHttpRequest = new XMLHttpRequest();
+                let username = document.getElementById("username").value;
+                // 配置请求方式、请求地址及是否异步
+                xmlHttpRequest.open("GET", "/JavaWeb/UserCheck?username=" + username, true);
+                // 注册回调函数，监听请求状态变化
+                xmlHttpRequest.onreadystatechange = function () {
+                    // 4 代表请求完成，且响应已就绪，200 表示成功
+                    if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
+                        // 动态更新 div 内容
+                        let responseText = xmlHttpRequest.responseText;
+                        document.getElementById("div1").innerHTML = responseText;
+                        if (responseText != "") {
+                            document.getElementById("res").value = "不可用";
+                        } else {
+                            document.getElementById("res").value = "可用";
+                        }
+                    }
+                }
+                // 发送请求到服务器，GET 不带请求体，如果是 POST 则需要将请求体放入 send() 方法中
+                xmlHttpRequest.send();
+            }
+        }
+    </script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form>
+  U:<input type="text" name="username" id="username">
+  <input type="button" id="checkButton" value="验证">
+  <input type="text" id="res"><br>
+  P:<input type="password" id="pwd"><br>
+  <input type="submit" value="提交">
+</form>
+<div id="div1"></div>
+</body>
+</html>

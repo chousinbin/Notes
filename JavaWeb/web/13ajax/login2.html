@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#checkButton").click(function () {
+                // $.ajax({
+                //     url: "/JavaWeb/UserCheck2",
+                //     type: "post",
+                //     data: {
+                //         username: $("#username").val(),
+                //         date: new Date()//防止浏览器缓存
+                //     },
+                //     error: function () {// 失败的回调函数
+                //         console.log("失败")
+                //     },
+                //     success: function (data, status, xhr) {// 成功的回调函数
+                //         console.log("成功")
+                //         console.log(data)
+                //         console.log(status)
+                //         console.log(xhr)
+                //         $("#div1").html(JSON.stringify(data))
+                //         if ("" == data.name) {
+                //             $("#res").val("用户名可用")
+                //         } else {
+                //             $("#res").val("用户名不可用")
+                //         }
+                //     },
+                //     dataType: "json"
+                // })
+
+                // $.get(
+                //     "/JavaWeb/UserCheck2",
+                //     {
+                //         username: $("#username").val(),
+                //         date: new Date()//防止浏览器缓存
+                //     },
+                //     function (data, status, xhr) {// 成功的回调函数
+                //         console.log("get()成功")
+                //         console.log(data)
+                //         console.log(status)
+                //         console.log(xhr)
+                //         $("#div1").html(JSON.stringify(data))
+                //         if ("" == data.name) {
+                //             $("#res").val("用户名可用")
+                //         } else {
+                //             $("#res").val("用户名不可用")
+                //         }
+                //     },
+                //     "json"
+                // )
+
+                $.getJSON(
+                    "/JavaWeb/UserCheck2",
+                    {
+                        username: $("#username").val(),
+                        date: new Date()//防止浏览器缓存
+                    },
+                    function (data, status, xhr) {// 成功的回调函数
+                        console.log("getJSON()成功")
+                        console.log(data)
+                        console.log(status)
+                        console.log(xhr)
+                        $("#div1").html(JSON.stringify(data))
+                        if ("" == data.name) {
+                            $("#res").val("用户名可用")
+                        } else {
+                            $("#res").val("用户名不可用")
+                        }
+                    }
+                )
+            })
+        })
+    </script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form>
+    U:<input type="text" name="username" id="username">
+    <input type="button" id="checkButton" value="验证">
+    <input type="text" id="res"><br>
+    P:<input type="password" id="pwd"><br>
+    <input type="submit" value="提交">
+</form>
+<div id="div1"></div>
+</body>
+</html>
