@@ -3649,13 +3649,234 @@ HashMap<String, Book> bookMap2 = gson.fromJson(strBookMap, type2);
 System.out.println("bookMap2: " + bookMap2);
 ```
 
+# Ajax
 
+Ajax: Asynchronous JavaScript And XML 异步 JavaScript 和 XML
 
+## Ajax 介绍
 
+Ajax 是一种浏览器**异步发起请求**（发送指定数据），**局部更新页面**的技术
 
+## Ajax 应用场景
 
+传统 HTTP 请求缺点：
 
+1. 表单所有数据被提交给服务器，存在垃圾数据
+2. 在服务端返回 HTTP 响应前，浏览器前端页面处于挂起状态，暂时停用
+3. 不能进行局部刷新
 
+Ajax 请求优点：
+
+1. 可以使用 XMLHttpRequest 对象发送指定数据
+2. 异步发送，服务端响应之前浏览器不需要等待，可以进行其他操作
+3. 可以进行局部刷新
+
+## Ajax 数据通信方式
+
+![image-20250914182534834](https://cdn.jsdelivr.net/gh/chousinbin/Image/202509141825940.png)
+
+## JS 原生 Ajax
+
+```js
+<script type="text/javascript">
+window.onload = function () {
+    document.getElementById("checkButton").onclick = function () {
+        // 得到 XMLHttpRequest 对象
+        let xmlHttpRequest = new XMLHttpRequest();
+        let username = document.getElementById("username").value;
+        // 配置请求方式、请求地址及是否异步
+        xmlHttpRequest.open("GET", "/JavaWeb/UserCheck?username=" + username, true);
+        // 注册回调函数，监听请求状态变化
+        xmlHttpRequest.onreadystatechange = function () {
+            // 4 代表请求完成，且响应已就绪，200 表示成功
+            if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
+                // 动态更新 div 内容
+                let responseText = xmlHttpRequest.responseText;
+                document.getElementById("div1").innerHTML = responseText;
+                if (responseText != "") {
+                    document.getElementById("res").value = "不可用";
+                } else {
+                    document.getElementById("res").value = "可用";
+                }
+            }
+        }
+        // 发送请求到服务器，GET 不带请求体，如果是 POST 则需要将请求体放入 send() 方法中
+        xmlHttpRequest.send();
+    }
+}
+</script>
+```
+
+## jQuery 使用 Ajax
+
+> 原生 Ajax 在不同的浏览器环境中可能有兼容性问题，使用 JS 库操作 Ajax 更方便好用。
+
+### $.ajax()
+
+```js
+$.ajax({
+  url: "", 
+  type: "", 
+  data: {
+    k: v,
+    k: v
+  }, 
+  success/error: function () {
+  	
+	}, 
+  dataType=
+})
+```
+
+| 参数     | 含义                                           |
+| -------- | ---------------------------------------------- |
+| url      | 请求的地址                                     |
+| type     | 请求的方式: get / post                         |
+| data     | 发送到服务器的数据（自动转换为请求字符串格式） |
+| success  | 成功的回调函数                                 |
+| error    | 失败的回调函数                                 |
+| dataType | 返回的数据类型，常用 JSON 或 Text              |
+
+```js
+$(function () {
+    $("#checkButton").click(function () {
+        $.ajax({
+            url: "/JavaWeb/UserCheck2",
+            type: "post",
+            data: {
+                username: $("#username").val(),
+                date: new Date() //防止浏览器缓存
+            },
+            error: function () { // 失败的回调函数
+                console.log("失败")
+            },
+            success: function (data, status, xhr) { // 成功的回调函数
+                console.log("成功")
+                console.log(data)
+                console.log(status)
+                console.log(xhr)
+                $("#div1").html(JSON.stringify(data))
+                if ("" == data.name) {
+                    $("#res").val("用户名可用")
+                } else {
+                    $("#res").val("用户名不可用")
+                }
+            },
+            dataType: "json"
+        })
+    })
+})
+```
+
+### $.get()
+
+```js
+$.get(url,data,success(response,status,xhr),dataType)
+```
+
+| 参数                           | 描述                                                         |
+| :----------------------------- | :----------------------------------------------------------- |
+| *url*                          | 必需。规定将请求发送的哪个 URL。                             |
+| *data*                         | 可选。规定连同请求发送到服务器的数据。                       |
+| *success(response,status,xhr)* | 可选。规定当请求成功时运行的函数。额外的参数：response - 包含来自请求的结果数据status - 包含请求的状态xhr - 包含 XMLHttpRequest 对象 |
+| *dataType*                     | 可选。规定预计的服务器响应的数据类型。默认地，jQuery 将智能判断。可能的类型："xml""html""text""script""json""jsonp" |
+
+```js
+// 参数有顺序
+$.get(
+    "/JavaWeb/UserCheck2",
+    {
+        username: $("#username").val(),
+        date: new Date()//防止浏览器缓存
+    },
+    function (data, status, xhr) {// 成功的回调函数
+        console.log("get()成功")
+        console.log(data)
+        console.log(status)
+        console.log(xhr)
+        $("#div1").html(JSON.stringify(data))
+        if ("" == data.name) {
+            $("#res").val("用户名可用")
+        } else {
+            $("#res").val("用户名不可用")
+        }
+    },
+    "json"
+)
+```
+
+### $.post()
+
+```js
+$.post(url,data,success(data, textStatus, jqXHR),dataType)
+```
+
+| 参数                               | 描述                                                         |
+| :--------------------------------- | :----------------------------------------------------------- |
+| *url*                              | 必需。规定把请求发送到哪个 URL。                             |
+| *data*                             | 可选。映射或字符串值。规定连同请求发送到服务器的数据。       |
+| *success(data, textStatus, jqXHR)* | 可选。请求成功时执行的回调函数。                             |
+| *dataType*                         | 可选。规定预期的服务器响应的数据类型。默认执行智能判断（xml、json、script 或 html）。 |
+
+```js
+// 参数有顺序
+$.post(
+    "/JavaWeb/UserCheck2",
+    {
+        username: $("#username").val(),
+        date: new Date()//防止浏览器缓存
+    },
+    function (data, status, xhr) {// 成功的回调函数
+        console.log("post()成功")
+        console.log(data)
+        console.log(status)
+        console.log(xhr)
+        $("#div1").html(JSON.stringify(data))
+        if ("" == data.name) {
+            $("#res").val("用户名可用")
+        } else {
+            $("#res").val("用户名不可用")
+        }
+    },
+    "json"
+)
+```
+
+### $.getJSON()
+
+如果使用 jQuery 发出的 Ajax 请求是 get 的并且返回类型是 JSON 格式，可直接使用 getJSON
+
+```js
+$.getJSON(url,data,success(data,status,xhr))
+```
+
+| 参数                       | 描述                                                         |
+| :------------------------- | :----------------------------------------------------------- |
+| *url*                      | 必需。规定将请求发送的哪个 URL。                             |
+| *data*                     | 可选。规定连同请求发送到服务器的数据。                       |
+| *success(data,status,xhr)* | 可选。规定当请求成功时运行的函数。额外的参数：*response* - 包含来自请求的结果数据*status* - 包含请求的状态*xhr* - 包含 XMLHttpRequest 对象 |
+
+```js
+$.getJSON(
+    "/JavaWeb/UserCheck2",
+    {
+        username: $("#username").val(),
+        date: new Date()//防止浏览器缓存
+    },
+    function (data, status, xhr) {// 成功的回调函数
+        console.log("getJSON()成功")
+        console.log(data)
+        console.log(status)
+        console.log(xhr)
+        $("#div1").html(JSON.stringify(data))
+        if ("" == data.name) {
+            $("#res").val("用户名可用")
+        } else {
+            $("#res").val("用户名不可用")
+        }
+    }
+)
+```
 
 
 
