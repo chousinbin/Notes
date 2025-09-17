@@ -3931,11 +3931,114 @@ public T get() {
 }
 ```
 
+# 文件上传下载
 
+Tomcat 不会把空目录在 out 中同步创建。
 
+## 上传
 
+```java
+public class fileUpload extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        if (ServletFileUpload.isMultipartContent(request)) {
+            System.out.println("文件表单");
+            // 解析上传数据的工具对象
+            DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory();
+            ServletFileUpload servletFileUpload = new ServletFileUpload(diskFileItemFactory);
+            // 解决接收文件中文乱码问题
+            servletFileUpload.setHeaderEncoding("UTF-8");
+            try {
+                // 从请求的表单中获取数据（文件和非文件）
+                List<FileItem> list = servletFileUpload.parseRequest(request);
+                for (FileItem fileItem : list) {
+                    if (fileItem.isFormField()) {
+                        String name = fileItem.getString("utf-8");
+                        System.out.println("家具名=" + name);
+                    } else {
+                        // 获取文件名
+                        String fileName = fileItem.getName();
+                        // 文件名唯一化 UUID + 系统毫秒数 前缀
+                        fileName = UUID.randomUUID().toString() + "_" + System.currentTimeMillis() + "_" + fileName;
+                        System.out.println("文件名=" + fileName);
+                        // 获取全路径
+                        String filePath = "/upload/";
+                        String realPath = request.getServletContext().getRealPath(filePath);
+                        System.out.println(realPath);
+                        // 按日期分目录
+                        realPath = realPath + WebUtils.getYMD();
+                        // 创建目录
+                        File file = new File(realPath);
+                        if (!file.exists()) {
+                            file.mkdirs();
+                        }
+                        // 文件拷贝到指定目录
+                        String filePathName = realPath + fileName;
+                        fileItem.write(new File(filePathName));
+                        // 提示信息
+                        response.setContentType("text/html;charset=utf-8");
+                        response.getWriter().write("上传成功");
+                    }
+                }
+            } catch (FileUploadException e) {
+                throw new RuntimeException(e);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            System.out.println("非文件表单");
+        }
+    }
 
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
+    }
+}
+```
 
+## 下载
+
+```java
+@WebServlet(urlPatterns = "/fileDownload")
+public class fileDownload extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+        // 获取文件路径 + 名称
+        String fileName = request.getParameter("name");
+        ServletContext servletContext = request.getServletContext();
+        String downloadPath = "/static/";
+        String downloadRealPath = downloadPath + fileName;
+        System.out.println(downloadRealPath);
+        // 设置响应头
+        String mimeType = servletContext.getMimeType(downloadRealPath);
+        System.out.println(mimeType);
+        response.setContentType(mimeType);
+        // 火狐 Base64 编码
+        if (request.getHeader("User-Agent").contains("Firefox")) {
+            response.setHeader("Content-Disposition", "attachment; filename==?UTF-8?B?" +
+                    new BASE64Encoder().encode(fileName.getBytes("UTF-8")) + "?=");
+        } else { // 其他 URL 编码
+            response.setHeader("Content-Disposition", "attachment; filename=" +
+                    URLEncoder.encode(fileName, "UTF-8"));
+        }
+        // 输入流拷贝到输出流
+        InputStream resourceAsStream = servletContext.getResourceAsStream(downloadRealPath);
+        ServletOutputStream outputStream = response.getOutputStream();
+        IOUtils.copy(resourceAsStream, outputStream);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+    }
+}
+```
 
 
 
