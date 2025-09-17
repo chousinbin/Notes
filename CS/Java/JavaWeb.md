@@ -3878,6 +3878,75 @@ $.getJSON(
 )
 ```
 
+# ThreadLocal
+
+## 介绍
+
+- ThreadLocal 对象可以实现在同一线程中数据共享，解决多线程数据安全问题
+- 一个线程可以有多个 ThreadLocal 对象
+- 一个 ThreadLocal 对象只能携带一个数据对象
+- ThreadLocal 有一个内部类 ThreadLocalMap，ThreadLocalMap 有一个 Entry，K 为 ThreadLocal，V 为 Object
+- 线程销毁后，ThreadLocal 会随之销毁
+
+## 源码解读
+
+### set()
+
+```java
+public void set(T value) {
+  	// 1. 拿到当前线程
+    Thread t = Thread.currentThread();
+  	// 2. 得到与当前线程关联的 map
+    ThreadLocalMap map = getMap(t);
+  	// 3.1 如果 map 存在，向 map 存入与当前 ThreadLocal 关联的数据对象
+    if (map != null) {
+        map.set(this, value);
+    } else { // 3.2 如果不存在，创建与当前线程关联的 map 并存入数据对象
+        createMap(t, value);
+    }
+}
+```
+
+总而言之：ThreadLocal 为了实现统一线程中共享数据，先用线程关联 Map，Map 中再用 ThreadLocal 关联 数据。由于底层是 Map 所以一个 ThreadLocal 对象只能共享一个对象。
+
+### get()
+
+```java
+public T get() {
+  	// 1. 得到当前线程
+    Thread t = Thread.currentThread();
+  	// 2. 得到与当前线程关联的 Map
+    ThreadLocalMap map = getMap(t);
+    if (map != null) {
+      	// 3. 从 Map 中得到与当前 ThreadLocal 关联的 Entry
+        ThreadLocalMap.Entry e = map.getEntry(this);
+        if (e != null) {
+            @SuppressWarnings("unchecked")
+          	// 4. 得到 Vaule
+            T result = (T)e.value;
+            return result;
+        }
+    }
+    return setInitialValue();
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
