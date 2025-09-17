@@ -37,5 +37,7 @@
     <orderEntry type="library" name="taglibs-standard-spec-1.2.5" level="project" />
     <orderEntry type="library" name="gson-2.2.4 (2)" level="project" />
     <orderEntry type="library" name="jquery-3.6.0.min" level="project" />
+    <orderEntry type="library" name="commons-fileupload-1.2.1" level="project" />
+    <orderEntry type="library" name="commons-io-1.4" level="project" />
   </component>
 </module>
