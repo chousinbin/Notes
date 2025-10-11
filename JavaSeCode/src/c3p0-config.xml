@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c3p0-config name="zxb_c3p0">
+    <default-config>
+        <!-- MySQL 8.x 驱动 -->
+        <property name="driverClass">com.mysql.cj.jdbc.Driver</property>
+        <!-- MySQL 8.x URL (注意时区参数) -->
+        <property name="jdbcUrl">jdbc:mysql://localhost:3306/mysql_test?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=Asia/Shanghai</property>
+        <!-- 数据库用户名 -->
+        <property name="user">root</property>
+        <!-- 数据库密码 -->
+        <property name="password">zxb19990079994...</property>
+
+        <!-- 连接池初始化时创建的连接数 -->
+        <property name="initialPoolSize">5</property>
+        <!-- 连接池中最小的连接数 -->
+        <property name="minPoolSize">5</property>
+        <!-- 连接池中最大的连接数 -->
+        <property name="maxPoolSize">20</property>
+        <!-- 连接池在获得新连接时，一次性获得的最大连接数 -->
+        <property name="acquireIncrement">3</property>
+
+        <!-- 连接的最大空闲时间，单位秒。如果连接在池中空闲了maxIdleTime秒，则将其丢弃。0表示永不丢弃。 -->
+        <property name="maxIdleTime">1800</property> <!-- 30分钟 -->
+
+        <!-- 连接在池中保持的最长时间，单位秒。0表示永不丢弃。 -->
+        <!-- <property name="maxConnectionAge">14400</property> --> <!-- 4小时 -->
+
+        <!-- 当连接池用完时，c3p0获取新连接的等待时间，单位毫秒。0表示无限等待。 -->
+        <property name="checkoutTimeout">30000</property> <!-- 30秒 -->
+
+        <!-- 连接失败重试次数 -->
+        <property name="acquireRetryAttempts">30</property>
+        <!-- 连接失败重试间隔时间，单位毫秒 -->
+        <property name="acquireRetryDelay">1000</property>
+
+        <!-- 是否在获取连接失败时打印堆栈跟踪信息 -->
+        <property name="breakAfterAcquireFailure">false</property>
+
+        <!-- 每隔多少秒检查所有连接池中的空闲连接，单位秒。 -->
+        <property name="idleConnectionTestPeriod">60</property> <!-- 1分钟 -->
+
+        <!-- 验证连接是否有效。如果为true，则在每次从连接池中获取连接时都对其进行测试。 -->
+        <!-- 建议设置为true，以确保获取到的连接是可用的。 -->
+        <property name="testConnectionOnCheckin">false</property>
+        <property name="testConnectionOnCheckout">true</property>
+
+        <!-- 连接测试查询语句。如果数据库支持，建议使用一个简单的查询，如 "SELECT 1"。 -->
+        <!-- MySQL/PostgreSQL -->
+        <property name="preferredTestQuery">SELECT 1</property>
+        <!-- Oracle -->
+        <!-- <property name="preferredTestQuery">SELECT 1 FROM DUAL</property> -->
+
+        <!-- 是否自动提交事务，默认为true -->
+        <!-- <property name="autoCommitOnClose">true</property> -->
+
+        <!-- 连接池的名称，用于日志输出 -->
+        <property name="dataSourceName">myAppDataSource</property>
+
+        <!-- C3P0日志级别，可选值：OFF, SEVERE, WARNING, INFO, CONFIG, FINE, FINER, FINEST, ALL -->
+        <!-- <property name="debugUnreturnedConnectionStackTraces">true</property> -->
+        <!-- <property name="unreturnedConnectionTimeout">60</property> -->
+    </default-config>
+</c3p0-config>
