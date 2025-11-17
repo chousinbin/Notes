@@ -7544,13 +7544,260 @@ class Dog {
 }
 ```
 
+# 正则表达式
 
+> regular expression
 
+正则表达式是某种模式匹配字符串的一个公式，很多编程语言都支持正则表达式来处理字符串。
 
+## 源码分析
 
+```java
+public class RegTheory {
+    public static void main(String[] args) {
+        String content = "1881三个1991四个2002n2003";
+        // \\d表示任意0-9数字
+        String reg = "\\d(\\d\\d)\\d";
+        // 正则对象
+        Pattern pattern = Pattern.compile(reg);
+        // 匹配对象
+        Matcher matcher = pattern.matcher(content);
+        /** 匹配结果
+         * find 根据指定规则，定位符合规则的下标
+         * 将符合规则的字符串的首尾下标，记录到groups[]
+         * 例如1881 groups[0] = 0，groups[1] = 4
+         * 分组后：groups[1] = 1 groups[2] = 3
+         * 将 oldlast 值记录为 4, 下次 find 从 4 开始
+         */
+        while(matcher.find()) {
+            // 匹配输出
+            System.out.println(matcher.group(0)); // 1881
+            System.out.println(matcher.group(1)); // 88
+            /**
+             * public String group(int group) {
+             *         if (first < 0)
+             *             throw new IllegalStateException("No match found");
+             *         if (group < 0 || group > groupCount())
+             *             throw new IndexOutOfBoundsException("No group " + group);
+             *         if ((groups[group*2] == -1) || (groups[group*2+1] == -1))
+             *             return null;
+             *         return getSubSequence(groups[group * 2], groups[group * 2 + 1]).toString();
+             *     }
+             * 传 0 的时候，根据 groups[0] 和 groups[1] 的值进行截取子字符串
+             */
+        }
+    }
+}
+```
 
+## 转义号
 
+使用 \\\ 表示 \
 
+需要用到转义字符的字符有：. * + ( ) $ / \ ? [ ] ^ { }
+
+## 字符匹配符
+
+| 符号                                   | 含义                           | 事例    | 解释                   |
+| -------------------------------------- | ------------------------------ | ------- | ---------------------- |
+| []                                     | 可接收的字符列表               | [efgh]  | efgh 中的任意 1 个字符 |
+| [^]                                    | 不可接收的字符列表             | [^abc]  | 除 abc 的任意 1 个字符 |
+| -                                      | 连字符                         | A-Z     | 任意单个大写字符       |
+| .                                      | 除 \n 的任何单个字符           | a..b    |                        |
+| \\\\.                                  | 匹配 \n 字符                   |         |                        |
+| \\\d                                   | 任意单个数字                   |         |                        |
+| \\\d{3}                                | 匹配 3 位数字字符串            |         |                        |
+| \\\d{3}(\\\d)?                         | 匹配 3 位或 4 位数字字符串     |         |                        |
+| \\\D                                   | 匹配单个非数字字符             |         |                        |
+| \\\w                                   | 匹配单个数字、大小写字符字符   |         |                        |
+| \\\W                                   | 匹配单个非数字、大小写字符字符 |         |                        |
+| +                                      | 代表 1 或 多个字符             |         |                        |
+| (?!)                                   | 不区分大小写                   | (?!)abc | abc 不区分大小写       |
+| complie(reg, Pattern.CASE_INSENSITIVE) | 不区分大小写                   |         |                        |
+| \\\s                                   | 任何单个空字符                 |         |                        |
+| \\\S                                   | 任何单个非空字符               |         |                        |
+
+## 选择匹配符
+
+|      |      |      |                   |
+| ---- | ---- | ---- | ----------------- |
+| \|   | 选择 | a\|b | 既可以 a 也可以 b |
+
+## 限定符
+
+| 符号   | 含义                                         | 事例 | 说明                         |
+| ------ | -------------------------------------------- | ---- | ---------------------------- |
+| *      | 指定字符重复 0 或 n 次                       |      |                              |
+| +      | 指定字符重复 1 或 n 次                       |      |                              |
+| ？     | 指定字符重复 0 或 1 次                       |      |                              |
+| {n}    | 指定字符串中字符重复 n 次                    |      | 可重复                       |
+| {n,}   | 指定字符串中字符至少重复 n 次                |      |                              |
+| {n, m} | 指定字符串中字符至少重复 n 次，至多重复 m 次 |      | Java 优先匹配长的，如 m 长度 |
+
+**非贪婪匹配**：在限定符后面加上 `?` 则代表非贪婪匹配，只匹配最短的目标。
+
+## 定位符
+
+| 符号 | 含义                                               | 事例               | 说明                                                  |
+| ---- | -------------------------------------------------- | ------------------ | ----------------------------------------------------- |
+| ^    | 指定起始字符                                       | ^[0-9]+[a-z]\*     | 至少 1 个数字开头，后接 n 个小写字母                  |
+| $    | 指定结尾字符                                       | ^[0-9]\\\\-[a-z]\$ | 至少 1 个数字开头，后接连字符，并至少一个小写字母结尾 |
+| \\\b | 边界，可以是整个字符串尾巴，也可以是子字符串的结尾 | han\\\b            | hanshunping sp**han** **han**                         |
+| \\\B | 与上相反                                           | han\\\B            | **han**shunping sphan han                             |
+
+## 捕获分组
+
+| 常用分组构造形式   | 说明                                                         |
+| ------------------ | ------------------------------------------------------------ |
+| `(pattern)`        | 非命名捕获。捕获匹配的子字符串。编号为零的第一个捕获是由整个正则表达式模式匹配的文本，其它捕获结果则根据左括号的顺序从 1 开始自动编号。 |
+| `(?<name>pattern)` | 命名捕获。将匹配的子字符串捕获到一个组名称或编号名称中。用于name的字符串不能包含任何标点符号，并且不能以数字开头。可以使用单引号替代尖括号，例如 `(?'name')` |
+
+## 非捕获分组
+
+| 常用分组构造形式 | 说明                                                         |
+| ---------------- | ------------------------------------------------------------ |
+| `(?:pattern)`    | 这对于用 or 字符 (\|) 组合模式部件的情况很有用。例如，`industr(?:y|ies)` 是比 `industry|industries` 更经济的表达式。 |
+| `(?=pattern)`    | 它是一个非捕获匹配。例如，`Windows (?=95|98|NT|2000)` 匹配"Windows 2000"中的"Windows"，但不匹配"Windows 3.1"中的"Windows"。 |
+| `(?!pattern)`    | 该表达式匹配不处于匹配 pattern 的字符串的起始点的搜索字符串。它是一个非捕获匹配。例如，`Windows (?!95|98|NT|2000)` (?!95匹配"Windows 3.1"中的"Windows"，但不匹配"Windows 2000"中的"Windows"。 |
+
+非捕获分组不能使用 `match.group(1)`
+
+### 验证 URL
+
+```java
+public static void main(String[] args) {
+    String content = "https://www.bilibili.com/video/BV1Eq4y1E79W?" +
+            "spm_id_from=333.788.player.switch&vd_source=1c1e33cb7fae15eec6ad3d52ff00c843&p=17";
+    String reg = "^((http|https)://)([\\w-]+\\.)+([\\w-]+)(\\/[\\w-?=&/%.#]*)?$";
+    Matcher matcher = Pattern.compile(reg).matcher(content);
+    while (matcher.find()) {
+        System.out.println(matcher.group(0));
+        System.out.println(matcher.group(1));
+        System.out.println(matcher.group(2));
+        System.out.println(matcher.group(3));
+        System.out.println(matcher.group(4));
+        System.out.println(matcher.group(5));
+    }
+}
+```
+
+## 常用类及方法
+
+### Pattern
+
+`Pattern` 对象是一个正则表达式对象。`Pattern` 类没有公共构造方法。要创建一个 `Pattern` 对象，你需要调用其公共静态方法 `Pattern.compile()`，它返回一个 `Pattern` 对象。该方法接受一个正则表达式字符串作为它的第一个参数。
+
+```java
+Pattern r = Pattern.compile(pattern);
+```
+
+**matches** 方法
+
+只返回**布尔类型**结果，`Pattern.matches()` 底层是 `Matcher.matches()`
+
+```java
+public class matches_ {
+    public static void main(String[] args) {
+        String content = "hello 周新斌";
+        String reg = "hello.*";
+
+        boolean matches = Pattern.matches(reg, content);
+        System.out.println(matches);
+    }
+}
+```
+
+### Matcher
+
+`Matcher` 对象是对输入字符串进行解释和匹配的引擎。与 `Pattern` 类一样，`Matcher` 也没有公共构造方法。你需要调用 `Pattern` 对象的 `matcher()` 方法来获得一个 `Matcher` 对象。
+
+| 方法                             | 说明                                                         |
+| :------------------------------- | :----------------------------------------------------------- |
+| `public int start()`             | 返回以前匹配的初始索引。                                     |
+| `public int start(int group)`    | 返回在以前的匹配操作期间，由给定组所捕获的子序列的初始索引。 |
+| `public int end()`               | 返回最后匹配字符之后的偏移量。                               |
+| `public int end(int group)`      | 返回在以前的匹配操作期间，由给定组所捕获子序列的最后字符之后的偏移量。 |
+| `public boolean lookingAt()`     | 尝试将从区域开头开始的输入序列与该模式匹配。                 |
+| `public boolean find()`          | 尝试查找与该模式匹配的输入序列的下一个子序列。               |
+| `public boolean find(int start)` | 重置此匹配器，然后尝试查找匹配该模式、从指定索引开始的输入序列的下一个子序列。 |
+| `public boolean matches()`       | 尝试将整个区域与模式匹配。                                   |
+
+| 方法                                                         | 说明                                                         |
+| :----------------------------------------------------------- | :----------------------------------------------------------- |
+| `public Matcher appendReplacement(StringBuffer sb, String replacement)` | 实现非终端添加和替换步骤。                                   |
+| `public StringBuffer appendTail(StringBuffer sb)`            | 实现终端添加和替换步骤。                                     |
+| `public String replaceAll(String replacement)`               | 替换模式与给定替换字符串相匹配的输入序列的每个子序列。       |
+| `public String replaceFirst(String replacement)`             | 替换模式与给定替换字符串匹配的输入序列的第一个子序列。       |
+| `public static String quoteReplacement(String s)`            | 返回指定字符串的字面替换字符串。这个方法返回一个字符串，就像传递给`Matcher`类的`appendReplacement`方法一个字面字符串一样工作。 |
+
+### PatternSyntaxException
+
+`PatternSyntaxException` 是一个非强制异常类，它表示一个正则表达式模式中的语法错误。
+
+## 反向引用
+
+允许**引用**正则表达式中**先前捕获的组**所匹配的文本。
+
+- 正则内部反向引用：`\\分组号`
+- 正则外部反向引用：`$分组号`
+
+| 需求               | 正则                                       |
+| ------------------ | ------------------------------------------ |
+| 两个连续相同的数字 | `(\\d)\\1`                                 |
+| 四位回文数字       | `(\\d)(\\d)\\2\\1`                         |
+| 12345-111222333    | `\\d{5}-(\\d)\\1{2}(\\d)\\2{2}(\\d)\\3{2}` |
+
+## 应用实例
+
+| 实例       | 正则                               |
+| ---------- | ---------------------------------- |
+| 汉字字符串 | `^[\u0391-\uffe5]+$`               |
+| 邮政编码   | `^[1-9]\\d{5}$`                    |
+| QQ 号码    | `^[1-9]\\d{4,9}$`                  |
+| 手机号码   | `^1[3|5|7|8|9]\\d{9}$`             |
+| 邮件地址   | `[\\w-]+@([a-zA-Z]+\\.)+[a-zA-Z]+` |
+
+### 结巴去重
+
+```java
+String content = "我...我要...学学学....编程";
+// 去除所有 .
+content = Pattern.compile("\\.").matcher(content).replaceAll("");
+// 找到重复字段 并使用单个替换整个
+content = Pattern.compile("(.)\\1+").matcher(content).replaceAll("$1");
+
+System.out.println(content);
+```
+
+## 字符串正则
+
+字符串 String 类里面也支持正则表达式方法。
+
+### replaceAll()
+
+替换
+
+```java
+String content = "JDK1.3 JDK1.4 JDK";
+content = content.replaceAll("JDK1\\.3|JDK1\\.4", "JDK");
+```
+
+### matches()
+
+检查匹配
+
+```java
+String content = "19990011009";
+boolean res = content.matches("1(38|39)\\d{8}");
+```
+
+### split()
+
+按照正则表达式分割字符串
+
+```java
+String[] res = "123#abc-999~888".split("#|-|~");
+```
 
 
 
